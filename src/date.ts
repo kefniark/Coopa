@@ -1,4 +1,4 @@
-let _now: () => number = (typeof Date.now === "function") ? Date.now : new Date().getTime
+let _now: () => number = typeof Date.now === "function" ? Date.now : new Date().getTime
 let _perf: () => number
 
 /* istanbul ignore next */

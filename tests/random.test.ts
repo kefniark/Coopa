@@ -8,7 +8,7 @@ test("Random", () => {
 	expect(r1).toBeGreaterThan(0)
 	expect(r1).toBeLessThan(1)
 
-	expect(rng.randArray([1,2,3])).toBeGreaterThan(0)
+	expect(rng.randArray([1, 2, 3])).toBeGreaterThan(0)
 })
 
 test("RandBool", () => {

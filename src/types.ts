@@ -17,5 +17,5 @@ export function isObjectEmpty(obj: any) {
 }
 
 export function clone(obj: any): boolean {
-	return Object.assign({}, obj);
+	return Object.assign({}, obj)
 }

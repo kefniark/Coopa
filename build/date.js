@@ -1,4 +1,4 @@
-let _now = (typeof Date.now === "function") ? Date.now : new Date().getTime;
+let _now = typeof Date.now === "function" ? Date.now : new Date().getTime;
 let _perf;
 /* istanbul ignore next */
 if (globalThis && globalThis.performance) {

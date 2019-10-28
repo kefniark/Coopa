@@ -39,7 +39,5 @@ Array.prototype.shuffle = function () {
         start = Math.floor(Math.random() * this.length);
         buffer.push(this.splice(start, 1)[0]);
     }
-    ;
     return buffer;
 };
-//# sourceMappingURL=array.js.map

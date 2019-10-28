@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Vector2 {
+export class Vector2 {
     constructor(x = 0, y = 0) {
         this.x = 0;
         this.y = 0;
@@ -27,9 +25,7 @@ class Vector2 {
         return this.x * vector.x + this.y + vector.y;
     }
     moveTowards(vector, t) {
-        // Linearly interpolates between vectors A and B by t.
-        // t = 0 returns A, t = 1 returns B
-        t = Math.min(t, 1); // still allow negative t
+        t = Math.min(t, 1);
         const diff = vector.subtract(this);
         return this.add(diff.scale(t));
     }
@@ -82,5 +78,3 @@ class Vector2 {
         return "[" + vector.x + "; " + vector.y + "]";
     }
 }
-exports.Vector2 = Vector2;
-//# sourceMappingURL=vector.js.map

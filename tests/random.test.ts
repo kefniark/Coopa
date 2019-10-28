@@ -7,6 +7,8 @@ test("Random", () => {
 	expect(r1).not.toBe(r2)
 	expect(r1).toBeGreaterThan(0)
 	expect(r1).toBeLessThan(1)
+
+	expect(rng.randArray([1,2,3])).toBeGreaterThan(0)
 })
 
 test("RandBool", () => {
@@ -62,11 +64,15 @@ test("seededRandom", () => {
 	const rng3 = rng.createSeededRandom(1235)
 
 	for (var i = 0; i < 100; i++) {
-		console.log(i)
 		const r1 = rng1.rand()
 		const r2 = rng2.rand()
 		const r3 = rng3.rand()
 		expect(r1).toBe(r2)
 		expect(r1).not.toBe(r3)
+
+		rng3.randBool()
+		rng3.randRangeFloat(0, 2)
+		rng3.randRangeInt(0, 2)
+		rng3.randArray([1, 2, 3])
 	}
 })

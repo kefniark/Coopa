@@ -33,9 +33,7 @@ export class Vector2 {
 	}
 
 	moveTowards(vector: Vector2, t: number) {
-		// Linearly interpolates between vectors A and B by t.
-		// t = 0 returns A, t = 1 returns B
-		t = Math.min(t, 1) // still allow negative t
+		t = Math.min(t, 1)
 		const diff = vector.subtract(this)
 		return this.add(diff.scale(t))
 	}

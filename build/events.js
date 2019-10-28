@@ -1,16 +1,12 @@
-"use strict";
 /// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
-Object.defineProperty(exports, "__esModule", { value: true });
-class Event {
+export class Event {
     constructor() {
         this.listeners = [];
         this.listenersOncer = [];
     }
     on(listener) {
         this.listeners.push(listener);
-        return {
-            dispose: () => this.off(listener)
-        };
+        return { dispose: () => this.off(listener) };
     }
     once(listener) {
         this.listenersOncer.push(listener);
@@ -31,5 +27,3 @@ class Event {
         }
     }
 }
-exports.Event = Event;
-//# sourceMappingURL=events.js.map

@@ -2,14 +2,15 @@
 	"compilerOptions": {
 		// build
 		"typeRoots": ["node_modules/@types"],
-		"lib": ["es2015", "dom"],
+		"lib": ["esnext", "dom"],
 		"target": "esnext",
 		"outDir": "./build",
+		"declarationDir": "./build/declarations/",
 		"types": ["node"],
-		"module": "commonjs",
+		"module": "esnext",
 
 		// build settings
-		"sourceMap": true,
+		"sourceMap": false,
 		"pretty": true,
 		"declaration": true,
 		"preserveConstEnums": true,

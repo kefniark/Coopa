@@ -14,9 +14,7 @@ export class Event<T> {
 
 	on(listener: Listener<T>): Disposable {
 		this.listeners.push(listener)
-		return {
-			dispose: () => this.off(listener)
-		}
+		return { dispose: () => this.off(listener) }
 	}
 
 	once(listener: Listener<T>): void {

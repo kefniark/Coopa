@@ -52,4 +52,3 @@ String.prototype.slugify = function (lower = true) {
     }
     return this.normalize().replace(/[^a-z0-9]/gi, "-");
 };
-//# sourceMappingURL=string.js.map

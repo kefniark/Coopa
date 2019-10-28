@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Random {
+export class Random {
     rand() {
         return Math.random();
     }
@@ -27,8 +25,7 @@ class Random {
         return new SeededRandom(seed);
     }
 }
-exports.Random = Random;
-class SeededRandom {
+export class SeededRandom {
     constructor(seed) {
         this.seed = seed;
     }
@@ -43,16 +40,14 @@ class SeededRandom {
         return this.randRangeInt(0, 1) === 0;
     }
     randRangeFloat(min, max) {
-        return exports.rng.randRangeFloat(min, max, this.next());
+        return rng.randRangeFloat(min, max, this.next());
     }
     randRangeInt(min, max) {
-        return exports.rng.randRangeInt(min, max, this.next());
+        return rng.randRangeInt(min, max, this.next());
     }
     randArray(arr) {
-        const index = exports.rng.randRangeInt(0, arr.length - 1);
+        const index = rng.randRangeInt(0, arr.length - 1);
         return arr[index];
     }
 }
-exports.SeededRandom = SeededRandom;
-exports.rng = new Random();
-//# sourceMappingURL=random.js.map
+export const rng = new Random();

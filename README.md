@@ -2,7 +2,7 @@
 
 A really simple and reliable Typescript utility library compatible with Tree Shaking
 
-Originally just for my personal used, a bit tired to copy/paste code between project in a `helpers.js` or to have crazy dependencies for any basic feature.
+Originally just for personal use, a bit tired to copy/paste code between project in a `helpers.js` or to have crazy dependencies for any basic feature.
 
 ___
 ## API

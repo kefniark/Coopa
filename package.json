@@ -1,11 +1,16 @@
 {
   "name": "coopa",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
-  "main": "build/index.js",
+  "main": "build/coopa.cjs.js",
+  "module": "build/coopa.es.mjs",
   "types": "build/declarations/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "rimraf build && tsc",
+    "build": "run-s build:**",
+    "build:clean": "rimraf build",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build:tsc": "tsc --emitDeclarationOnly",
     "coverage": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "dev": "webpack-dev-server --config webpack.config.dev.js",
@@ -28,8 +33,12 @@
     "npm-check": "^5.9.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.18.2",
+    "rollup": "^1.26.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-typescript": "^1.0.1",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
+    "tslib": "^1.10.0",
     "typescript": "^3.6.4"
   }
 }

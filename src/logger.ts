@@ -1,6 +1,6 @@
 import { Event } from "./events"
 
-export enum LogLevel {
+export const enum LogLevel {
 	INFO = 0,
 	WARN = 1,
 	ERROR = 2,

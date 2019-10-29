@@ -10,7 +10,12 @@ A really simple and reliable Typescript utility library compatible with Tree Sha
 
 Originally just for personal use, a bit tired to copy/paste code between project in a `helpers.js` or to have crazy dependencies for any basic feature.
 
+Export with Rollup in:
+* ESM: the default modern version (compatible with tree shaking)
+* CommonJS: fallback for old node / tools
+
 ___
+
 ## API
 
 ### Typed Events

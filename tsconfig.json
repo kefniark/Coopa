@@ -7,15 +7,13 @@
 		"outDir": "./build",
 		"declarationDir": "./build/declarations/",
 		"types": ["node"],
-		"module": "esnext",
+		"module": "commonjs",
 
 		// build settings
 		"sourceMap": false,
 		"pretty": true,
 		"declaration": true,
 		"preserveConstEnums": true,
-		"allowSyntheticDefaultImports": true,
-		"experimentalDecorators": true,
 
 		// strict
 		"strict": true,
@@ -31,7 +29,6 @@
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": true,
-		"esModuleInterop": true
 	},
 	"include":[
 		"./src/**/*"

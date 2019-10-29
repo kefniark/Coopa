@@ -10,6 +10,18 @@
 		"node": ">=12.0.0",
 		"npm": ">=6.0.0"
 	},
+	"author": {
+		"name": "Kevin destrem",
+		"email": "kef1@free.fr"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:kefniark/Coopa.git"
+	},
+	"bugs": {
+		"url": "https://github.com/kefniark/Coopa/issues"
+	},
 	"scripts": {
 		"build": "run-s build:**",
 		"build:clean": "rimraf build",
@@ -27,8 +39,6 @@
 		"test:depencencies": "npm-check --production || echo \"Run 'npm run update' to interactively update dependencies for this project\"",
 		"update": "npm-check --update"
 	},
-	"author": "",
-	"license": "MIT",
 	"devDependencies": {
 		"@types/jest": "^24.0.20",
 		"@types/node": "^12.11.7",

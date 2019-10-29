@@ -1,3 +1,8 @@
+// [COOPA] Build: 0.1.1 - October 30, 2019
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 /**
  * Provide polyfill around Date.now()
  */
@@ -62,13 +67,12 @@ function uid(len = 8) {
     return id;
 }
 
-var LogLevel;
 (function (LogLevel) {
     LogLevel[LogLevel["INFO"] = 0] = "INFO";
     LogLevel[LogLevel["WARN"] = 1] = "WARN";
     LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
     LogLevel[LogLevel["OFF"] = 3] = "OFF";
-})(LogLevel || (LogLevel = {}));
+})(exports.LogLevel || (exports.LogLevel = {}));
 class Logger {
     constructor() {
         this.eventHandler = new Event();
@@ -98,25 +102,25 @@ class Logger {
         this._console = val;
     }
     info(...params) {
-        if (this.level > LogLevel.INFO)
+        if (this.level > exports.LogLevel.INFO)
             return;
         if (this._console)
             console.info(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.INFO, this.prefix, ...params]);
+        this.eventHandler.emit([exports.LogLevel.INFO, this.prefix, ...params]);
     }
     warn(...params) {
-        if (this.level > LogLevel.WARN)
+        if (this.level > exports.LogLevel.WARN)
             return;
         if (this._console)
             console.warn(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.WARN, this.prefix, ...params]);
+        this.eventHandler.emit([exports.LogLevel.WARN, this.prefix, ...params]);
     }
     error(...params) {
-        if (this.level > LogLevel.ERROR)
+        if (this.level > exports.LogLevel.ERROR)
             return;
         if (this._console)
             console.error(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.ERROR, this.prefix, ...params]);
+        this.eventHandler.emit([exports.LogLevel.ERROR, this.prefix, ...params]);
     }
 }
 const logger = new Logger();
@@ -376,4 +380,18 @@ String.prototype.slugify = function (lower = true) {
 
 const name = "Coopa";
 
-export { Event, LogLevel, Random, SeededRandom, Vector2, clone, isArray, isNumeric, isObjectEmpty, isString, logger, name, now, perf, rng, uid };
+exports.Event = Event;
+exports.Random = Random;
+exports.SeededRandom = SeededRandom;
+exports.Vector2 = Vector2;
+exports.clone = clone;
+exports.isArray = isArray;
+exports.isNumeric = isNumeric;
+exports.isObjectEmpty = isObjectEmpty;
+exports.isString = isString;
+exports.logger = logger;
+exports.name = name;
+exports.now = now;
+exports.perf = perf;
+exports.rng = rng;
+exports.uid = uid;

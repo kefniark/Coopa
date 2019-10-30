@@ -9,7 +9,7 @@ test("Basic", () => {
 
 test("Check for colision", () => {
 	const set = new Set<string>()
-	for (var i = 0; i < 100000; i++) {
+	for (let i = 0; i < 100000; i++) {
 		const id = uid()
 		if (set.has(id)) throw new Error("collision detected !")
 		set.add(id)

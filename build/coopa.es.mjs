@@ -1,4 +1,4 @@
-// [COOPA] Build: 0.1.1 - October 30, 2019
+// [COOPA] Build: 0.1.2 - October 31, 2019
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -36,7 +36,7 @@ class Event {
         this.listenersOncer.push(listener);
     }
     off(listener) {
-        var callbackIndex = this.listeners.indexOf(listener);
+        const callbackIndex = this.listeners.indexOf(listener);
         if (callbackIndex > -1)
             this.listeners.splice(callbackIndex, 1);
     }
@@ -60,7 +60,7 @@ const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
  * @return {String} uid
  */
 function uid(len = 8) {
-    var id = "";
+    let id = "";
     while (len--) {
         id += url[(Math.random() * 62) | 0];
     }
@@ -191,7 +191,7 @@ function isNumeric(value) {
 function isObjectEmpty(obj) {
     if (!obj || typeof obj !== "object")
         return true;
-    for (var a in obj)
+    for (const a in obj)
         if (obj.hasOwnProperty(a))
             return false;
     return true;
@@ -200,41 +200,397 @@ function clone(obj) {
     return Object.assign({}, obj);
 }
 
-class Vector2 {
-    constructor(x = 0, y = 0) {
-        this.x = 0;
-        this.y = 0;
-        this.x = x;
-        this.y = y;
+const PI_TWO = Math.PI * 2;
+const EPSILON = 0.0000001;
+/**
+ * Convert degree to radian
+ *
+ * @export
+ * @param {number} euler
+ */
+function eulerToRadian(euler) {
+    return (euler * PI_TWO) / 360;
+}
+/**
+ * Convert radian into degree
+ *
+ * @export
+ * @param {number} radian
+ */
+function radianToEuler(radian) {
+    return (radian * 360) / PI_TWO;
+}
+/**
+ * Number Equal, approximately (+-epsilon)
+ *
+ * @export
+ * @param {number} a
+ * @param {number} b
+ */
+function numberEqual(a, b) {
+    return Math.abs(a - b) < EPSILON;
+}
+/**
+ * Round to a certain amount of decimals
+ *
+ * @export
+ * @param {number} value
+ * @param {number} [decimals=2]
+ */
+function roundTo(value, decimals = 2) {
+    return +value.toFixed(decimals);
+}
+
+/**
+ * Basic Matrix class
+ *
+ * @export
+ */
+class Matrix {
+    constructor(elements) {
+        this.elements = [];
+        if (elements)
+            this.set(elements);
     }
-    set(x, y) {
-        this.x = x || 0;
-        this.y = y || 0;
+    get type() {
+        return `(${this.rows} x ${this.columns})`;
+    }
+    get rows() {
+        return this.elements.length;
+    }
+    get columns() {
+        return this.elements[0].length;
+    }
+    /**
+     * Create a matrix with values
+     *
+     * @static
+     * @param {(number[][] | number[])} elements
+     * @returns
+     */
+    static create(elements) {
+        const m = new Matrix();
+        return m.set(elements);
+    }
+    /**
+     * Create an empty matrix based on the size
+     *
+     * @static
+     * @param {number} n number of row
+     * @param {number} m number of column
+     * @returns {Matrix}
+     */
+    static createZero(n, m) {
+        const elem = [];
+        for (let i = 0; i < n; i++) {
+            elem[i] = [];
+            for (let j = 0; j < m; j++) {
+                elem[i][j] = 0;
+            }
+        }
+        return Matrix.create(elem);
+    }
+    /**
+     * Create a matrix from diagonal values
+     *
+     * @static
+     * @param {number[]} val
+     * @returns {Matrix}
+     */
+    static createDiagonal(val) {
+        let i = val.length;
+        const m = Matrix.createIdentity(i);
+        while (i--) {
+            m.elements[i][i] = val[i];
+        }
+        return m;
+    }
+    /**
+     * Create an identity matrix
+     *
+     * @static
+     * @param {number} n size
+     * @returns {Matrix}
+     */
+    static createIdentity(n) {
+        let els = [], i = n, j;
+        while (i--) {
+            j = n;
+            els[i] = [];
+            while (j--) {
+                els[i][j] = i === j ? 1 : 0;
+            }
+        }
+        return Matrix.create(els);
+    }
+    /**
+     * Create Random matrix
+     *
+     * @static
+     * @param {number} n number of row
+     * @param {number} m number of column
+     * @returns {Matrix}
+     */
+    static createRandom(n, m) {
+        return Matrix.createZero(n, m).map(() => rng.rand(), Matrix.create([]));
+    }
+    /**
+     * Get a value by row/col
+     * Important: use math indexes (start at 1,1 and not 0,0)
+     *
+     * @param {number} i
+     * @param {number} j
+     * @returns {number}
+     */
+    el(i, j) {
+        if (i < 1 || i > this.elements.length || j < 1 || j > this.elements[0].length)
+            return undefined;
+        return this.elements[i - 1][j - 1];
+    }
+    /**
+     * Create a new matrix with same values
+     *
+     * @returns {Matrix}
+     */
+    clone() {
+        return Matrix.create(this.elements);
+    }
+    scale(scalar) {
+        return this.map(x => x * scalar, Matrix.create([]));
+    }
+    scaleInto(scalar, into) {
+        return this.map(x => x * scalar, into);
+    }
+    /**
+     * Add another matrix (and return a new one)
+     *
+     * @param {Matrix} matrix
+     * @returns {Matrix} new matrix
+     */
+    add(matrix) {
+        return this._add(matrix, Matrix.create([]));
+    }
+    addInto(matrix, into) {
+        return this._add(matrix, into);
+    }
+    /**
+     * Subtract another matrix (and return a new one)
+     *
+     * @param {Matrix} matrix
+     * @returns {Matrix} new matrix
+     */
+    subtract(matrix) {
+        return this._subtract(matrix, Matrix.create([]));
+    }
+    subtractInto(matrix, into) {
+        return this._subtract(matrix, into);
+    }
+    /**
+     * Multiply with another matrix
+     *
+     * @param {Matrix} matrix
+     * @returns {Matrix} new matrix
+     */
+    multiply(matrix) {
+        return this._multiply(matrix, Matrix.create([]));
+    }
+    /**
+     * Check equality
+     *
+     * @param {Matrix} matrix
+     * @returns {boolean}
+     */
+    equals(matrix, exact = false) {
+        if (!this.isSameSize(matrix))
+            return false;
+        for (let i = 0; i < this.rows; i++) {
+            for (let j = 0; j < this.columns; j++) {
+                if (exact) {
+                    if (this.elements[i][j] !== matrix.elements[i][j])
+                        return false;
+                }
+                else {
+                    if (!numberEqual(this.elements[i][j], matrix.elements[i][j]))
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+    /**
+     * Check that different matrics have the same size
+     *
+     * @param {Matrix} matrix
+     * @returns {boolean}
+     */
+    isSameSize(matrix) {
+        return this.rows === matrix.rows && this.columns === matrix.columns;
+    }
+    /**
+     * Check if the matrix is a square or not
+     *
+     * @returns {boolean}
+     */
+    isSquare() {
+        return this.rows === this.columns;
+    }
+    /**
+     * Inspect the content of the matrix
+     *
+     * a string with the form:
+     *  [0, 0, 0]
+     *  [1, 2, 3]
+     *
+     * @returns {string}
+     */
+    inspect() {
+        const matrix_rows = [];
+        if (this.rows === 0)
+            return "[]";
+        for (let i = 0; i < this.rows; i++) {
+            matrix_rows.push(`[ ${this.elements[i].join(", ")} ]`);
+        }
+        return matrix_rows.join("\n");
+    }
+    /**
+     * To String
+     *
+     * @returns {string}
+     */
+    toString() {
+        return `Matrix ${this.type}\n${this.inspect()}`;
+    }
+    _add(matrix, into) {
+        if (!this.isSameSize(matrix))
+            throw new Error("different size");
+        return this.map((x, i, j) => x + matrix.elements[i - 1][j - 1], into);
+    }
+    _subtract(matrix, into) {
+        if (!this.isSameSize(matrix))
+            throw new Error("different size");
+        return this.map((x, i, j) => x - matrix.elements[i - 1][j - 1], into);
+    }
+    _multiply(matrix, into) {
+        if (!this.canMultiply(matrix)) {
+            throw new Error(`Cannot multiply ${this.type} x ${matrix.type}`);
+        }
+        let i = this.elements.length, nj = matrix.columns, j;
+        let cols = this.columns, c, elements = [], sum;
+        while (i--) {
+            j = nj;
+            elements[i] = [];
+            while (j--) {
+                c = cols;
+                sum = 0;
+                while (c--) {
+                    sum += this.elements[i][c] * matrix.elements[c][j];
+                }
+                elements[i][j] = sum;
+            }
+        }
+        return into ? into.set(elements) : Matrix.create(elements);
+    }
+    canMultiply(matrix) {
+        if (this.elements.length === 0)
+            return false;
+        return this.columns === matrix.rows;
+    }
+    map(fn, into) {
+        const elements = [];
+        let i = this.elements.length;
+        const nj = this.elements[0].length;
+        let j = 0;
+        while (i--) {
+            j = nj;
+            elements[i] = [];
+            while (j--) {
+                elements[i][j] = fn.call(undefined, this.elements[i][j], i + 1, j + 1);
+            }
+        }
+        return into.set(elements);
+    }
+    set(elements) {
+        let i = 0;
+        let j = 0;
+        if (elements[0] && Array.isArray(elements[0])) {
+            const array2d = elements;
+            i = array2d.length;
+            this.elements = [];
+            while (i--) {
+                j = array2d[i].length;
+                this.elements[i] = [];
+                while (j--) {
+                    this.elements[i][j] = array2d[i][j];
+                }
+            }
+            return this;
+        }
+        const array1d = elements;
+        const n = array1d.length;
+        this.elements = [];
+        for (i = 0; i < n; i++) {
+            this.elements.push([array1d[i]]);
+        }
+        return this;
+    }
+}
+
+class Vector2 extends Matrix {
+    static get zero() {
+        return new Vector2(0, 0);
+    }
+    static get up() {
+        return new Vector2(0, 1);
+    }
+    static get down() {
+        return new Vector2(0, -1);
+    }
+    static get left() {
+        return new Vector2(-1, 0);
+    }
+    static get right() {
+        return new Vector2(1, 0);
+    }
+    get x() {
+        return this.elements[0][0];
+    }
+    set x(val) {
+        this.elements[0][0] = val;
+    }
+    get y() {
+        return this.elements[0][1];
+    }
+    set y(val) {
+        this.elements[0][1] = val;
+    }
+    constructor(x = 0, y = 0) {
+        super([[x, y, 0]]);
+    }
+    add(vec) {
+        return this.addInto(vec, new Vector2());
+    }
+    subtract(vec) {
+        return this.subtractInto(vec, new Vector2());
+    }
+    scale(scalar) {
+        return this.scaleInto(scalar, new Vector2());
     }
     clone() {
         return new Vector2(this.x, this.y);
     }
-    add(vector) {
-        return new Vector2(this.x + vector.x, this.y + vector.y);
-    }
-    subtract(vector) {
-        return new Vector2(this.x - vector.x, this.y - vector.y);
-    }
-    scale(scalar) {
-        return new Vector2(this.x * scalar, this.y * scalar);
-    }
     dot(vector) {
-        return this.x * vector.x + this.y + vector.y;
+        return this.x * vector.x + this.y * vector.y;
     }
-    moveTowards(vector, t) {
-        t = Math.min(t, 1);
-        const diff = vector.subtract(this);
-        return this.add(diff.scale(t));
+    cross(vector) {
+        return this.x * vector.y - this.y * vector.x;
     }
-    magnitude() {
-        return Math.sqrt(this.magnitudeSqr());
+    round(decimal = 2) {
+        return new Vector2(roundTo(this.x, decimal), roundTo(this.y, decimal));
     }
-    magnitudeSqr() {
+    length() {
+        return Math.sqrt(this.lengthSqr());
+    }
+    lengthSqr() {
         return this.x * this.x + this.y * this.y;
     }
     distance(vector) {
@@ -246,7 +602,7 @@ class Vector2 {
         return deltaX * deltaX + deltaY * deltaY;
     }
     normalize() {
-        const mag = this.magnitude();
+        const mag = this.length();
         const vector = this.clone();
         if (Math.abs(mag) < 1e-9) {
             vector.x = 0;
@@ -261,6 +617,12 @@ class Vector2 {
     angle() {
         return Math.atan2(this.y, this.x);
     }
+    angleEuler() {
+        return radianToEuler(Math.atan2(this.y, this.x));
+    }
+    rotateEuler(angle) {
+        return this.rotate(eulerToRadian(angle));
+    }
     rotate(alpha) {
         const cos = Math.cos(alpha);
         const sin = Math.sin(alpha);
@@ -269,15 +631,46 @@ class Vector2 {
         vector.y = this.x * sin + this.y * cos;
         return vector;
     }
-    toPrecision(precision) {
-        const vector = this.clone();
-        vector.x = Number(vector.x.toFixed(precision));
-        vector.y = Number(vector.y.toFixed(precision));
-        return vector;
+    toString() {
+        return `Vector2 { x: ${this.x}, y: ${this.y} }`;
+    }
+}
+class Vector3 extends Matrix {
+    get x() {
+        return this.elements[0][0];
+    }
+    set x(val) {
+        this.elements[0][0] = val;
+    }
+    get y() {
+        return this.elements[0][1];
+    }
+    set y(val) {
+        this.elements[0][1] = val;
+    }
+    get z() {
+        return this.elements[0][2];
+    }
+    set z(val) {
+        this.elements[0][2] = val;
+    }
+    constructor(x = 0, y = 0, z = 0) {
+        super([[x, y, z]]);
+    }
+    add(vec) {
+        return this.addInto(vec, new Vector3());
+    }
+    subtract(vec) {
+        return this.subtractInto(vec, new Vector3());
+    }
+    clone() {
+        return new Vector3(this.x, this.y, this.z);
+    }
+    scale(scalar) {
+        return this.scaleInto(scalar, new Vector3());
     }
     toString() {
-        const vector = this.toPrecision(1);
-        return "[" + vector.x + "; " + vector.y + "]";
+        return `Vector3 { x: ${this.x}, y: ${this.y}, z: ${this.z} }`;
     }
 }
 
@@ -316,8 +709,8 @@ Array.prototype.random = function () {
     return this[index];
 };
 Array.prototype.shuffle = function () {
-    var buffer = [], start;
-    for (var i = this.length; i >= this.length && i > 0; i--) {
+    let buffer = [], start;
+    for (let i = this.length; i >= this.length && i > 0; i--) {
         start = Math.floor(Math.random() * this.length);
         buffer.push(this.splice(start, 1)[0]);
     }
@@ -384,6 +777,7 @@ exports.Event = Event;
 exports.Random = Random;
 exports.SeededRandom = SeededRandom;
 exports.Vector2 = Vector2;
+exports.Vector3 = Vector3;
 exports.clone = clone;
 exports.isArray = isArray;
 exports.isNumeric = isNumeric;

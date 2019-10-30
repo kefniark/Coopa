@@ -12,7 +12,7 @@ export function isNumeric(value: any): boolean {
 
 export function isObjectEmpty(obj: any) {
 	if (!obj || typeof obj !== "object") return true
-	for (var a in obj) if (obj.hasOwnProperty(a)) return false
+	for (const a in obj) if (obj.hasOwnProperty(a)) return false
 	return true
 }
 

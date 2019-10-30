@@ -57,10 +57,10 @@ Array.prototype.random = function() {
 }
 
 Array.prototype.shuffle = function() {
-	var buffer = [],
+	let buffer = [],
 		start
 
-	for (var i = this.length; i >= this.length && i > 0; i--) {
+	for (let i = this.length; i >= this.length && i > 0; i--) {
 		start = Math.floor(Math.random() * this.length)
 		buffer.push(this.splice(start, 1)[0])
 	}

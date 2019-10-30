@@ -1,48 +1,74 @@
-export class Vector2 {
-	public x: number = 0
-	public y: number = 0
+import { Matrix } from "./matrix"
+import { eulerToRadian, radianToEuler, roundTo } from "./math"
+
+export class Vector2 extends Matrix {
+	static get zero() {
+		return new Vector2(0, 0)
+	}
+	static get up() {
+		return new Vector2(0, 1)
+	}
+	static get down() {
+		return new Vector2(0, -1)
+	}
+	static get left() {
+		return new Vector2(-1, 0)
+	}
+	static get right() {
+		return new Vector2(1, 0)
+	}
+
+	get x() {
+		return this.elements[0][0]
+	}
+	set x(val: number) {
+		this.elements[0][0] = val
+	}
+
+	get y() {
+		return this.elements[0][1]
+	}
+	set y(val: number) {
+		this.elements[0][1] = val
+	}
 
 	constructor(x: number = 0, y: number = 0) {
-		this.x = x
-		this.y = y
+		super([[x, y, 0]])
 	}
 
-	set(x: number, y: number) {
-		this.x = x || 0
-		this.y = y || 0
+	add(vec: Vector2): Vector2 {
+		return this.addInto(vec, new Vector2())
 	}
 
-	clone() {
-		return new Vector2(this.x, this.y)
-	}
-
-	add(vector: Vector2) {
-		return new Vector2(this.x + vector.x, this.y + vector.y)
-	}
-
-	subtract(vector: Vector2) {
-		return new Vector2(this.x - vector.x, this.y - vector.y)
+	subtract(vec: Vector2): Vector2 {
+		return this.subtractInto(vec, new Vector2())
 	}
 
 	scale(scalar: number) {
-		return new Vector2(this.x * scalar, this.y * scalar)
+		return this.scaleInto(scalar, new Vector2())
+	}
+
+	clone(): Vector2 {
+		return new Vector2(this.x, this.y)
 	}
 
 	dot(vector: Vector2) {
-		return this.x * vector.x + this.y + vector.y
+		return this.x * vector.x + this.y * vector.y
 	}
 
-	moveTowards(vector: Vector2, t: number) {
-		t = Math.min(t, 1)
-		const diff = vector.subtract(this)
-		return this.add(diff.scale(t))
+	cross(vector: Vector2) {
+		return this.x * vector.y - this.y * vector.x
 	}
 
-	magnitude() {
-		return Math.sqrt(this.magnitudeSqr())
+	round(decimal: number = 2) {
+		return new Vector2(roundTo(this.x, decimal), roundTo(this.y, decimal))
 	}
 
-	magnitudeSqr() {
+	length() {
+		return Math.sqrt(this.lengthSqr())
+	}
+
+	lengthSqr() {
 		return this.x * this.x + this.y * this.y
 	}
 
@@ -57,7 +83,7 @@ export class Vector2 {
 	}
 
 	normalize() {
-		const mag = this.magnitude()
+		const mag = this.length()
 		const vector = this.clone()
 		if (Math.abs(mag) < 1e-9) {
 			vector.x = 0
@@ -73,6 +99,14 @@ export class Vector2 {
 		return Math.atan2(this.y, this.x)
 	}
 
+	angleEuler() {
+		return radianToEuler(Math.atan2(this.y, this.x))
+	}
+
+	rotateEuler(angle: number) {
+		return this.rotate(eulerToRadian(angle))
+	}
+
 	rotate(alpha: number) {
 		const cos = Math.cos(alpha)
 		const sin = Math.sin(alpha)
@@ -82,15 +116,54 @@ export class Vector2 {
 		return vector
 	}
 
-	toPrecision(precision: number) {
-		const vector = this.clone()
-		vector.x = Number(vector.x.toFixed(precision))
-		vector.y = Number(vector.y.toFixed(precision))
-		return vector
+	toString(): string {
+		return `Vector2 { x: ${this.x}, y: ${this.y} }`
+	}
+}
+
+export class Vector3 extends Matrix {
+	get x() {
+		return this.elements[0][0]
+	}
+	set x(val: number) {
+		this.elements[0][0] = val
 	}
 
-	toString() {
-		const vector = this.toPrecision(1)
-		return "[" + vector.x + "; " + vector.y + "]"
+	get y() {
+		return this.elements[0][1]
+	}
+	set y(val: number) {
+		this.elements[0][1] = val
+	}
+
+	get z() {
+		return this.elements[0][2]
+	}
+	set z(val: number) {
+		this.elements[0][2] = val
+	}
+
+	constructor(x: number = 0, y: number = 0, z: number = 0) {
+		super([[x, y, z]])
+	}
+
+	add(vec: Vector2 | Vector3): Vector3 {
+		return this.addInto(vec as Vector3, new Vector3())
+	}
+
+	subtract(vec: Vector2 | Vector3): Vector3 {
+		return this.subtractInto(vec as Vector3, new Vector3())
+	}
+
+	clone(): Vector3 {
+		return new Vector3(this.x, this.y, this.z)
+	}
+
+	scale(scalar: number) {
+		return this.scaleInto(scalar, new Vector3())
+	}
+
+	toString(): string {
+		return `Vector3 { x: ${this.x}, y: ${this.y}, z: ${this.z} }`
 	}
 }

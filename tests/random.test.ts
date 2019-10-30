@@ -12,12 +12,12 @@ test("Random", () => {
 })
 
 test("RandBool", () => {
-	var list = [0, 0]
-	for (var i = 0; i < 100000; i++) {
+	const list = [0, 0]
+	for (let i = 0; i < 100000; i++) {
 		const r = rng.randBool()
 		list[r ? 0 : 1] += 1
 	}
-	for (var l of list) {
+	for (const l of list) {
 		expect(l).toBeGreaterThan(45000)
 	}
 })
@@ -33,12 +33,12 @@ test("randRangeInt", () => {
 	expect(r).toBeGreaterThanOrEqual(100)
 	expect(r).toBeLessThanOrEqual(102)
 
-	var list = [0, 0, 0, 0]
-	for (var i = 0; i < 100000; i++) {
+	const list = [0, 0, 0, 0]
+	for (let i = 0; i < 100000; i++) {
 		const r = rng.randRangeInt(0, 3)
 		list[r] += 1
 	}
-	for (var l of list) {
+	for (const l of list) {
 		expect(l).toBeGreaterThan(20000)
 	}
 })
@@ -48,12 +48,12 @@ test("randRangeInt", () => {
 	expect(r).toBeGreaterThanOrEqual(100)
 	expect(r).toBeLessThanOrEqual(102)
 
-	var list = [0, 0, 0, 0]
-	for (var i = 0; i < 100000; i++) {
+	const list = [0, 0, 0, 0]
+	for (let i = 0; i < 100000; i++) {
 		const r = rng.randRangeInt(0, 3)
 		list[r] += 1
 	}
-	for (var l of list) {
+	for (const l of list) {
 		expect(l).toBeGreaterThan(20000)
 	}
 })
@@ -63,7 +63,7 @@ test("seededRandom", () => {
 	const rng2 = rng.createSeededRandom(1234)
 	const rng3 = rng.createSeededRandom(1235)
 
-	for (var i = 0; i < 100; i++) {
+	for (let i = 0; i < 100; i++) {
 		const r1 = rng1.rand()
 		const r2 = rng2.rand()
 		const r3 = rng3.rand()

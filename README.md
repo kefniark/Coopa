@@ -67,18 +67,47 @@ logger.warn("warn", { a: 1 })
 logger.error("error", { a: 2 })
 ```
 
-### Math
-
-#### Vector2
+### OnChange
 ```ts
-import { Vector2 } from "coopa"
+import { onChange } from "coopa"
 
-const vec = new Vector2(2, 4)
-vec.set(1, 6)
-vec.add(new Vector(5, 5))
-vec.clone().normalize()
+const data = { a: 2, c: 4 }
+const proxy = onChange(data, (prop, value) => console.log(`Property changed ${prop} = ${value}`))
+
+proxy.b = { a: 1, b: 2} // Add: Property changed `b` = { a: 1, b: 2 }
+proxy.a = 5 // Set: Property changed `a` = 5
+proxy.b.a = 5 // Set Chield: Property changed `b.a` = 5
+delete proxy.b // Delete: Property changed `b`
 ```
 
+### Math
+
+Most of the Math functions are based on [gl-matrix](https://github.com/toji/gl-matrix/):
+* Matrices (Mat3, Mat4)
+* Quaternions (Quat, Quat2)
+* Vectors (Vec2, Vec3, Vec4)
+
+#### Transform
+Based on Mat4 with position (Vec3), rotation (Vec3), scale (Vec3)
+```ts
+const trans = new Transform()
+
+// vector3
+trans.position.x = 100
+trans.position.y = 60
+trans.position.z = 0
+
+// quat
+trans.rotation.w = Math.sqrt(0.5)
+trans.rotation.z = Math.sqrt(0.5)
+
+// vector3
+trans.scale.x = 2
+trans.scale.y = 2
+
+trans.toCss() // => matrix3d(-4.440892098500626e-16, 2.0000000000000004, 0, 0, -2.0000000000000004, -4.440892098500626e-16, 0, 0, 0, 0, 1, 0, 100, 60, 0, 1)
+
+```
 ___
 ### And few extension utility
 

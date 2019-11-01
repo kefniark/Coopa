@@ -29,6 +29,8 @@
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": true,
+		"jsx": "react",
+		"jsxFactory": "jsx"
 	},
 	"include":[
 		"./src/**/*"

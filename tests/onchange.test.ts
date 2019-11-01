@@ -18,7 +18,7 @@ test("on-change", () => {
 
 test("on-change event", () => {
 	let events = 0
-	var a: any = { a: 1, b: 2}
+	var a: any = { a: 1, b: 2 }
 	const proxy = onChange(a, () => events++)
 
 	proxy.a = 1

@@ -1,3 +1,4 @@
+// [COOPA] Build: 0.1.4 - November 2, 2019
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });

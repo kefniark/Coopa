@@ -127,6 +127,8 @@ const logger = new Logger();
 /**
  * Method used to create a proxy around some data an get event
  *
+ * Inspired by `on-change` but simpler (https://github.com/sindresorhus/on-change/)
+ *
  * @export
  * @param {*} objToWatch
  * @param {(prop: string, value?: any, previous?: any) => void} onChangeFunction
@@ -152,15 +154,20 @@ function onChange(objToWatch, onChangeFunction) {
         set(target, property, value) {
             const path = getRootPath(target) + property;
             const prev = target[property];
+            if (value === prev)
+                return true;
             const res = Reflect.set(target, property, value);
             onChangeFunction(path, value, prev);
             return res;
         },
         deleteProperty(target, property) {
             const path = getRootPath(target) + property;
-            onChangeFunction(path);
-            map.delete(target);
-            return Reflect.deleteProperty(target, property);
+            const prev = target[property];
+            if (map.has(target))
+                map.delete(target);
+            const res = Reflect.deleteProperty(target, property);
+            onChangeFunction(path, undefined, prev);
+            return res;
         }
     };
     map.set(objToWatch, "");

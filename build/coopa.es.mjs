@@ -1,4 +1,8 @@
 // [COOPA] Build: 0.1.3 - November 2, 2019
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 /**
  * Provide polyfill around Date.now()
  */
@@ -63,13 +67,12 @@ function uid(len = 8) {
     return id;
 }
 
-var LogLevel;
 (function (LogLevel) {
     LogLevel[LogLevel["INFO"] = 0] = "INFO";
     LogLevel[LogLevel["WARN"] = 1] = "WARN";
     LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
     LogLevel[LogLevel["OFF"] = 3] = "OFF";
-})(LogLevel || (LogLevel = {}));
+})(exports.LogLevel || (exports.LogLevel = {}));
 class Logger {
     constructor() {
         this.eventHandler = new Event();
@@ -99,31 +102,33 @@ class Logger {
         this._console = val;
     }
     info(...params) {
-        if (this.level > LogLevel.INFO)
+        if (this.level > exports.LogLevel.INFO)
             return;
         if (this._console)
             console.info(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.INFO, this.prefix, ...params]);
+        this.eventHandler.emit([exports.LogLevel.INFO, this.prefix, ...params]);
     }
     warn(...params) {
-        if (this.level > LogLevel.WARN)
+        if (this.level > exports.LogLevel.WARN)
             return;
         if (this._console)
             console.warn(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.WARN, this.prefix, ...params]);
+        this.eventHandler.emit([exports.LogLevel.WARN, this.prefix, ...params]);
     }
     error(...params) {
-        if (this.level > LogLevel.ERROR)
+        if (this.level > exports.LogLevel.ERROR)
             return;
         if (this._console)
             console.error(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.ERROR, this.prefix, ...params]);
+        this.eventHandler.emit([exports.LogLevel.ERROR, this.prefix, ...params]);
     }
 }
 const logger = new Logger();
 
 /**
  * Method used to create a proxy around some data an get event
+ *
+ * Inspired by `on-change` but simpler (https://github.com/sindresorhus/on-change/)
  *
  * @export
  * @param {*} objToWatch
@@ -150,15 +155,20 @@ function onChange(objToWatch, onChangeFunction) {
         set(target, property, value) {
             const path = getRootPath(target) + property;
             const prev = target[property];
+            if (value === prev)
+                return true;
             const res = Reflect.set(target, property, value);
             onChangeFunction(path, value, prev);
             return res;
         },
         deleteProperty(target, property) {
             const path = getRootPath(target) + property;
-            onChangeFunction(path);
-            map.delete(target);
-            return Reflect.deleteProperty(target, property);
+            const prev = target[property];
+            if (map.has(target))
+                map.delete(target);
+            const res = Reflect.deleteProperty(target, property);
+            onChangeFunction(path, undefined, prev);
+            return res;
         }
     };
     map.set(objToWatch, "");
@@ -6088,4 +6098,27 @@ class ObjectExt {
 
 const name = "Coopa";
 
-export { ArrayExt, Event, LogLevel, ObjectExt, Random, SeededRandom, StringExt, Transform2d, Transform3d, logger, mat2d, mat3, mat4, common as math, name, now, onChange, perf, quat, quat2, rng, uid, vec2, vec3, vec4 };
+exports.ArrayExt = ArrayExt;
+exports.Event = Event;
+exports.ObjectExt = ObjectExt;
+exports.Random = Random;
+exports.SeededRandom = SeededRandom;
+exports.StringExt = StringExt;
+exports.Transform2d = Transform2d;
+exports.Transform3d = Transform3d;
+exports.logger = logger;
+exports.mat2d = mat2d;
+exports.mat3 = mat3;
+exports.mat4 = mat4;
+exports.math = common;
+exports.name = name;
+exports.now = now;
+exports.onChange = onChange;
+exports.perf = perf;
+exports.quat = quat;
+exports.quat2 = quat2;
+exports.rng = rng;
+exports.uid = uid;
+exports.vec2 = vec2;
+exports.vec3 = vec3;
+exports.vec4 = vec4;

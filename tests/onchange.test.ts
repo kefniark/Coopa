@@ -15,3 +15,16 @@ test("on-change", () => {
 	proxy.b.d.a = 3
 	delete proxy.b
 })
+
+test("on-change event", () => {
+	let events = 0
+	var a: any = { a: 1, b: 2}
+	const proxy = onChange(a, () => events++)
+
+	proxy.a = 1
+	proxy.b = 3
+	proxy.b = 2
+	proxy.b = 2
+
+	expect(events).toBe(2)
+})

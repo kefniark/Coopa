@@ -64,10 +64,11 @@ export function forEach(mat: number[], cb: (index: number, value: number) => num
 	}
 }
 
-// if (!Math.hypot)
-// 	Math.hypot = function() {
-// 		var y = 0,
-// 			i = arguments.length
-// 		while (i--) y += arguments[i] * arguments[i]
-// 		return Math.sqrt(y)
-// 	}
+if (!Math.hypot) {
+	Math.hypot = function() {
+		var y = 0,
+			i = arguments.length
+		while (i--) y += arguments[i] * arguments[i]
+		return Math.sqrt(y)
+	}
+}

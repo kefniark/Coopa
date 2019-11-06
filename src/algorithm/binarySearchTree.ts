@@ -61,7 +61,7 @@ export class binarySearchTree<Key, Val> {
 	}
 
 	public delete(key: Key) {
-		if (!this.root) {
+		if (this.root) {
 			this.root = this.recursiveDel(this.root, key)
 		}
 	}

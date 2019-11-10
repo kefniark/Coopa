@@ -1,4 +1,6 @@
-class TreeNode<Key, Val> {
+// inspired by https://algs4.cs.princeton.edu/31elementary/
+
+class TreeNode<Key extends number | string, Val> {
 	public key: Key
 	public val: Val
 	public right: TreeNode<Key, Val>
@@ -7,24 +9,35 @@ class TreeNode<Key, Val> {
 		this.key = key
 		this.val = val
 	}
+
+	public toString() {
+		this.print("", this, false)
+	}
+	private print(prefix: string, node: TreeNode<Key, Val>, isLeft: boolean) {
+		if (node != null) {
+			console.log(prefix + (isLeft ? "|-- " : "\\-- ") + node.key)
+			this.print(prefix + (isLeft ? "|   " : "    "), node.left, true)
+			this.print(prefix + (isLeft ? "|   " : "    "), node.right, false)
+		}
+	}
 }
 
-export class binarySearchTree<Key, Val> {
-	private root: TreeNode<Key, Val>
+export class BinarySearchTree<Key extends number | string, Val> {
+	private root: TreeNode<Key, Val> | null
 
-	insert(key: Key, val: Val): void {
-		this.root = this.recursiveInsert(this.root, key, val)
+	set(key: Key, val: Val): void {
+		this.root = this.recursiveSet(this.root, key, val)
 	}
 
-	private recursiveInsert(node: TreeNode<Key, Val>, key: Key, val: Val): TreeNode<Key, Val> {
+	private recursiveSet(node: TreeNode<Key, Val> | null, key: Key, val: Val): TreeNode<Key, Val> {
 		if (node == null) {
 			return new TreeNode(key, val)
 		}
 
 		if (key < node.key) {
-			node.left = this.recursiveInsert(node.left, key, val)
+			node.left = this.recursiveSet(node.left, key, val)
 		} else if (key > node.key) {
-			node.right = this.recursiveInsert(node.right, key, val)
+			node.right = this.recursiveSet(node.right, key, val)
 		} else {
 			node.val = val
 		}
@@ -36,19 +49,15 @@ export class binarySearchTree<Key, Val> {
 		return this.recursiveGet(this.root, key)
 	}
 
-	private recursiveGet(x: TreeNode<Key, Val>, key: Key): Val | null {
-		if (x == null) return null
-		if (key < x.key) {
-			return this.recursiveGet(x.left, key)
-		} else if (key > x.key) {
-			return this.recursiveGet(x.right, key)
+	private recursiveGet(node: TreeNode<Key, Val> | null, key: Key): Val | null {
+		if (node == null) return null
+		if (key < node.key) {
+			return this.recursiveGet(node.left, key)
+		} else if (key > node.key) {
+			return this.recursiveGet(node.right, key)
 		} else {
-			return x.val
+			return node.val
 		}
-	}
-
-	public delMin() {
-		this.root = this.recursiveDelMin(this.root)
 	}
 
 	private recursiveDelMin(node: TreeNode<Key, Val>): TreeNode<Key, Val> {
@@ -62,15 +71,19 @@ export class binarySearchTree<Key, Val> {
 
 	public delete(key: Key) {
 		if (this.root) {
-			this.root = this.recursiveDel(this.root, key)
+			this.root = this.delRecursively(this.root, key)
 		}
 	}
 
-	private recursiveDel(node: TreeNode<Key, Val>, key: Key): TreeNode<Key, Val> {
+	public clear() {
+		this.root = null
+	}
+
+	private delRecursively(node: TreeNode<Key, Val>, key: Key): TreeNode<Key, Val> {
 		if (key < node.key) {
-			node.left = this.recursiveDel(node.left, key)
+			node.left = this.delRecursively(node.left, key)
 		} else if (key > node.key) {
-			node.right = this.recursiveDel(node.right, key)
+			node.right = this.delRecursively(node.right, key)
 		} else {
 			if (node.right == null) {
 				return node.left
@@ -95,19 +108,64 @@ export class binarySearchTree<Key, Val> {
 		return this.min(node.left)
 	}
 
-	public traverse(): TreeNode<Key, Val>[] {
+	public entries(): TreeNode<Key, Val>[] {
 		var array: TreeNode<Key, Val>[] = []
-		this.iterate(this.root, array)
+		this.entriesRecursively(this.root, array)
 		return array
 	}
 
-	private iterate(node: TreeNode<Key, Val>, array: TreeNode<Key, Val>[]) {
+	private entriesRecursively(node: TreeNode<Key, Val> | null, array: TreeNode<Key, Val>[]) {
 		if (node == null) {
 			return
 		}
 
-		this.iterate(node.left, array)
+		this.entriesRecursively(node.left, array)
 		array.push(node)
-		this.iterate(node.right, array)
+		this.entriesRecursively(node.right, array)
+	}
+
+	public keys(): Key[] {
+		var array: Key[] = []
+		this.keyRecursively(this.root, array)
+		return array
+	}
+
+	public has(key: Key): boolean {
+		var keys = this.keys()
+		return keys.indexOf(key) > -1
+	}
+
+	private keyRecursively(node: TreeNode<Key, Val> | null, array: Key[]) {
+		if (node == null) {
+			return
+		}
+
+		this.keyRecursively(node.left, array)
+		array.push(node.key)
+		this.keyRecursively(node.right, array)
+	}
+
+	public values(): Val[] {
+		var array: Val[] = []
+		this.valRecursively(this.root, array)
+		return array
+	}
+
+	private valRecursively(node: TreeNode<Key, Val> | null, array: Val[]) {
+		if (node == null) {
+			return
+		}
+
+		this.valRecursively(node.left, array)
+		array.push(node.val)
+		this.valRecursively(node.right, array)
+	}
+
+	public print() {
+		if (this.root != null) {
+			return this.root.toString()
+		}
+
+		return ""
 	}
 }

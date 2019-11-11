@@ -22,10 +22,20 @@ class TreeNode<Key extends number | string, Val> {
 	}
 }
 
+/**
+ * Binary search tree
+ * @template Key
+ * @template Val
+ */
 export class BinarySearchTree<Key extends number | string, Val> {
 	private root: TreeNode<Key, Val> | null
 
-	set(key: Key, val: Val): void {
+	/**
+	 * Set tree node into the tree.
+	 * @param key
+	 * @param val
+	 */
+	public set(key: Key, val: Val): void {
 		this.root = this.recursiveSet(this.root, key, val)
 	}
 
@@ -45,6 +55,11 @@ export class BinarySearchTree<Key extends number | string, Val> {
 		return node
 	}
 
+	/**
+	 * Gets Tree node by key from binary search tree
+	 * @param key
+	 * @returns get
+	 */
 	public get(key: Key): Val | null {
 		return this.recursiveGet(this.root, key)
 	}
@@ -69,12 +84,19 @@ export class BinarySearchTree<Key extends number | string, Val> {
 		return node
 	}
 
+	/**
+	 * Deletes TreeNode by key from binary search tree
+	 * @param key
+	 */
 	public delete(key: Key) {
 		if (this.root) {
 			this.root = this.delRecursively(this.root, key)
 		}
 	}
 
+	/**
+	 * Clear binary search tree
+	 */
 	public clear() {
 		this.root = null
 	}
@@ -108,6 +130,10 @@ export class BinarySearchTree<Key extends number | string, Val> {
 		return this.min(node.left)
 	}
 
+	/**
+	 * Return all tree nodes in binary search tree
+	 * @returns entries
+	 */
 	public entries(): TreeNode<Key, Val>[] {
 		var array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
@@ -124,43 +150,40 @@ export class BinarySearchTree<Key extends number | string, Val> {
 		this.entriesRecursively(node.right, array)
 	}
 
+	/**
+	 * Return all keys in binary search tree
+	 * @returns keys
+	 */
 	public keys(): Key[] {
-		var array: Key[] = []
-		this.keyRecursively(this.root, array)
-		return array
+		var array: TreeNode<Key, Val>[] = []
+		this.entriesRecursively(this.root, array)
+		return array.map(x => x.key)
 	}
 
+	/**
+	 * Return true if binary search tree contains key
+	 * @param key
+	 * @returns true if has
+	 */
 	public has(key: Key): boolean {
 		var keys = this.keys()
 		return keys.indexOf(key) > -1
 	}
 
-	private keyRecursively(node: TreeNode<Key, Val> | null, array: Key[]) {
-		if (node == null) {
-			return
-		}
-
-		this.keyRecursively(node.left, array)
-		array.push(node.key)
-		this.keyRecursively(node.right, array)
-	}
-
+	/**
+	 * Return all values in binary search tree
+	 * @returns values
+	 */
 	public values(): Val[] {
-		var array: Val[] = []
-		this.valRecursively(this.root, array)
-		return array
+		var array: TreeNode<Key, Val>[] = []
+		this.entriesRecursively(this.root, array)
+		return array.map(x => x.val)
 	}
 
-	private valRecursively(node: TreeNode<Key, Val> | null, array: Val[]) {
-		if (node == null) {
-			return
-		}
-
-		this.valRecursively(node.left, array)
-		array.push(node.val)
-		this.valRecursively(node.right, array)
-	}
-
+	/**
+	 * Prints binary search tree
+	 * @returns
+	 */
 	public print() {
 		if (this.root != null) {
 			return this.root.toString()

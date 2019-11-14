@@ -1,4 +1,4 @@
-name: Node CI
+name: Build CI
 
 on: ["push", "pull_request"]
 
@@ -25,7 +25,6 @@ jobs:
         npm run coverage
       env:
         CI: true
-
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:

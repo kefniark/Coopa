@@ -1,3 +1,6 @@
+// Used only as a polyfill for DOMRect
+/* istanbul ignore file */
+
 export class DOMRect {
 	x: number
 	y: number

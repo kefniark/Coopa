@@ -1,10 +1,8 @@
-import { DOMMatrix } from "./matrix"
+// Used only as a polyfill for DOMPoint
+// cf: https://drafts.fxtf.org/geometry/#DOMPoint
+/* istanbul ignore file */
 
-// @info
-//   DOMPoint polyfill
-// @src
-//   https://drafts.fxtf.org/geometry/#DOMPoint
-//   https://github.com/chromium/chromium/blob/master/third_party/blink/renderer/core/geometry/dom_point_read_only.cc
+import { DOMMatrix } from "./matrix"
 
 export class DOMPoint {
 	x: number

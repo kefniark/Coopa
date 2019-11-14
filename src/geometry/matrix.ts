@@ -1,3 +1,6 @@
+// Used only as a polyfill for DOMMatrix
+/* istanbul ignore file */
+
 const enum Matrix3D {
 	M11 = 0,
 	M12 = 1,

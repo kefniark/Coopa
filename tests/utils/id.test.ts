@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { uid } from "../src/id"
+import { uid } from "../../src"
 
 test("Basic", () => {
 	expect(uid().length).toBe(8)

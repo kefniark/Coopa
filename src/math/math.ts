@@ -42,7 +42,7 @@ export function numberEqual(a: number, b: number) {
  * @param {number} [decimals=2]
  */
 export function roundTo(value: number, decimals: number = 2) {
-	return +value.toFixed(decimals)
+	return +value.toFixed(decimals + EPSILON)
 }
 
 /**

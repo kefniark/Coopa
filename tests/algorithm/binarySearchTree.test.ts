@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { BinarySearchTree } from "../../src/algorithm/binarySearchTree"
+import { BinarySearchTree } from "../../src"
 
 test("insertion with string", () => {
 	var bst = new BinarySearchTree<string, number>()

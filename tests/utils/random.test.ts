@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { rng } from "../src/random"
+import { rng } from "../../src"
 
 test("Random", () => {
 	const r1 = rng.rand()

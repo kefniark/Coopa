@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { onChange } from "../src/onchange"
+import { onChange } from "../../src"
 
 test("on-change", () => {
 	var a: any = {}

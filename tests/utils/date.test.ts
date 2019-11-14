@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { perf, now } from "../src/date"
+import { perf, now } from "../../src"
 
 test("Basic", () => {
 	const res1 = perf()

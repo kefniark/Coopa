@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { logger, LogLevel } from "../src/logger"
+import { logger, LogLevel } from "../../src"
 
 test("Basic", () => {
 	let evt = 0

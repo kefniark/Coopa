@@ -1,5 +1,5 @@
 /// <reference types="jest" />
-import { Event } from "../src/events"
+import { Event } from "../../src"
 
 test("Basic", () => {
 	const event = new Event<number>()

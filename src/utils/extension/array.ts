@@ -1,8 +1,26 @@
 export class ArrayExt {
+	/**
+	 * Create an array of n elements with value val
+	 *
+	 * createSimilar(3, 2) -> [2, 2, 2]
+	 *
+	 * @param {number} n
+	 * @param {number} [val=0]
+	 * @returns
+	 */
 	static createSimilar(n: number, val: number = 0) {
 		return ArrayExt.create(n, () => val)
 	}
 
+	/**
+	 * Create an array of n elements ordered starting at start
+	 *
+	 * createOrder(3, 1) -> [1, 2, 3]
+	 *
+	 * @param {number} n
+	 * @param {number} [start=1]
+	 * @returns
+	 */
 	static createOrder(n: number, start: number = 1) {
 		return ArrayExt.create(n, i => start + i)
 	}

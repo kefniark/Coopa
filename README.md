@@ -1,8 +1,8 @@
 ## Coopa
 
+[![Build Status](https://github.com/kefniark/Coopa/workflows/Build%20CI/badge.svg)](https://github.com/kefniark/Coopa/actions)
 [![NPM Version](https://img.shields.io/npm/v/coopa.svg)](https://npmjs.org/package/coopa)
 [![NPM Download](https://img.shields.io/npm/dm/coopa.svg)](https://npmjs.org/package/coopa)
-[![Build Status](https://travis-ci.org/kefniark/Coopa.svg?branch=master)](https://travis-ci.org/kefniark/Coopa)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Coopa/badge.svg?branch=master)](https://coveralls.io/github/kefniark/Coopa?branch=master)
 [![License](https://img.shields.io/npm/l/coopa.svg)](https://npmjs.org/package/coopa)
 

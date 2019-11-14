@@ -2,15 +2,16 @@ import * as matrix from "./matrix"
 import * as point from "./point"
 import * as rect from "./rect"
 
-const m = globalThis.DOMMatrix ? DOMMatrix : matrix.DOMMatrix as any
-const p = globalThis.DOMPoint ? DOMPoint : point.DOMPoint as any
-const r = globalThis.DOMRect ? DOMRect : rect.DOMRect as any
+const m = globalThis.DOMMatrix ? DOMMatrix : (matrix.DOMMatrix as any)
+const p = globalThis.DOMPoint ? DOMPoint : (point.DOMPoint as any)
+const r = globalThis.DOMRect ? DOMRect : (rect.DOMRect as any)
 
 export * from "./vector"
 
 export const createMatrix = (t?: string | number[]) => new m(t) as DOMMatrix
 export const createPoint = (x?: number, y?: number, z?: number, w?: number) => new p(x, y, z, w) as DOMPoint
-export const createRect = (x?: number, y?: number, width?: number, height?: number) => new r(x, y, width, height) as DOMRect
+export const createRect = (x?: number, y?: number, width?: number, height?: number) =>
+	new r(x, y, width, height) as DOMRect
 export const mapMatrix = (matrix: DOMMatrix, cb: (i: number, j: number, val: number) => number) => {
 	matrix.m11 = cb(1, 1, matrix.m11)
 	matrix.m12 = cb(1, 2, matrix.m12)
@@ -34,19 +35,31 @@ export const mapMatrix = (matrix: DOMMatrix, cb: (i: number, j: number, val: num
 }
 
 // set identity matrix
-export const resetMatrix = (matrix: DOMMatrix) => mapMatrix(matrix, (i, j) => i === j ? 1 : 0)
+export const resetMatrix = (matrix: DOMMatrix) => mapMatrix(matrix, (i, j) => (i === j ? 1 : 0))
 export const matrix3dValues = (matrix: DOMMatrix) => {
 	return [
-		matrix.m11, matrix.m12, matrix.m13, matrix.m14,
-		matrix.m21, matrix.m22, matrix.m23, matrix.m24,
-		matrix.m31, matrix.m32, matrix.m33, matrix.m34,
-		matrix.m41, matrix.m42, matrix.m43, matrix.m44,
+		matrix.m11,
+		matrix.m12,
+		matrix.m13,
+		matrix.m14,
+		matrix.m21,
+		matrix.m22,
+		matrix.m23,
+		matrix.m24,
+		matrix.m31,
+		matrix.m32,
+		matrix.m33,
+		matrix.m34,
+		matrix.m41,
+		matrix.m42,
+		matrix.m43,
+		matrix.m44
 	]
 }
 export const matrix3dToCSS = (matrix: DOMMatrix) => {
-	return `matrix3d(${matrix3dValues(matrix).join(",")})`;
+	return `matrix3d(${matrix3dValues(matrix).join(",")})`
 }
 
 export const matrix2dToCSS = (matrix: DOMMatrix) => {
-	return `matrix2d(${[matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].join(",")})`;
+	return `matrix2d(${[matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].join(",")})`
 }

@@ -1,8 +1,8 @@
 /// <reference types="jest" />
 import { DOM } from "../../src"
-import * as jsdom from 'jsdom'
+import * as jsdom from "jsdom"
 
-const {window} = new jsdom.JSDOM(`<html><head></head><body><div id="app"></div></body></html`)
+const { window } = new jsdom.JSDOM(`<html><head></head><body><div id="app"></div></body></html`)
 DOM.setup(window.document)
 test("Basic", () => {
 	const div = DOM.createElement("div")

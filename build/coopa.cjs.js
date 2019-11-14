@@ -330,50 +330,138 @@ class DOMMatrix$1 {
             throw new TypeError("Expected string or array.");
         }
     }
-    get m11() { return getNumber(this, Matrix3D.M11); }
-    set m11(value) { setNumber2D(this, Matrix3D.M11, value); }
-    get m12() { return getNumber(this, Matrix3D.M12); }
-    set m12(value) { setNumber2D(this, Matrix3D.M12, value); }
-    get m13() { return getNumber(this, Matrix3D.M13); }
-    set m13(value) { setNumber2D(this, Matrix3D.M13, value); }
-    get m14() { return getNumber(this, Matrix3D.M14); }
-    set m14(value) { setNumber2D(this, Matrix3D.M14, value); }
-    get m21() { return getNumber(this, Matrix3D.M21); }
-    set m21(value) { setNumber2D(this, Matrix3D.M21, value); }
-    get m22() { return getNumber(this, Matrix3D.M22); }
-    set m22(value) { setNumber2D(this, Matrix3D.M22, value); }
-    get m23() { return getNumber(this, Matrix3D.M23); }
-    set m23(value) { setNumber2D(this, Matrix3D.M23, value); }
-    get m24() { return getNumber(this, Matrix3D.M24); }
-    set m24(value) { setNumber2D(this, Matrix3D.M24, value); }
-    get m31() { return getNumber(this, Matrix3D.M31); }
-    set m31(value) { setNumber2D(this, Matrix3D.M31, value); }
-    get m32() { return getNumber(this, Matrix3D.M32); }
-    set m32(value) { setNumber2D(this, Matrix3D.M32, value); }
-    get m33() { return getNumber(this, Matrix3D.M33); }
-    set m33(value) { setNumber2D(this, Matrix3D.M33, value); }
-    get m34() { return getNumber(this, Matrix3D.M34); }
-    set m34(value) { setNumber2D(this, Matrix3D.M34, value); }
-    get m41() { return getNumber(this, Matrix3D.M41); }
-    set m41(value) { setNumber2D(this, Matrix3D.M41, value); }
-    get m42() { return getNumber(this, Matrix3D.M42); }
-    set m42(value) { setNumber2D(this, Matrix3D.M42, value); }
-    get m43() { return getNumber(this, Matrix3D.M43); }
-    set m43(value) { setNumber2D(this, Matrix3D.M43, value); }
-    get m44() { return getNumber(this, Matrix3D.M44); }
-    set m44(value) { setNumber2D(this, Matrix3D.M44, value); }
-    get a() { return getNumber(this, Matrix2D.A); }
-    set a(value) { setNumber2D(this, Matrix2D.A, value); }
-    get b() { return getNumber(this, Matrix2D.B); }
-    set b(value) { setNumber2D(this, Matrix2D.B, value); }
-    get c() { return getNumber(this, Matrix2D.C); }
-    set c(value) { setNumber2D(this, Matrix2D.C, value); }
-    get d() { return getNumber(this, Matrix2D.D); }
-    set d(value) { setNumber2D(this, Matrix2D.D, value); }
-    get e() { return getNumber(this, Matrix2D.E); }
-    set e(value) { setNumber2D(this, Matrix2D.E, value); }
-    get f() { return getNumber(this, Matrix2D.F); }
-    set f(value) { setNumber2D(this, Matrix2D.F, value); }
+    get m11() {
+        return getNumber(this, Matrix3D.M11);
+    }
+    set m11(value) {
+        setNumber2D(this, Matrix3D.M11, value);
+    }
+    get m12() {
+        return getNumber(this, Matrix3D.M12);
+    }
+    set m12(value) {
+        setNumber2D(this, Matrix3D.M12, value);
+    }
+    get m13() {
+        return getNumber(this, Matrix3D.M13);
+    }
+    set m13(value) {
+        setNumber2D(this, Matrix3D.M13, value);
+    }
+    get m14() {
+        return getNumber(this, Matrix3D.M14);
+    }
+    set m14(value) {
+        setNumber2D(this, Matrix3D.M14, value);
+    }
+    get m21() {
+        return getNumber(this, Matrix3D.M21);
+    }
+    set m21(value) {
+        setNumber2D(this, Matrix3D.M21, value);
+    }
+    get m22() {
+        return getNumber(this, Matrix3D.M22);
+    }
+    set m22(value) {
+        setNumber2D(this, Matrix3D.M22, value);
+    }
+    get m23() {
+        return getNumber(this, Matrix3D.M23);
+    }
+    set m23(value) {
+        setNumber2D(this, Matrix3D.M23, value);
+    }
+    get m24() {
+        return getNumber(this, Matrix3D.M24);
+    }
+    set m24(value) {
+        setNumber2D(this, Matrix3D.M24, value);
+    }
+    get m31() {
+        return getNumber(this, Matrix3D.M31);
+    }
+    set m31(value) {
+        setNumber2D(this, Matrix3D.M31, value);
+    }
+    get m32() {
+        return getNumber(this, Matrix3D.M32);
+    }
+    set m32(value) {
+        setNumber2D(this, Matrix3D.M32, value);
+    }
+    get m33() {
+        return getNumber(this, Matrix3D.M33);
+    }
+    set m33(value) {
+        setNumber2D(this, Matrix3D.M33, value);
+    }
+    get m34() {
+        return getNumber(this, Matrix3D.M34);
+    }
+    set m34(value) {
+        setNumber2D(this, Matrix3D.M34, value);
+    }
+    get m41() {
+        return getNumber(this, Matrix3D.M41);
+    }
+    set m41(value) {
+        setNumber2D(this, Matrix3D.M41, value);
+    }
+    get m42() {
+        return getNumber(this, Matrix3D.M42);
+    }
+    set m42(value) {
+        setNumber2D(this, Matrix3D.M42, value);
+    }
+    get m43() {
+        return getNumber(this, Matrix3D.M43);
+    }
+    set m43(value) {
+        setNumber2D(this, Matrix3D.M43, value);
+    }
+    get m44() {
+        return getNumber(this, Matrix3D.M44);
+    }
+    set m44(value) {
+        setNumber2D(this, Matrix3D.M44, value);
+    }
+    get a() {
+        return getNumber(this, Matrix2D.A);
+    }
+    set a(value) {
+        setNumber2D(this, Matrix2D.A, value);
+    }
+    get b() {
+        return getNumber(this, Matrix2D.B);
+    }
+    set b(value) {
+        setNumber2D(this, Matrix2D.B, value);
+    }
+    get c() {
+        return getNumber(this, Matrix2D.C);
+    }
+    set c(value) {
+        setNumber2D(this, Matrix2D.C, value);
+    }
+    get d() {
+        return getNumber(this, Matrix2D.D);
+    }
+    set d(value) {
+        setNumber2D(this, Matrix2D.D, value);
+    }
+    get e() {
+        return getNumber(this, Matrix2D.E);
+    }
+    set e(value) {
+        setNumber2D(this, Matrix2D.E, value);
+    }
+    get f() {
+        return getNumber(this, Matrix2D.F);
+    }
+    set f(value) {
+        setNumber2D(this, Matrix2D.F, value);
+    }
     get isIdentity() {
         let values = this.values;
         return (values[Matrix3D.M11] === 1 &&
@@ -684,9 +772,7 @@ class DOMPoint$1 {
         return new DOMPoint$1(otherPoint.x, otherPoint.y, otherPoint.z !== undefined ? otherPoint.z : 0, otherPoint.w !== undefined ? otherPoint.w : 1);
     }
     matrixTransform(matrix) {
-        if ((matrix.is2D || matrix instanceof SVGMatrix) &&
-            this.z === 0 &&
-            this.w === 1) {
+        if ((matrix.is2D || matrix instanceof SVGMatrix) && this.z === 0 && this.w === 1) {
             return new DOMPoint$1(this.x * matrix.a + this.y * matrix.c + matrix.e, this.x * matrix.b + this.y * matrix.d + matrix.f, 0, 1);
         }
         else {
@@ -920,13 +1006,25 @@ const mapMatrix = (matrix, cb) => {
     matrix.m44 = cb(4, 4, matrix.m44);
 };
 // set identity matrix
-const resetMatrix = (matrix) => mapMatrix(matrix, (i, j) => i === j ? 1 : 0);
+const resetMatrix = (matrix) => mapMatrix(matrix, (i, j) => (i === j ? 1 : 0));
 const matrix3dValues = (matrix) => {
     return [
-        matrix.m11, matrix.m12, matrix.m13, matrix.m14,
-        matrix.m21, matrix.m22, matrix.m23, matrix.m24,
-        matrix.m31, matrix.m32, matrix.m33, matrix.m34,
-        matrix.m41, matrix.m42, matrix.m43, matrix.m44,
+        matrix.m11,
+        matrix.m12,
+        matrix.m13,
+        matrix.m14,
+        matrix.m21,
+        matrix.m22,
+        matrix.m23,
+        matrix.m24,
+        matrix.m31,
+        matrix.m32,
+        matrix.m33,
+        matrix.m34,
+        matrix.m41,
+        matrix.m42,
+        matrix.m43,
+        matrix.m44
     ];
 };
 const matrix3dToCSS = (matrix) => {
@@ -1026,6 +1124,12 @@ function onChange(objToWatch, onChangeFunction) {
     return new Proxy(objToWatch, handler);
 }
 
+/**
+ * Basic Transform class, provide (position, rotation, scale) and take care of transformation
+ *
+ * @export
+ * @class TransformMatrix
+ */
 class TransformMatrix {
     constructor() {
         this.matrix = createMatrix();
@@ -1054,6 +1158,12 @@ class TransformMatrix {
     }
 }
 
+/**
+ * Extend Transform matrix and add simple layout system with pivot, anchor and size
+ *
+ * @export
+ * @class RectTransformMatrix
+ */
 class RectTransformMatrix extends TransformMatrix {
     constructor() {
         super();

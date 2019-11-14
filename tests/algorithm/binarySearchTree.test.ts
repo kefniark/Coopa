@@ -3,7 +3,7 @@ import { BinarySearchTree } from "../../src"
 
 test("insertion with string", () => {
 	var bst = new BinarySearchTree<string, number>()
-	var input = "S E A R C H E X A M P L E".split(' ')
+	var input = "S E A R C H E X A M P L E".split(" ")
 	for (var i = 0; i < input.length; i++) {
 		bst.set(input[i], i)
 	}
@@ -13,8 +13,8 @@ test("insertion with string", () => {
 	var result = bst.entries()
 
 	// remove duplication
-	input.sort();
-	let expected = [...new Set(input)];
+	input.sort()
+	let expected = [...new Set(input)]
 	for (var i = 0; i < expected.length; i++) {
 		expect(result[i].key).toBe(expected[i])
 	}
@@ -22,7 +22,7 @@ test("insertion with string", () => {
 
 test("insertion with number", () => {
 	var bst = new BinarySearchTree<number, number>()
-	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99];
+	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
 	for (var i = 0; i < input.length; i++) {
 		bst.set(input[i], input[i])
 	}
@@ -30,8 +30,8 @@ test("insertion with number", () => {
 	var result = bst.entries()
 
 	// remove duplication
-	input.sort();
-	let expected = [...new Set(input)];
+	input.sort()
+	let expected = [...new Set(input)]
 	for (var i = 0; i < expected.length; i++) {
 		expect(result[i].key).toBe(expected[i])
 		expect(result[i].val).toBe(expected[i])
@@ -40,7 +40,7 @@ test("insertion with number", () => {
 
 test("deletion", () => {
 	var bst = new BinarySearchTree<number, number>()
-	var input = [41, 91, 65, 11, 29, 32, 50, 22, 72, 99];
+	var input = [41, 91, 65, 11, 29, 32, 50, 22, 72, 99]
 	for (var i = 0; i < input.length; i++) {
 		bst.set(input[i], input[i])
 	}
@@ -58,12 +58,11 @@ test("deletion", () => {
 	}
 
 	bst.delete(-1)
-
 })
 
 test("Clear", () => {
 	var bst = new BinarySearchTree<number, number>()
-	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99];
+	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
 
 	for (var i = 0; i < input.length; i++) {
 		bst.set(input[i], input[i])
@@ -75,8 +74,8 @@ test("Clear", () => {
 
 test("Keys and Value", () => {
 	var bst = new BinarySearchTree<number, number>()
-	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99];
-	var map: { [key: string]: number; } = {}
+	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
+	var map: { [key: string]: number } = {}
 	for (var i = 0; i < input.length; i++) {
 		map[input[i]] = i
 		bst.set(input[i], i)
@@ -86,7 +85,7 @@ test("Keys and Value", () => {
 	var values = bst.values()
 
 	// remove duplication
-	input.sort();
+	input.sort()
 	for (var i = 0; i < input.length; i++) {
 		expect(keys[i]).toBe(input[i])
 		expect(values[i]).toBe(map[input[i]])
@@ -95,7 +94,7 @@ test("Keys and Value", () => {
 
 test("Has Key", () => {
 	var bst = new BinarySearchTree<number, number>()
-	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99];
+	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
 	for (var i = 0; i < input.length; i++) {
 		bst.set(input[i], i)
 	}
@@ -103,7 +102,6 @@ test("Has Key", () => {
 	for (var i = 0; i < input.length; i++) {
 		expect(bst.has(input[i])).toBe(true)
 	}
-
 
 	for (var i = 0; i < input.length; i++) {
 		bst.delete(input[i])
@@ -114,7 +112,7 @@ test("Has Key", () => {
 test("ToString", () => {
 	var bst = new BinarySearchTree<number, number>()
 	bst.print()
-	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99];
+	var input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
 	for (var i = 0; i < input.length; i++) {
 		bst.set(input[i], i)
 	}

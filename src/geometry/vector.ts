@@ -1,17 +1,16 @@
-import { roundTo } from "../math/math";
+import { roundTo } from "../math/math"
 
 export class DOMVector2 {
-
 	get length() {
-		return Math.hypot(this.x, this.y);
+		return Math.hypot(this.x, this.y)
 	}
 
 	get lengthSquared() {
 		return this.x * this.x + this.y * this.y
 	}
 
-	x: number;
-	y: number;
+	x: number
+	y: number
 
 	constructor(x = 0, y = 0) {
 		this.x = x
@@ -60,18 +59,17 @@ export class DOMVector2 {
 }
 
 export class DOMVector3 {
-
 	get length() {
-		return Math.hypot(this.x, this.y, this.z);
+		return Math.hypot(this.x, this.y, this.z)
 	}
 
 	get lengthSquared() {
 		return this.x * this.x + this.y * this.y + this.z * this.z
 	}
 
-	x: number;
-	y: number;
-	z: number;
+	x: number
+	y: number
+	z: number
 
 	constructor(x = 0, y = 0, z = 0) {
 		this.x = x

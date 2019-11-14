@@ -5,10 +5,6 @@
 // import * as quat from "./gl-matrix/quat"
 // import { forEach, roundTo, toDegree } from "./math"
 
-
-
-
-
 /*
 export class Matrix2D {
 	matrix: number[]

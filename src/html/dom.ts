@@ -24,19 +24,19 @@ export class DOM {
 	}
 
 	static setText(el: HTMLElement, value: string) {
-		el.innerHTML = value;
+		el.innerHTML = value
 	}
 
-	static setAttr(el: HTMLElement, options: {[id:string]: string}) {
+	static setAttr(el: HTMLElement, options: { [id: string]: string }) {
 		for (var id in options) {
-			if (el.getAttribute(id) === options[id]) continue;
+			if (el.getAttribute(id) === options[id]) continue
 			el.setAttribute(id, options[id])
 		}
 	}
 
 	static setStyle(el: HTMLElement, styles: Partial<CSSStyleDeclaration>) {
 		for (var entry of Object.entries(styles)) {
-			if (el.style[entry[0] as any] === entry[1]) continue;
+			if (el.style[entry[0] as any] === entry[1]) continue
 			el.style[entry[0] as any] = entry[1]
 		}
 	}

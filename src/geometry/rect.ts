@@ -1,8 +1,8 @@
 export class DOMRect {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
+	x: number
+	y: number
+	width: number
+	height: number
 
 	constructor(x = 0, y = 0, width = 0, height = 0) {
 		this.x = x

@@ -2,6 +2,12 @@ import { TransformMatrix } from "./transform"
 import { DOMVector2, createRect, resetMatrix } from "../geometry"
 import { onChange } from "../utils/onchange"
 
+/**
+ * Extend Transform matrix and add simple layout system with pivot, anchor and size
+ *
+ * @export
+ * @class RectTransformMatrix
+ */
 export class RectTransformMatrix extends TransformMatrix {
 	public parent: RectTransformMatrix | undefined
 	public pivot: DOMVector2

@@ -1,9 +1,15 @@
-import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues } from "../geometry";
-import { onChange } from "../utils/onchange";
+import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues } from "../geometry"
+import { onChange } from "../utils/onchange"
 
+/**
+ * Basic Transform class, provide (position, rotation, scale) and take care of transformation
+ *
+ * @export
+ * @class TransformMatrix
+ */
 export class TransformMatrix {
 	public parent: TransformMatrix | undefined
-	public matrix: DOMMatrix;
+	public matrix: DOMMatrix
 	public position: number[]
 	public rotation: number[]
 	public scale: number[]
@@ -19,7 +25,7 @@ export class TransformMatrix {
 	}
 
 	constructor() {
-		this.matrix = createMatrix();
+		this.matrix = createMatrix()
 		this.position = onChange([0, 0, 0], () => this.compute())
 		this.rotation = onChange([0, 0, 0], () => this.compute())
 		this.scale = onChange([1, 1, 1], () => this.compute())

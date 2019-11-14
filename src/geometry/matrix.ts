@@ -119,54 +119,142 @@ let multiply = (first: Float64Array | number[], second: Float64Array | number[])
 }
 
 export class DOMMatrix {
-	get m11() { return getNumber(this, Matrix3D.M11) }
-	set m11(value) { setNumber2D(this, Matrix3D.M11, value) }
-	get m12() { return getNumber(this, Matrix3D.M12) }
-	set m12(value) { setNumber2D(this, Matrix3D.M12, value) }
-	get m13() { return getNumber(this, Matrix3D.M13) }
-	set m13(value) { setNumber2D(this, Matrix3D.M13, value) }
-	get m14() { return getNumber(this, Matrix3D.M14) }
-	set m14(value) { setNumber2D(this, Matrix3D.M14, value) }
+	get m11() {
+		return getNumber(this, Matrix3D.M11)
+	}
+	set m11(value) {
+		setNumber2D(this, Matrix3D.M11, value)
+	}
+	get m12() {
+		return getNumber(this, Matrix3D.M12)
+	}
+	set m12(value) {
+		setNumber2D(this, Matrix3D.M12, value)
+	}
+	get m13() {
+		return getNumber(this, Matrix3D.M13)
+	}
+	set m13(value) {
+		setNumber2D(this, Matrix3D.M13, value)
+	}
+	get m14() {
+		return getNumber(this, Matrix3D.M14)
+	}
+	set m14(value) {
+		setNumber2D(this, Matrix3D.M14, value)
+	}
 
-	get m21() { return getNumber(this, Matrix3D.M21) }
-	set m21(value) { setNumber2D(this, Matrix3D.M21, value) }
-	get m22() { return getNumber(this, Matrix3D.M22) }
-	set m22(value) { setNumber2D(this, Matrix3D.M22, value) }
-	get m23() { return getNumber(this, Matrix3D.M23) }
-	set m23(value) { setNumber2D(this, Matrix3D.M23, value) }
-	get m24() { return getNumber(this, Matrix3D.M24) }
-	set m24(value) { setNumber2D(this, Matrix3D.M24, value) }
+	get m21() {
+		return getNumber(this, Matrix3D.M21)
+	}
+	set m21(value) {
+		setNumber2D(this, Matrix3D.M21, value)
+	}
+	get m22() {
+		return getNumber(this, Matrix3D.M22)
+	}
+	set m22(value) {
+		setNumber2D(this, Matrix3D.M22, value)
+	}
+	get m23() {
+		return getNumber(this, Matrix3D.M23)
+	}
+	set m23(value) {
+		setNumber2D(this, Matrix3D.M23, value)
+	}
+	get m24() {
+		return getNumber(this, Matrix3D.M24)
+	}
+	set m24(value) {
+		setNumber2D(this, Matrix3D.M24, value)
+	}
 
-	get m31() { return getNumber(this, Matrix3D.M31) }
-	set m31(value) { setNumber2D(this, Matrix3D.M31, value) }
-	get m32() { return getNumber(this, Matrix3D.M32) }
-	set m32(value) { setNumber2D(this, Matrix3D.M32, value) }
-	get m33() { return getNumber(this, Matrix3D.M33) }
-	set m33(value) { setNumber2D(this, Matrix3D.M33, value) }
-	get m34() { return getNumber(this, Matrix3D.M34) }
-	set m34(value) { setNumber2D(this, Matrix3D.M34, value) }
+	get m31() {
+		return getNumber(this, Matrix3D.M31)
+	}
+	set m31(value) {
+		setNumber2D(this, Matrix3D.M31, value)
+	}
+	get m32() {
+		return getNumber(this, Matrix3D.M32)
+	}
+	set m32(value) {
+		setNumber2D(this, Matrix3D.M32, value)
+	}
+	get m33() {
+		return getNumber(this, Matrix3D.M33)
+	}
+	set m33(value) {
+		setNumber2D(this, Matrix3D.M33, value)
+	}
+	get m34() {
+		return getNumber(this, Matrix3D.M34)
+	}
+	set m34(value) {
+		setNumber2D(this, Matrix3D.M34, value)
+	}
 
-	get m41() { return getNumber(this, Matrix3D.M41) }
-	set m41(value) { setNumber2D(this, Matrix3D.M41, value) }
-	get m42() { return getNumber(this, Matrix3D.M42) }
-	set m42(value) { setNumber2D(this, Matrix3D.M42, value) }
-	get m43() { return getNumber(this, Matrix3D.M43) }
-	set m43(value) { setNumber2D(this, Matrix3D.M43, value) }
-	get m44() { return getNumber(this, Matrix3D.M44) }
-	set m44(value) { setNumber2D(this, Matrix3D.M44, value) }
+	get m41() {
+		return getNumber(this, Matrix3D.M41)
+	}
+	set m41(value) {
+		setNumber2D(this, Matrix3D.M41, value)
+	}
+	get m42() {
+		return getNumber(this, Matrix3D.M42)
+	}
+	set m42(value) {
+		setNumber2D(this, Matrix3D.M42, value)
+	}
+	get m43() {
+		return getNumber(this, Matrix3D.M43)
+	}
+	set m43(value) {
+		setNumber2D(this, Matrix3D.M43, value)
+	}
+	get m44() {
+		return getNumber(this, Matrix3D.M44)
+	}
+	set m44(value) {
+		setNumber2D(this, Matrix3D.M44, value)
+	}
 
-	get a() { return getNumber(this, Matrix2D.A) }
-	set a(value) { setNumber2D(this, Matrix2D.A, value) }
-	get b() { return getNumber(this, Matrix2D.B) }
-	set b(value) { setNumber2D(this, Matrix2D.B, value) }
-	get c() { return getNumber(this, Matrix2D.C) }
-	set c(value) { setNumber2D(this, Matrix2D.C, value) }
-	get d() { return getNumber(this, Matrix2D.D) }
-	set d(value) { setNumber2D(this, Matrix2D.D, value) }
-	get e() { return getNumber(this, Matrix2D.E) }
-	set e(value) { setNumber2D(this, Matrix2D.E, value) }
-	get f() { return getNumber(this, Matrix2D.F) }
-	set f(value) { setNumber2D(this, Matrix2D.F, value) }
+	get a() {
+		return getNumber(this, Matrix2D.A)
+	}
+	set a(value) {
+		setNumber2D(this, Matrix2D.A, value)
+	}
+	get b() {
+		return getNumber(this, Matrix2D.B)
+	}
+	set b(value) {
+		setNumber2D(this, Matrix2D.B, value)
+	}
+	get c() {
+		return getNumber(this, Matrix2D.C)
+	}
+	set c(value) {
+		setNumber2D(this, Matrix2D.C, value)
+	}
+	get d() {
+		return getNumber(this, Matrix2D.D)
+	}
+	set d(value) {
+		setNumber2D(this, Matrix2D.D, value)
+	}
+	get e() {
+		return getNumber(this, Matrix2D.E)
+	}
+	set e(value) {
+		setNumber2D(this, Matrix2D.E, value)
+	}
+	get f() {
+		return getNumber(this, Matrix2D.F)
+	}
+	set f(value) {
+		setNumber2D(this, Matrix2D.F, value)
+	}
 
 	values: Float64Array
 	is2D: boolean
@@ -388,7 +476,7 @@ export class DOMMatrix {
 		return newInstance(this.values).rotateSelf(rotX, rotY, rotZ)
 	}
 
-	rotateSelf(rotX: number = 0, rotY: number = 0, rotZ: number  = 0) {
+	rotateSelf(rotX: number = 0, rotY: number = 0, rotZ: number = 0) {
 		if (rotY === undefined && rotZ === undefined) {
 			rotZ = rotX
 			rotX = rotY = 0
@@ -524,21 +612,17 @@ export class DOMMatrix {
 	invertSelf() {
 		// if (this.is2D) {
 		// 	let det = this.values[Matrix2D.A] * this.values[Matrix2D.D] - this.values[Matrix2D.B] * this.values[Matrix2D.C]
-
 		// 	// Invertable
 		// 	if (det !== 0) {
 		// 		let result = new DOMMatrix()
-
 		// 		result.a = this.values[Matrix2D.D] / det
 		// 		result.b = -this.values[Matrix2D.B] / det
 		// 		result.c = -this.values[Matrix2D.C] / det
 		// 		result.d = this.values[Matrix2D.A] / det
 		// 		result.e = (this.values[Matrix2D.C] * this.values[Matrix2D.F] - this.values[Matrix2D.D] * this.values[Matrix2D.E]) / det
 		// 		result.f = (this.values[Matrix2D.B] * this.values[Matrix2D.E] - this.values[Matrix2D.A] * this.values[Matrix2D.F]) / det
-
 		// 		return result
 		// 	}
-
 		// 	// Not invertable
 		// 	else {
 		// 		this.is2D = false
@@ -566,10 +650,14 @@ export class DOMMatrix {
 
 		let values = this.values
 
-		let nx = values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w
-		let ny = values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w
-		let nz = values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w
-		let nw = values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w
+		let nx =
+			values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w
+		let ny =
+			values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w
+		let nz =
+			values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w
+		let nw =
+			values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w
 
 		return new DOMPoint(nx, ny, nz, nw)
 	}

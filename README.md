@@ -1,6 +1,8 @@
 ## Coopa
 
 [![Build Status](https://github.com/kefniark/Coopa/workflows/Build%20CI/badge.svg)](https://github.com/kefniark/Coopa/actions)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/kefniark/Coopa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kefniark/Coopa/alerts/)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/kefniark/Coopa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kefniark/Coopa/alerts/)
 [![NPM Version](https://img.shields.io/npm/v/coopa.svg)](https://npmjs.org/package/coopa)
 [![NPM Download](https://img.shields.io/npm/dm/coopa.svg)](https://npmjs.org/package/coopa)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Coopa/badge.svg?branch=master)](https://coveralls.io/github/kefniark/Coopa?branch=master)
@@ -23,5 +25,3 @@ ___
 * [HTML](./src/html/Readme.md)
 * [Utils](./src/utils/Readme.md)
 * [Extensions](./src/utils/extension/Readme.md)
-
-test

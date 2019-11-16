@@ -9,17 +9,6 @@ class TreeNode<Key extends number | string, Val> {
 		this.key = key
 		this.val = val
 	}
-
-	public toString() {
-		this.print("", this, false)
-	}
-	private print(prefix: string, node: TreeNode<Key, Val>, isLeft: boolean) {
-		if (node != null) {
-			console.log(prefix + (isLeft ? "|-- " : "\\-- ") + node.key)
-			this.print(prefix + (isLeft ? "|   " : "    "), node.left, true)
-			this.print(prefix + (isLeft ? "|   " : "    "), node.right, false)
-		}
-	}
 }
 
 /**
@@ -51,7 +40,6 @@ export class BinarySearchTree<Key extends number | string, Val> {
 		} else {
 			node.val = val
 		}
-
 		return node
 	}
 
@@ -182,13 +170,53 @@ export class BinarySearchTree<Key extends number | string, Val> {
 
 	/**
 	 * Prints binary search tree
+	 * Inspired by https://flaviocopes.com/golang-data-structure-binary-search-tree/
 	 * @returns
 	 */
 	public print() {
-		if (this.root != null) {
-			return this.root.toString()
+		// Draw lines for debugging
+		var maxHeight = this.getMaxHeight()
+		if (maxHeight == 0) return
+		var line = "--------"
+		var current = ""
+		for (var i = 0; i < maxHeight; i++) {
+			current += line
 		}
 
-		return ""
+		console.log(current)
+		this.stringify(this.root, 0)
+		console.log(current)
+	}
+
+	private stringify(n: TreeNode<Key, Val> | null, level: number) {
+		if (!n) return
+
+		var format = ""
+		for (var i = 0; i < level; i++) {
+			format += "       "
+		}
+
+		format += "----[ "
+		level++
+
+		// change the order for logs to display smaller value to right
+		this.stringify(n.right, level)
+		console.log(format + n.key)
+		this.stringify(n.left, level)
+	}
+
+	/**
+	 * Return max height of Binary Search Tree
+	 * @returns max height
+	 */
+	public getMaxHeight(): number {
+		return this.getMaxHeightRecursively(this.root)
+	}
+
+	private getMaxHeightRecursively(node: TreeNode<Key, Val> | null): number {
+		if (!node) return 0
+		if (node.left == null && node.right == null) return 1
+
+		return 1 + Math.max(this.getMaxHeightRecursively(node.left), this.getMaxHeightRecursively(node.right))
 	}
 }

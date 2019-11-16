@@ -3,7 +3,7 @@
 	"version": "0.1.9",
 	"description": "",
 	"main": "build/coopa.umd.js",
-	"module": "build/coopa.esm.mjs",
+	"module": "build/coopa.es.mjs",
 	"types": "build/declarations/index.d.ts",
 	"sideEffects": false,
 	"engines": {
@@ -42,7 +42,7 @@
 		"@types/jest": "^24.0.23",
 		"@types/jsdom": "^12.2.4",
 		"@types/node": "^12.12.8",
-		"fatina": "file:../fatina",
+		"fatina": "^3.0.1",
 		"jest": "^24.9.0",
 		"jsdom": "^15.2.1",
 		"livereload": "^0.8.2",

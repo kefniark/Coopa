@@ -89,7 +89,7 @@ export class RectTransformMatrix extends TransformMatrix {
 		var pat1 = decomposeMatrix(before.inverse().multiply(this.global))
 
 		this.position.x -= pat1.translate.x
-		this.position.y += pat1.translate.y
+		this.position.y -= pat1.translate.y
 		this.position.z -= pat1.translate.z
 		console.log(pat1, pat1.translate.x, this.size.x)
 

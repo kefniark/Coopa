@@ -1719,7 +1719,7 @@
 	        this.rotation.z += dec1.rotate.z - dec2.rotate.z;
 	        var pat1 = decomposeMatrix(before.inverse().multiply(this.global));
 	        this.position.x -= pat1.translate.x;
-	        this.position.y += pat1.translate.y;
+	        this.position.y -= pat1.translate.y;
 	        this.position.z -= pat1.translate.z;
 	        console.log(pat1, pat1.translate.x, this.size.x);
 	        console.log("apres compensation", decomposeMatrix(this.global));

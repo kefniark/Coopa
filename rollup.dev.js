@@ -1,5 +1,5 @@
 import pkg from "./package.json"
-import typescript from "rollup-plugin-typescript"
+import typescript from "rollup-plugin-typescript2"
 import serve from 'rollup-plugin-serve'
 
 export default {

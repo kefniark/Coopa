@@ -12,8 +12,8 @@
 		// build settings
 		"sourceMap": false,
 		"pretty": true,
-		"declaration": true,
-		"preserveConstEnums": true,
+		"declaration": false,
+		"preserveConstEnums": false,
 
 		// strict
 		"strict": true,

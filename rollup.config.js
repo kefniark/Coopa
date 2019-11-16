@@ -1,21 +1,10 @@
 import pkg from "./package.json"
-import typescript from "rollup-plugin-typescript"
+import typescript from "rollup-plugin-typescript2"
 import filesize from "rollup-plugin-filesize"
 import versionInjector from "rollup-plugin-version-injector"
 
 export default {
 	input: "src/index.ts",
-	output: [
-		{
-			name: "Coopa",
-			file: pkg.main,
-			format: "umd"
-		},
-		{
-			file: pkg.module,
-			format: "esm"
-		}
-	],
 	external: [...Object.keys(pkg.peerDependencies || {})],
 	plugins: [
 		typescript(),

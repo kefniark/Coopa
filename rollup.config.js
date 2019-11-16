@@ -7,12 +7,13 @@ export default {
 	input: "src/index.ts",
 	output: [
 		{
+			name: "Coopa",
 			file: pkg.main,
-			format: "cjs"
+			format: "umd"
 		},
 		{
 			file: pkg.module,
-			format: "es"
+			format: "esm"
 		}
 	],
 	external: [...Object.keys(pkg.peerDependencies || {})],

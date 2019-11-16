@@ -1,5 +1,5 @@
-import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues } from "../geometry"
-import { onChange } from "../utils/onchange"
+import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues, DOMVector3 } from "../geometry/index"
+import { ArrayExt, Event, onChange } from "../utils/index"
 
 /**
  * Basic Transform class, provide (position, rotation, scale) and take care of transformation
@@ -8,37 +8,60 @@ import { onChange } from "../utils/onchange"
  * @class TransformMatrix
  */
 export class TransformMatrix {
-	public parent: TransformMatrix | undefined
-	public matrix: DOMMatrix
-	public position: number[]
-	public rotation: number[]
-	public scale: number[]
+	public onParentChanged: Event<TransformMatrix | undefined>
+	public onChanged: Event<void>
+	public onDelayedChanged: Event<void>
+	protected _parent: TransformMatrix | undefined
+	protected _child: TransformMatrix[] = []
+	get parent() {
+		return this._parent
+	}
+	set parent(p: TransformMatrix | undefined) {
+		if (p === this._parent) return
+		if (this._parent) {
+			ArrayExt.remove(this._parent._child, this)
+		}
+		this._parent = p
+		this.onParentChanged.emit(p)
+		if (this._parent) {
+			this._parent._child.push(this)
+		}
+	}
 
-	public get global() {
-		let mat = createMatrix(matrix3dValues(this.matrix))
-		let el: TransformMatrix = this
-		while (!!el.parent) {
-			el = el.parent
-			mat.multiply(el.matrix)
+	public matrix: DOMMatrix
+	public position: DOMVector3
+	public rotation: DOMVector3
+	public scale: DOMVector3
+
+	public get global(): DOMMatrix {
+		const mat = createMatrix(matrix3dValues(this.matrix))
+		if (this.parent) {
+			const el: TransformMatrix = this.parent
+			mat.multiplySelf(el.global)
 		}
 		return mat
 	}
 
 	constructor() {
 		this.matrix = createMatrix()
-		this.position = onChange([0, 0, 0], () => this.compute())
-		this.rotation = onChange([0, 0, 0], () => this.compute())
-		this.scale = onChange([1, 1, 1], () => this.compute())
+		this.position = onChange(new DOMVector3(0, 0, 0), () => this.compute())
+		this.rotation = onChange(new DOMVector3(0, 0, 0), () => this.compute())
+		this.scale = onChange(new DOMVector3(1, 1, 1), () => this.compute())
+		this.onChanged = new Event()
+		this.onParentChanged = new Event()
 	}
 
-	compute(reset: boolean = true) {
-		if (reset) resetMatrix(this.matrix)
-		this.matrix.translateSelf(this.position[0], this.position[1], this.position[2])
-		this.matrix.rotateSelf(this.rotation[0], this.rotation[1], this.rotation[2])
-		this.matrix.scaleSelf(this.scale[0], this.scale[1], this.scale[2])
+	compute() {
+		resetMatrix(this.matrix)
+		this.matrix.translateSelf(this.position.x, this.position.y, this.position.z)
+		this.matrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z)
+		this.matrix.scaleSelf(this.scale.x, this.scale.y, this.scale.z)
+		this.onChanged.emit()
 	}
 
 	toCSS() {
-		return matrix3dToCSS(this.matrix)
+		return {
+			transform: matrix3dToCSS(this.matrix)
+		}
 	}
 }

@@ -23,3 +23,18 @@ ___
 * [HTML](./src/html/Readme.md)
 * [Utils](./src/utils/Readme.md)
 * [Extensions](./src/utils/extension/Readme.md)
+
+___
+
+## Dev
+
+Automatically rebuild code on changed and start a local server with samples on `localhost:8085`
+```
+npm run dev
+```
+
+If you want to work on sample, I recommend using:
+```
+npm run dev:livereload
+```
+This command will automatically reload the browser when samples are edited

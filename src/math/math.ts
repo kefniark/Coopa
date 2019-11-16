@@ -57,18 +57,3 @@ export function roundTo(value: number, decimals: number = 2) {
 export function equals(a: number, b: number) {
 	return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b))
 }
-
-export function forEach(mat: number[], cb: (index: number, value: number) => number) {
-	for (var i = 0; i < mat.length; i++) {
-		mat[i] = cb(i, mat[i])
-	}
-}
-
-if (!Math.hypot) {
-	Math.hypot = function() {
-		var y = 0,
-			i = arguments.length
-		while (i--) y += arguments[i] * arguments[i]
-		return Math.sqrt(y)
-	}
-}

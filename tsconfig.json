@@ -7,7 +7,7 @@
 		"outDir": "./build",
 		"declarationDir": "./build/declarations/",
 		"types": ["node"],
-		"module": "commonjs",
+		"module": "esnext",
 
 		// build settings
 		"sourceMap": false,
@@ -28,9 +28,7 @@
 		"noImplicitAny": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
-		"noImplicitThis": true,
-		"jsx": "react",
-		"jsxFactory": "jsx"
+		"noImplicitThis": true
 	},
 	"include":[
 		"./src/**/*"

@@ -5,17 +5,7 @@ import versionInjector from "rollup-plugin-version-injector"
 
 export default {
 	input: "src/index.ts",
-	output: [
-		{
-			file: pkg.main,
-			format: "cjs"
-		},
-		{
-			file: pkg.module,
-			format: "es"
-		}
-	],
-	external: [...Object.keys(pkg.peerDependencies || {})],
+	external: [...Object.keys(pkg.peerDependencies || {}), ...Object.keys(pkg.dependencies || {})],
 	plugins: [
 		typescript(),
 		versionInjector({

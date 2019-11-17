@@ -102,7 +102,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 				return node.right
 			}
 
-			var t = node
+			const t = node
 			node = this.min(node.right)
 			node.right = this.recursiveDelMin(t.right)
 			node.left = t.left
@@ -123,7 +123,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns entries
 	 */
 	public entries(): TreeNode<Key, Val>[] {
-		var array: TreeNode<Key, Val>[] = []
+		const array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
 		return array
 	}
@@ -143,7 +143,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns keys
 	 */
 	public keys(): Key[] {
-		var array: TreeNode<Key, Val>[] = []
+		const array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
 		return array.map(x => x.key)
 	}
@@ -154,7 +154,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns true if has
 	 */
 	public has(key: Key): boolean {
-		var keys = this.keys()
+		const keys = this.keys()
 		return keys.indexOf(key) > -1
 	}
 
@@ -163,7 +163,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns values
 	 */
 	public values(): Val[] {
-		var array: TreeNode<Key, Val>[] = []
+		const array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
 		return array.map(x => x.val)
 	}
@@ -175,11 +175,11 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 */
 	public print() {
 		// Draw lines for debugging
-		var maxHeight = this.getMaxHeight()
+		const maxHeight = this.height
 		if (maxHeight == 0) return
-		var line = "--------"
-		var current = ""
-		for (var i = 0; i < maxHeight; i++) {
+		const line = "--------"
+		let current = ""
+		for (let i = 0; i < maxHeight; i++) {
 			current += line
 		}
 
@@ -191,8 +191,8 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	private stringify(n: TreeNode<Key, Val> | null, level: number) {
 		if (!n) return
 
-		var format = ""
-		for (var i = 0; i < level; i++) {
+		let format = ""
+		for (let i = 0; i < level; i++) {
 			format += "       "
 		}
 
@@ -209,7 +209,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * Return max height of Binary Search Tree
 	 * @returns max height
 	 */
-	public getMaxHeight(): number {
+	public get height(): number {
 		return this.getMaxHeightRecursively(this.root)
 	}
 

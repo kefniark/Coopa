@@ -1,4 +1,9 @@
-## Coopa
+# Coopa
+
+A really simple and reliable Typescript utility library compatible with Tree Shaking
+
+* [**Samples**](https://kefniark.github.io/Coopa/samples/)
+* [**API Documentation**](./src/Readme.md)
 
 [![Build Status](https://github.com/kefniark/Coopa/workflows/Build%20CI/badge.svg)](https://github.com/kefniark/Coopa/actions)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/kefniark/Coopa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kefniark/Coopa/alerts/)
@@ -6,8 +11,6 @@
 [![NPM Download](https://img.shields.io/npm/dm/coopa.svg)](https://npmjs.org/package/coopa)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Coopa/badge.svg?branch=master)](https://coveralls.io/github/kefniark/Coopa?branch=master)
 [![License](https://img.shields.io/npm/l/coopa.svg)](https://npmjs.org/package/coopa)
-
-A really simple and reliable Typescript utility library compatible with Tree Shaking
 
 Originally just for personal use, a bit tired to copy/paste code between project in a `helpers.js` or to have crazy dependencies for any basic feature.
 
@@ -17,21 +20,26 @@ Export with Rollup in:
 
 ___
 
-## Links
+## Usage
 
-### Demo:
-* [**Samples**](https://kefniark.github.io/Coopa/samples/)
+To install
+```
+npm install coopa
+```
 
-### API:
-* [Algorithm](./src/algorithm/Readme.md)
-* [Geometry](./src/geometry/Readme.md)
-* [HTML](./src/html/Readme.md)
-* [Utils](./src/utils/Readme.md)
-* [Extensions](./src/utils/extension/Readme.md)
+and use
+
+```ts
+import { uid } from "coopa"
+
+uid() // -> "KCSNPPDr"
+```
+
+Test online with [RunKit](https://runkit.com/embed/b74otegzaeba)
 
 ___
 
-## Dev
+## Development
 
 ### Getting Started
 Automatically rebuild code on changed and start a local server with samples on `localhost:8085`

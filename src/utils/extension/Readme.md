@@ -2,32 +2,38 @@
 
 #### Array
 ```ts
-Array.clone()
-Array.isEmpty()
-Array.first()
-Array.last()
-Array.insert(index: number, element: T)
-Array.removeIndex(index: number)
-Array.remove(element: T)
-Array.shuffle()
-Array.random()
-Array.sum()
-Array.avg()
+import { ArrayExt } from "coopa"
+
+ArrayExt.clone(arr)
+ArrayExt.isEmpty(arr)
+ArrayExt.first(arr)
+ArrayExt.last(arr)
+ArrayExt.insert(arr, index: number, element: T)
+ArrayExt.removeIndex(arr, index: number)
+ArrayExt.remove(arr, element: T)
+ArrayExt.shuffle(arr)
+ArrayExt.random(arr)
+ArrayExt.sum(arr)
+ArrayExt.avg(arr)
 ```
 
 #### String
 ```ts
-String.capitalize()
-String.capitalizeWords()
-String.contains(val: string)
-String.slugify(lower?: boolean)
+import { StringExt } from "coopa"
+
+StringExt.isNullOrEmpty(str)
+StringExt.capitalize(str)
+StringExt.capitalizeWords(str)
+StringExt.contains(str: string, search: string)
+StringExt.slugify(str, lower?: boolean)
 ```
 
 #### Check
 ```ts
-isString(val: any): boolean
-isArray(val: any): boolean
-isNumeric(val: any): boolean
-isObjectEmpty(val: any): boolean
-clone(val: T): T
+import { ObjectExt } from "coopa"
+
+ObjectExt.isString(val: any): boolean
+ObjectExt.isArray(val: any): boolean
+ObjectExt.isNumeric(val: any): boolean
+ObjectExt.clone(val: T): T
 ```

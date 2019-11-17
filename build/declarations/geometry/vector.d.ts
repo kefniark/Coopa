@@ -5,7 +5,7 @@ export declare class DOMVector2 {
     y: number;
     constructor(x?: number, y?: number);
     clone(): DOMVector2;
-    set(x: number, y: number): this;
+    set(x?: number, y?: number): this;
     invert(): this;
     negate(): this;
     normalize(): this;
@@ -22,7 +22,7 @@ export declare class DOMVector3 {
     z: number;
     constructor(x?: number, y?: number, z?: number);
     clone(): DOMVector3;
-    set(x: number, y: number, z: number): this;
+    set(x?: number, y?: number, z?: number): this;
     invert(): this;
     negate(): this;
     normalize(): this;

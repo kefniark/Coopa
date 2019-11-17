@@ -22,7 +22,7 @@ export class DOMVector2 {
 		return new DOMVector2(this.x, this.y)
 	}
 
-	set(x: number, y: number) {
+	set(x: number = NaN, y: number = NaN) {
 		if (!isNaN(x)) this.x = x
 		if (!isNaN(y)) this.y = y
 		return this
@@ -94,7 +94,7 @@ export class DOMVector3 {
 		return new DOMVector3(this.x, this.y, this.z)
 	}
 
-	set(x: number, y: number, z: number) {
+	set(x: number = NaN, y: number = NaN, z: number = NaN) {
 		if (!isNaN(x)) this.x = x
 		if (!isNaN(y)) this.y = y
 		if (!isNaN(z)) this.z = z

@@ -11,7 +11,12 @@
 				overflow: hidden;
 			}
 
+			#app {
+				transform-style: preserve-3d;
+			}
+
 			.element {
+				/* transform-style: preserve-3d; */
 				/* backface-visibility: hidden; */
 				will-change: transform, opacity;
 				position: absolute;
@@ -149,6 +154,18 @@
 			})
 			map.set(rootLayout2, layoutDiv2)
 
+			var rootLayout4 = new Coopa.RectTransformMatrix(1280, 960)
+			rootLayout4.parent = rootLayout2
+			var layoutDiv4 = Coopa.DOM.createElement('div')
+			layoutDiv2.appendChild(layoutDiv4)
+			Coopa.DOM.setAttr(layoutDiv4, { id:"layout4", class: "element" })
+			Coopa.DOM.setStyle(layoutDiv4, rootLayout4.toCSS())
+			var layoutEvent4 = new Coopa.DelayedEvent(rootLayout4.onChanged)
+			layoutEvent4.on(() => {
+				Coopa.DOM.setStyle(layoutDiv4, Object.assign(rootLayout4.toCSS()))
+				// console.log('Changed', rootLayout2)
+			})
+			map.set(rootLayout4, layoutDiv4)
 
 			var rootLayout3 = new Coopa.RectTransformMatrix(1280, 960)
 			rootLayout3.parent = rootLayout2
@@ -163,15 +180,59 @@
 			})
 			map.set(rootLayout3, layoutDiv3)
 
+
+
+
+			function createPoint(x, y, size, parent, parentDiv, color) {
+				var rootPoint = new Coopa.RectTransformMatrix(1280, 960)
+				rootPoint.parent = parent
+
+				rootPoint.anchor.set(x, y)
+				rootPoint.size.set(size, size)
+				var pointDiv = Coopa.DOM.createElement('div')
+				parentDiv.appendChild(pointDiv)
+				Coopa.DOM.setAttr(pointDiv, { id:"point", class: "element" })
+				Coopa.DOM.setStyle(pointDiv, rootPoint.toCSS())
+				var pointEvent = new Coopa.DelayedEvent(rootPoint.onChanged)
+				pointEvent.on(() => Coopa.DOM.setStyle(pointDiv, Object.assign(rootPoint.toCSS(), { backgroundColor: color })))
+				map.set(pointDiv, rootPoint)
+
+				after.addTick(() => pointEvent.update())
+				pointEvent.emit(null, true)
+				pointDiv.addEventListener("click", () => {
+					console.log("click", rootPoint.localOrigin, "scene position: ", rootPoint.globalOrigin)
+					Fatina.shake(rootPoint, { amplitude: 0.06 }).start()
+				})
+			}
+
+			for (var x = 0; x <= 1; x += 0.25) {
+				for (var y = 0; y <= 1; y += 0.25) {
+					createPoint(x, y, 0.15, rootLayout3, layoutDiv3, "#333")
+				}
+			}
+
+			for (var x = 0; x <= 1; x += 0.1) {
+				for (var y = 0; y <= 1; y += 0.1) {
+					createPoint(x, y, 0.06, rootLayout4, layoutDiv4, "#CCC")
+				}
+			}
+
 			rootLayout3.anchor.set(1, 1)
 			rootLayout3.pivot.set(1, 1)
 			rootLayout3.size.set(0.5, 0.5)
+			rootLayout3.position.z = 100
+
+			rootLayout4.anchor.set(0, 0.5)
+			rootLayout4.pivot.set(0, 0.5)
+			rootLayout4.size.set(0.5, 1)
+			rootLayout4.position.z = -200
 
 			// event changed
 			after.addTick(() => rootEvent.update())
 			after.addTick(() => layoutEvent.update())
 			after.addTick(() => layoutEvent2.update())
 			after.addTick(() => layoutEvent3.update())
+			after.addTick(() => layoutEvent4.update())
 			after.addTick(() => child1Event.update())
 			after.addTick(() => child2Event.update())
 			after.addTick(() => childCenterEvent.update())
@@ -180,6 +241,7 @@
 			layoutEvent.emit(null, true)
 			layoutEvent2.emit(null, true)
 			layoutEvent3.emit(null, true)
+			layoutEvent4.emit(null, true)
 			child1Event.emit(null, true)
 			child2Event.emit(null, true)
 			childCenterEvent.emit(null, true)
@@ -234,7 +296,19 @@
 
 			Fatina.tween(child1Transform)
 				.from({ angle: 0 })
-				.to({ angle: 360 }, 25000)
+				.to({ angle: 360 }, 1500)
+				.yoyo(-1)
+				.start()
+
+			Fatina.tween(child1Transform.size)
+				.from({ x: 0.6, y: 0.6 })
+				.to({ x: 0.2, y: 0.2 }, 4000)
+				.yoyo(-1)
+				.start()
+
+			Fatina.tween(child1Transform.position)
+				.from({ x: 0, y: 0 })
+				.to({ x: 1, y: 1 }, 2000)
 				.yoyo(-1)
 				.start()
 

@@ -34,11 +34,11 @@ export class TransformMatrix {
 	public rotation: DOMVector3
 	public scale: DOMVector3
 
-	public get global(): DOMMatrix {
+	public get globalMatrix(): DOMMatrix {
 		const mat = createMatrix(matrix3dValues(this.matrix))
 		if (this.parent) {
 			const el: TransformMatrix = this.parent
-			mat.multiplySelf(el.global)
+			mat.multiplySelf(el.globalMatrix)
 		}
 		return mat
 	}

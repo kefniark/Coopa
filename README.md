@@ -28,7 +28,6 @@ npm install coopa
 ```
 
 and use
-
 ```ts
 import { uid } from "coopa"
 

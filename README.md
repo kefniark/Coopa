@@ -2,7 +2,6 @@
 
 [![Build Status](https://github.com/kefniark/Coopa/workflows/Build%20CI/badge.svg)](https://github.com/kefniark/Coopa/actions)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/kefniark/Coopa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kefniark/Coopa/alerts/)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/kefniark/Coopa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kefniark/Coopa/alerts/)
 [![NPM Version](https://img.shields.io/npm/v/coopa.svg)](https://npmjs.org/package/coopa)
 [![NPM Download](https://img.shields.io/npm/dm/coopa.svg)](https://npmjs.org/package/coopa)
 [![Coverage Status](https://coveralls.io/repos/github/kefniark/Coopa/badge.svg?branch=master)](https://coveralls.io/github/kefniark/Coopa?branch=master)
@@ -13,13 +12,17 @@ A really simple and reliable Typescript utility library compatible with Tree Sha
 Originally just for personal use, a bit tired to copy/paste code between project in a `helpers.js` or to have crazy dependencies for any basic feature.
 
 Export with Rollup in:
-* ESM: the default modern version (compatible with tree shaking)
-* CommonJS: fallback for old node / tools
+* **ESM**: the default modern version (compatible with tree shaking)
+* **UMD**: fallback for old node / tools (both browser & nodeJS)
 
 ___
 
-## API
+## Links
 
+### Demo:
+* [**Samples**](https://kefniark.github.io/Coopa/samples/)
+
+### API:
 * [Algorithm](./src/algorithm/Readme.md)
 * [Geometry](./src/geometry/Readme.md)
 * [HTML](./src/html/Readme.md)

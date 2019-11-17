@@ -1,4 +1,4 @@
-// [COOPA] Build: 0.2.0 - November 17, 2019
+// [COOPA] Build: 0.2.1 - November 17, 2019
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :

@@ -50,7 +50,6 @@ test("deletion", () => {
 		const result = bst.entries()
 		expect(result.length).toBe(input.length - i - 1)
 		expect(bst.get(input[i])).toBe(null)
-
 		// check if the bst has correct nodes
 		for (let j = i + 1; j < input.length; j++) {
 			expect(bst.get(input[j])).toBe(input[j])
@@ -109,12 +108,24 @@ test("Has Key", () => {
 	}
 })
 
-test("ToString", () => {
+test("Print and Get Max Height", () => {
 	const bst = new BinarySearchTree<number, number>()
 	bst.print()
 	const input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
 	for (let i = 0; i < input.length; i++) {
 		bst.set(input[i], i)
+	}
+	const height1 = bst.getMaxHeight()
+	expect(height1).toBe(4)
+
+	bst.print()
+	input.sort()
+	bst.clear()
+
+	for (let i = 0; i < input.length; i++) {
+		bst.set(input[i], i)
+		const height2 = bst.getMaxHeight()
+		expect(height2).toBe(i + 1)
 	}
 	bst.print()
 })

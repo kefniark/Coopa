@@ -1,19 +1,9 @@
-// [COOPA] Build: 0.1.9 - November 17, 2019
+// [COOPA] Build: 0.2.0 - November 17, 2019
 // inspired by https://algs4.cs.princeton.edu/31elementary/
 class TreeNode {
     constructor(key, val) {
         this.key = key;
         this.val = val;
-    }
-    toString() {
-        this.print("", this, false);
-    }
-    print(prefix, node, isLeft) {
-        if (node != null) {
-            console.log(prefix + (isLeft ? "|-- " : "\\-- ") + node.key);
-            this.print(prefix + (isLeft ? "|   " : "    "), node.left, true);
-            this.print(prefix + (isLeft ? "|   " : "    "), node.right, false);
-        }
     }
 }
 /**
@@ -102,7 +92,7 @@ class BinarySearchTree {
             if (node.left == null) {
                 return node.right;
             }
-            var t = node;
+            const t = node;
             node = this.min(node.right);
             node.right = this.recursiveDelMin(t.right);
             node.left = t.left;
@@ -120,7 +110,7 @@ class BinarySearchTree {
      * @returns entries
      */
     entries() {
-        var array = [];
+        const array = [];
         this.entriesRecursively(this.root, array);
         return array;
     }
@@ -137,7 +127,7 @@ class BinarySearchTree {
      * @returns keys
      */
     keys() {
-        var array = [];
+        const array = [];
         this.entriesRecursively(this.root, array);
         return array.map(x => x.key);
     }
@@ -147,7 +137,7 @@ class BinarySearchTree {
      * @returns true if has
      */
     has(key) {
-        var keys = this.keys();
+        const keys = this.keys();
         return keys.indexOf(key) > -1;
     }
     /**
@@ -155,24 +145,62 @@ class BinarySearchTree {
      * @returns values
      */
     values() {
-        var array = [];
+        const array = [];
         this.entriesRecursively(this.root, array);
         return array.map(x => x.val);
     }
     /**
      * Prints binary search tree
+     * Inspired by https://flaviocopes.com/golang-data-structure-binary-search-tree/
      * @returns
      */
     print() {
-        if (this.root != null) {
-            return this.root.toString();
+        // Draw lines for debugging
+        const maxHeight = this.height;
+        if (maxHeight == 0)
+            return;
+        const line = "--------";
+        let current = "";
+        for (let i = 0; i < maxHeight; i++) {
+            current += line;
         }
-        return "";
+        console.log(current);
+        this.stringify(this.root, 0);
+        console.log(current);
+    }
+    stringify(n, level) {
+        if (!n)
+            return;
+        let format = "";
+        for (let i = 0; i < level; i++) {
+            format += "       ";
+        }
+        format += "----[ ";
+        level++;
+        // change the order for logs to display smaller value to right
+        this.stringify(n.right, level);
+        console.log(format + n.key);
+        this.stringify(n.left, level);
+    }
+    /**
+     * Return max height of Binary Search Tree
+     * @returns max height
+     */
+    get height() {
+        return this.getMaxHeightRecursively(this.root);
+    }
+    getMaxHeightRecursively(node) {
+        if (!node)
+            return 0;
+        if (node.left == null && node.right == null)
+            return 1;
+        return 1 + Math.max(this.getMaxHeightRecursively(node.left), this.getMaxHeightRecursively(node.right));
     }
 }
 
 // Used only as a polyfill for DOMMatrix
 /* istanbul ignore file */
+/* eslint @typescript-eslint/no-use-before-define: 0 */
 var Matrix3D;
 (function (Matrix3D) {
     Matrix3D[Matrix3D["M11"] = 0] = "M11";
@@ -203,7 +231,7 @@ var Matrix2D;
 })(Matrix2D || (Matrix2D = {}));
 const DEGREE_PER_RAD = 180 / Math.PI;
 const RAD_PER_DEGREE = Math.PI / 180;
-let parseMatrix = (init) => {
+const parseMatrix = (init) => {
     let parsed = init.replace(/matrix\(/, "");
     parsed = parsed.split(/,/, 7);
     if (parsed.length !== 6) {
@@ -212,7 +240,7 @@ let parseMatrix = (init) => {
     parsed = parsed.map(parseFloat);
     return [parsed[0], parsed[1], 0, 0, parsed[2], parsed[3], 0, 0, 0, 0, 1, 0, parsed[4], parsed[5], 0, 1];
 };
-let parseMatrix3d = (init) => {
+const parseMatrix3d = (init) => {
     let parsed = init.replace(/matrix3d\(/, "");
     parsed = parsed.split(/,/, 17);
     if (parsed.length !== 16) {
@@ -220,8 +248,8 @@ let parseMatrix3d = (init) => {
     }
     return parsed.map(parseFloat);
 };
-let parseTransform = (tform) => {
-    let type = tform.split(/\(/, 1)[0];
+const parseTransform = (tform) => {
+    const type = tform.split(/\(/, 1)[0];
     if (type === "matrix") {
         return parseMatrix(tform);
     }
@@ -232,16 +260,16 @@ let parseTransform = (tform) => {
         throw new Error(`${type} parsing not implemented`);
     }
 };
-let getNumber = (receiver, index) => {
+const getNumber = (receiver, index) => {
     return receiver.values[index];
 };
-let setNumber2D = (receiver, index, value) => {
+const setNumber2D = (receiver, index, value) => {
     if (typeof value !== "number") {
         throw new TypeError("Expected number");
     }
     receiver.values[index] = value;
 };
-let setNumber3D = (receiver, index, value) => {
+const setNumber3D = (receiver, index, value) => {
     if (typeof value !== "number") {
         throw new TypeError("Expected number");
     }
@@ -255,15 +283,15 @@ let setNumber3D = (receiver, index, value) => {
     }
     receiver.values[index] = value;
 };
-let newInstance = (values) => {
-    let instance = Object.create(DOMMatrix$1.prototype);
+const newInstance = (values) => {
+    const instance = Object.create(DOMMatrix$1.prototype);
     instance.constructor = DOMMatrix$1;
     instance.is2D = true;
     instance.values = values;
     return instance;
 };
-let multiply = (first, second) => {
-    let dest = new Float64Array(16);
+const multiply = (first, second) => {
+    const dest = new Float64Array(16);
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 4; j++) {
             let sum = 0;
@@ -287,7 +315,7 @@ class DOMMatrix$1 {
                 return;
             }
             else {
-                let tforms = init.split(/\)\s+/, 20).map(parseTransform);
+                const tforms = init.split(/\)\s+/, 20).map(parseTransform);
                 if (tforms.length === 0) {
                     return;
                 }
@@ -298,7 +326,7 @@ class DOMMatrix$1 {
             }
         }
         let i = 0;
-        var arr = init;
+        const arr = init;
         if (init && init.length === 6) {
             setNumber2D(this, Matrix2D.A, arr[i++]);
             setNumber2D(this, Matrix2D.B, arr[i++]);
@@ -462,7 +490,7 @@ class DOMMatrix$1 {
         setNumber2D(this, Matrix2D.F, value);
     }
     get isIdentity() {
-        let values = this.values;
+        const values = this.values;
         return (values[Matrix3D.M11] === 1 &&
             values[Matrix3D.M12] === 0 &&
             values[Matrix3D.M13] === 0 &&
@@ -593,7 +621,7 @@ class DOMMatrix$1 {
         return newInstance(this.values).rotateFromVectorSelf(x, y);
     }
     rotateFromVectorSelf(x = 0, y = 0) {
-        let theta = x === 0 && y === 0 ? 0 : Math.atan2(y, x) * DEGREE_PER_RAD;
+        const theta = x === 0 && y === 0 ? 0 : Math.atan2(y, x) * DEGREE_PER_RAD;
         return this.rotateSelf(theta);
     }
     rotate(rotX, rotY, rotZ) {
@@ -629,7 +657,7 @@ class DOMMatrix$1 {
         return newInstance(this.values).rotateAxisAngleSelf(x, y, z, angle);
     }
     rotateAxisAngleSelf(x = 0, y = 0, z = 0, angle = 0) {
-        let length = Math.sqrt(x * x + y * y + z * z);
+        const length = Math.sqrt(x * x + y * y + z * z);
         if (length === 0) {
             return this;
         }
@@ -639,11 +667,11 @@ class DOMMatrix$1 {
             z /= length;
         }
         angle *= RAD_PER_DEGREE;
-        let c = Math.cos(angle);
-        let s = Math.sin(angle);
-        let t = 1 - c;
-        let tx = t * x;
-        let ty = t * y;
+        const c = Math.cos(angle);
+        const s = Math.sin(angle);
+        const t = 1 - c;
+        const tx = t * x;
+        const ty = t * y;
         this.values = multiply([
             tx * x + c,
             tx * y + s * z,
@@ -674,7 +702,7 @@ class DOMMatrix$1 {
         if (typeof sx !== "number") {
             return this;
         }
-        let t = Math.tan(sx * RAD_PER_DEGREE);
+        const t = Math.tan(sx * RAD_PER_DEGREE);
         this.values = multiply([1, 0, 0, 0, t, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], this.values);
         return this;
     }
@@ -685,7 +713,7 @@ class DOMMatrix$1 {
         if (typeof sy !== "number") {
             return this;
         }
-        let t = Math.tan(sy * RAD_PER_DEGREE);
+        const t = Math.tan(sy * RAD_PER_DEGREE);
         this.values = multiply([1, t, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], this.values);
         return this;
     }
@@ -722,21 +750,21 @@ class DOMMatrix$1 {
         // }
     }
     setMatrixValue(transformList) {
-        let temp = new DOMMatrix$1(transformList);
+        const temp = new DOMMatrix$1(transformList);
         this.values = temp.values;
         this.is2D = temp.is2D;
         return this;
     }
     transformPoint(point) {
-        let x = point.x;
-        let y = point.y;
-        let z = point.z;
-        let w = point.w;
-        let values = this.values;
-        let nx = values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w;
-        let ny = values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w;
-        let nz = values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w;
-        let nw = values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w;
+        const x = point.x;
+        const y = point.y;
+        const z = point.z;
+        const w = point.w;
+        const values = this.values;
+        const nx = values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w;
+        const ny = values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w;
+        const nz = values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w;
+        const nw = values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w;
         return new DOMPoint(nx, ny, nz, nw);
     }
     toFloat32Array() {
@@ -831,7 +859,7 @@ class ArrayExt {
     }
     static create(n, cb) {
         const res = new Array(n);
-        for (var i = 0; i < n; i++) {
+        for (let i = 0; i < n; i++) {
             res[i] = cb(i);
         }
         return res;
@@ -885,7 +913,7 @@ class ArrayExt {
  */
 // Configuration Constants
 const EPSILON = 0.000001;
-let ARRAY_TYPE = Array;
+const ARRAY_TYPE = Array;
 const RANDOM = Math.random;
 const degree = Math.PI / 180;
 /**
@@ -944,6 +972,7 @@ var math = /*#__PURE__*/Object.freeze({
 	equals: equals
 });
 
+/* istanbul ignore file */
 class DOMVector2 {
     constructor(x = 0, y = 0) {
         this.x = x;
@@ -956,7 +985,7 @@ class DOMVector2 {
         return this.x * this.x + this.y * this.y;
     }
     clone() {
-        return new DOMVector3(this.x, this.y);
+        return new DOMVector2(this.x, this.y);
     }
     set(x, y) {
         if (!isNaN(x))
@@ -1085,6 +1114,7 @@ class DOMVector3 {
     }
 }
 
+/* istanbul ignore file */
 const m = globalThis.DOMMatrix ? DOMMatrix : DOMMatrix$1;
 const p = globalThis.DOMPoint ? DOMPoint : DOMPoint$1;
 const r = globalThis.DOMRect ? DOMRect : DOMRect$1;
@@ -1229,6 +1259,7 @@ const decomposeMatrix = (matrix) => {
 };
 
 class DOM {
+    /* istanbul ignore next */
     static get doc() {
         if (!this.document) {
             if (!globalThis.document)
@@ -1241,11 +1272,11 @@ class DOM {
         DOM.document = doc;
     }
     static createElement(tagName, options = {}) {
-        var el = DOM.doc.createElement(tagName, options);
+        const el = DOM.doc.createElement(tagName, options);
         return el;
     }
     static createText(value) {
-        var el = DOM.createElement("span");
+        const el = DOM.createElement("span");
         DOM.setText(el, value);
         return el;
     }
@@ -1253,14 +1284,14 @@ class DOM {
         el.innerHTML = value;
     }
     static setAttr(el, options) {
-        for (var id in options) {
+        for (const id in options) {
             if (el.getAttribute(id) === options[id])
                 continue;
             el.setAttribute(id, options[id]);
         }
     }
     static setStyle(el, styles) {
-        for (var entry of Object.entries(styles)) {
+        for (const entry of Object.entries(styles)) {
             if (el.style[entry[0]] === entry[1])
                 continue;
             el.style[entry[0]] = entry[1];
@@ -1308,7 +1339,7 @@ class DelayedEvent {
     constructor(event, distinct = true) {
         this.queue = [];
         if (event)
-            event.on((evt) => this.emit(evt));
+            event.on(evt => this.emit(evt));
         this.ouput = new Event();
         this.distinct = distinct;
     }
@@ -1322,7 +1353,7 @@ class DelayedEvent {
         return this.ouput.off(listener);
     }
     update() {
-        for (var evt of this.queue) {
+        for (const evt of this.queue) {
             this.ouput.emit(evt);
         }
         this.queue.length = 0;
@@ -1462,6 +1493,33 @@ function onChange(objToWatch, onChangeFunction) {
     return new Proxy(objToWatch, handler);
 }
 
+// To reuse export `rng` const without hacking around
+/* eslint @typescript-eslint/no-use-before-define: 0 */
+class SeededRandom {
+    constructor(seed) {
+        this.seed = seed;
+    }
+    next() {
+        this.seed = (this.seed * 9301 + 49297) % 233280;
+        return this.seed / 233280.0;
+    }
+    rand() {
+        return this.next();
+    }
+    randBool() {
+        return this.randRangeInt(0, 1) === 0;
+    }
+    randRangeFloat(min, max) {
+        return rng.randRangeFloat(min, max, this.next());
+    }
+    randRangeInt(min, max) {
+        return rng.randRangeInt(min, max, this.next());
+    }
+    randArray(arr) {
+        const index = rng.randRangeInt(0, arr.length - 1);
+        return arr[index];
+    }
+}
 class Random {
     rand() {
         return Math.random();
@@ -1487,31 +1545,6 @@ class Random {
     }
     createSeededRandom(seed = -1) {
         return new SeededRandom(seed);
-    }
-}
-class SeededRandom {
-    constructor(seed) {
-        this.seed = seed;
-    }
-    next() {
-        this.seed = (this.seed * 9301 + 49297) % 233280;
-        return this.seed / 233280.0;
-    }
-    rand() {
-        return this.next();
-    }
-    randBool() {
-        return this.randRangeInt(0, 1) === 0;
-    }
-    randRangeFloat(min, max) {
-        return rng.randRangeFloat(min, max, this.next());
-    }
-    randRangeInt(min, max) {
-        return rng.randRangeInt(min, max, this.next());
-    }
-    randArray(arr) {
-        const index = rng.randRangeInt(0, arr.length - 1);
-        return arr[index];
     }
 }
 const rng = new Random();
@@ -1552,8 +1585,8 @@ class StringExt {
         return val;
     }
     static capitalizeWords(val) {
-        let regexp = /\s/;
-        let words = val.split(regexp);
+        const regexp = /\s/;
+        const words = val.split(regexp);
         if (words.length == 1) {
             return StringExt.capitalize(words[0]);
         }
@@ -1590,6 +1623,7 @@ class ObjectExt {
     }
 }
 
+/* istanbul ignore file */
 /**
  * Basic Transform class, provide (position, rotation, scale) and take care of transformation
  *
@@ -1643,6 +1677,7 @@ class TransformMatrix {
     }
 }
 
+/* istanbul ignore file */
 /**
  * Extend Transform matrix and add simple layout system with pivot, anchor and size
  *
@@ -1698,14 +1733,14 @@ class RectTransformMatrix extends TransformMatrix {
         return mat;
     }
     setParentFix(p) {
-        var before = this.global;
+        const before = this.global;
         console.log(decomposeMatrix(before));
-        var dec1 = decomposeMatrix(before);
+        const dec1 = decomposeMatrix(before);
         this.parent = p;
-        var after = this.global;
+        const after = this.global;
         if (!this.parent)
             return;
-        var dec2 = decomposeMatrix(after);
+        const dec2 = decomposeMatrix(after);
         console.log("avant compensation", dec1, dec2);
         this.scale.x *= dec1.scale.x / dec2.scale.x;
         this.scale.y *= dec1.scale.y / dec2.scale.y;
@@ -1713,7 +1748,7 @@ class RectTransformMatrix extends TransformMatrix {
         this.rotation.x += dec1.rotate.x - dec2.rotate.x;
         this.rotation.y += dec1.rotate.y - dec2.rotate.y;
         this.rotation.z += dec1.rotate.z - dec2.rotate.z;
-        var pat1 = decomposeMatrix(before.inverse().multiply(this.global));
+        const pat1 = decomposeMatrix(before.inverse().multiply(this.global));
         this.position.x -= pat1.translate.x;
         this.position.y -= pat1.translate.y;
         this.position.z -= pat1.translate.z;
@@ -1723,7 +1758,7 @@ class RectTransformMatrix extends TransformMatrix {
     computeRect(updateChild = false) {
         this.compute();
         if (updateChild) {
-            for (var child of this._child) {
+            for (const child of this._child) {
                 child.computeRect();
             }
         }
@@ -1731,10 +1766,16 @@ class RectTransformMatrix extends TransformMatrix {
     compute() {
         resetMatrix(this.matrix);
         // compute
-        var skewDisp = this.skew.clone().scale(this.res.x, this.res.y);
-        var piv = this.pivot.clone().add(-0.5, -0.5).scale(this.res.x, this.res.y);
-        var anc = this.anchor.clone().add(-0.5, -0.5).scale(this.res.x, this.res.y);
-        var pos = this.position.clone().scale(this.res.x, this.res.y, 1);
+        const skewDisp = this.skew.clone().scale(this.res.x, this.res.y);
+        const piv = this.pivot
+            .clone()
+            .add(-0.5, -0.5)
+            .scale(this.res.x, this.res.y);
+        const anc = this.anchor
+            .clone()
+            .add(-0.5, -0.5)
+            .scale(this.res.x, this.res.y);
+        const pos = this.position.clone().scale(this.res.x, this.res.y, 1);
         // compute
         this.matrix.translateSelf(pos.x + anc.x, pos.y + anc.y, pos.z);
         this.matrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z);

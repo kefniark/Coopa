@@ -96,7 +96,6 @@ test("Delay event distinct", () => {
 
 	delayedNotDistinct.emit(1, true)
 	expect(listenerNotDistinct).toHaveBeenCalledTimes(4)
-
 })
 
 test("Delay event - once", () => {

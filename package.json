@@ -1,6 +1,6 @@
 {
 	"name": "coopa",
-	"version": "0.1.9",
+	"version": "0.2.0",
 	"description": "",
 	"main": "build/coopa.umd.js",
 	"module": "build/coopa.es.mjs",
@@ -40,7 +40,6 @@
 		"test:unittest": "jest",
 		"test:lint": "eslint \"src/**/*.ts\"",
 		"test:prettier": "prettier --config .prettierrc.yaml --check \"src/**/*.ts\"",
-		"test:depencencies": "npm-check --production || echo \"Run 'npm run update' to interactively update dependencies for this project\"",
 		"update": "npm-check --update"
 	},
 	"devDependencies": {

@@ -1,3 +1,4 @@
+// [COOPA] Build: 0.2.0 - November 17, 2019
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -9,16 +10,6 @@
 	    constructor(key, val) {
 	        this.key = key;
 	        this.val = val;
-	    }
-	    toString() {
-	        this.print("", this, false);
-	    }
-	    print(prefix, node, isLeft) {
-	        if (node != null) {
-	            console.log(prefix + (isLeft ? "|-- " : "\\-- ") + node.key);
-	            this.print(prefix + (isLeft ? "|   " : "    "), node.left, true);
-	            this.print(prefix + (isLeft ? "|   " : "    "), node.right, false);
-	        }
 	    }
 	}
 	/**
@@ -166,13 +157,50 @@
 	    }
 	    /**
 	     * Prints binary search tree
+	     * Inspired by https://flaviocopes.com/golang-data-structure-binary-search-tree/
 	     * @returns
 	     */
 	    print() {
-	        if (this.root != null) {
-	            return this.root.toString();
+	        // Draw lines for debugging
+	        const maxHeight = this.height;
+	        if (maxHeight == 0)
+	            return;
+	        const line = "--------";
+	        let current = "";
+	        for (let i = 0; i < maxHeight; i++) {
+	            current += line;
 	        }
-	        return "";
+	        console.log(current);
+	        this.stringify(this.root, 0);
+	        console.log(current);
+	    }
+	    stringify(n, level) {
+	        if (!n)
+	            return;
+	        let format = "";
+	        for (let i = 0; i < level; i++) {
+	            format += "       ";
+	        }
+	        format += "----[ ";
+	        level++;
+	        // change the order for logs to display smaller value to right
+	        this.stringify(n.right, level);
+	        console.log(format + n.key);
+	        this.stringify(n.left, level);
+	    }
+	    /**
+	     * Return max height of Binary Search Tree
+	     * @returns max height
+	     */
+	    get height() {
+	        return this.getMaxHeightRecursively(this.root);
+	    }
+	    getMaxHeightRecursively(node) {
+	        if (!node)
+	            return 0;
+	        if (node.left == null && node.right == null)
+	            return 1;
+	        return 1 + Math.max(this.getMaxHeightRecursively(node.left), this.getMaxHeightRecursively(node.right));
 	    }
 	}
 

@@ -115,7 +115,7 @@ test("Print and Get Max Height", () => {
 	for (let i = 0; i < input.length; i++) {
 		bst.set(input[i], i)
 	}
-	const height1 = bst.getMaxHeight()
+	const height1 = bst.height
 	expect(height1).toBe(4)
 
 	bst.print()
@@ -124,7 +124,7 @@ test("Print and Get Max Height", () => {
 
 	for (let i = 0; i < input.length; i++) {
 		bst.set(input[i], i)
-		const height2 = bst.getMaxHeight()
+		const height2 = bst.height
 		expect(height2).toBe(i + 1)
 	}
 	bst.print()

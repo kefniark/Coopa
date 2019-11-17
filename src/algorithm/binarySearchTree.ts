@@ -175,11 +175,11 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 */
 	public print() {
 		// Draw lines for debugging
-		var maxHeight = this.getMaxHeight()
+		const maxHeight = this.height
 		if (maxHeight == 0) return
-		var line = "--------"
-		var current = ""
-		for (var i = 0; i < maxHeight; i++) {
+		const line = "--------"
+		let current = ""
+		for (let i = 0; i < maxHeight; i++) {
 			current += line
 		}
 
@@ -191,8 +191,8 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	private stringify(n: TreeNode<Key, Val> | null, level: number) {
 		if (!n) return
 
-		var format = ""
-		for (var i = 0; i < level; i++) {
+		let format = ""
+		for (let i = 0; i < level; i++) {
 			format += "       "
 		}
 
@@ -209,7 +209,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * Return max height of Binary Search Tree
 	 * @returns max height
 	 */
-	public getMaxHeight(): number {
+	public get height(): number {
 		return this.getMaxHeightRecursively(this.root)
 	}
 

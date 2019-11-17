@@ -1,4 +1,6 @@
 /* istanbul ignore file */
+/* eslint @typescript-eslint/no-this-alias: 0 */
+
 import { TransformMatrix } from "./transform"
 import { DOMVector2, resetMatrix, decomposeMatrix, createMatrix, matrix3dValues } from "../geometry/index"
 import { ArrayExt, onChange } from "../utils/index"
@@ -38,14 +40,11 @@ export class RectTransformMatrix extends TransformMatrix {
 		if (this.parent) {
 			return this.parent.size.clone().invert()
 		}
-		return new DOMVector2(
-			(this.anchor.x - 0.5) * this.res.x,
-			(this.anchor.y - 0.5) * this.res.y
-		)
+		return new DOMVector2((this.anchor.x - 0.5) * this.res.x, (this.anchor.y - 0.5) * this.res.y)
 	}
 
 	public get localOrigin(): DOMPoint {
-		var point = new DOMPoint()
+		let point = new DOMPoint()
 		point = point.matrixTransform(this.matrix)
 		point.x /= this.res.x
 		point.y /= this.res.y
@@ -53,7 +52,7 @@ export class RectTransformMatrix extends TransformMatrix {
 	}
 
 	public get globalOrigin(): DOMPoint {
-		var point = new DOMPoint()
+		let point = new DOMPoint()
 		point = point.matrixTransform(this.globalMatrix)
 		point.x /= this.res.x
 		point.y /= this.res.y
@@ -61,8 +60,8 @@ export class RectTransformMatrix extends TransformMatrix {
 	}
 
 	public get globalMatrix(): DOMMatrix {
-		var queue: RectTransformMatrix[] = [this]
-		var self: RectTransformMatrix = this
+		const queue: RectTransformMatrix[] = [this]
+		let self: RectTransformMatrix = this
 		while (self.parent) {
 			queue.push(self.parent)
 			self = self.parent
@@ -70,9 +69,9 @@ export class RectTransformMatrix extends TransformMatrix {
 
 		const mat = createMatrix(matrix3dValues(queue[queue.length - 1].matrix))
 		queue.pop()
-		while(queue.length > 0) {
-			var element = queue.pop()
-			if (!element) continue;
+		while (queue.length > 0) {
+			const element = queue.pop()
+			if (!element) continue
 			mat.multiplySelf(element.matrix)
 		}
 

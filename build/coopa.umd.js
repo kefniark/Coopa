@@ -1,4 +1,4 @@
-// [COOPA] Build: 0.2.2 - November 18, 2019
+// [COOPA] Build: 0.2.2 - November 17, 2019
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -993,7 +993,7 @@
 	    clone() {
 	        return new DOMVector2(this.x, this.y);
 	    }
-	    set(x = NaN, y = NaN) {
+	    set(x, y) {
 	        if (!isNaN(x))
 	            this.x = x;
 	        if (!isNaN(y))
@@ -1052,7 +1052,7 @@
 	    clone() {
 	        return new DOMVector3(this.x, this.y, this.z);
 	    }
-	    set(x = NaN, y = NaN, z = NaN) {
+	    set(x, y, z) {
 	        if (!isNaN(x))
 	            this.x = x;
 	        if (!isNaN(y))
@@ -1660,11 +1660,11 @@
 	            this._parent._child.push(this);
 	        }
 	    }
-	    get globalMatrix() {
+	    get global() {
 	        const mat = createMatrix(matrix3dValues(this.matrix));
 	        if (this.parent) {
 	            const el = this.parent;
-	            mat.multiplySelf(el.globalMatrix);
+	            mat.multiplySelf(el.global);
 	        }
 	        return mat;
 	    }
@@ -1693,8 +1693,6 @@
 	    constructor(x = 1280, y = 720) {
 	        super();
 	        this._child = [];
-	        this.rectMatrix = createMatrix();
-	        this.computedtMatrix = createMatrix();
 	        this.skew = onChange(new DOMVector2(0, 0), () => this.computeRect());
 	        this.pivot = onChange(new DOMVector2(0.5, 0.5), () => this.computeRect());
 	        this.anchor = onChange(new DOMVector2(0.5, 0.5), () => this.computeRect());
@@ -1727,69 +1725,42 @@
 	        if (this.parent) {
 	            return this.parent.size.clone().invert();
 	        }
-	        return new DOMVector2((this.anchor.x - 0.5) * this.res.x, (this.anchor.y - 0.5) * this.res.y);
+	        return new DOMVector2(1, 1);
 	    }
-	    get localOrigin() {
-	        var point = new DOMPoint();
-	        point = point.matrixTransform(this.matrix);
-	        point.x /= this.res.x;
-	        point.y /= this.res.y;
-	        return point;
-	    }
-	    get globalOrigin() {
-	        var point = new DOMPoint();
-	        point = point.matrixTransform(this.globalMatrix);
-	        point.x /= this.res.x;
-	        point.y /= this.res.y;
-	        return point;
-	    }
-	    get globalMatrix() {
-	        var queue = [this];
-	        var self = this;
-	        while (self.parent) {
-	            queue.push(self.parent);
-	            self = self.parent;
-	        }
-	        const mat = createMatrix(matrix3dValues(queue[queue.length - 1].matrix));
-	        queue.pop();
-	        while (queue.length > 0) {
-	            var element = queue.pop();
-	            if (!element)
-	                continue;
-	            mat.multiplySelf(element.matrix);
+	    get global() {
+	        const mat = createMatrix(matrix3dValues(this.matrix));
+	        mat.m41 /= this.res.x;
+	        mat.m42 /= this.res.y;
+	        if (this.parent) {
+	            const el = this.parent;
+	            mat.multiplySelf(el.global);
 	        }
 	        return mat;
 	    }
 	    setParentFix(p) {
-	        const before = this.globalMatrix;
+	        const before = this.global;
+	        console.log(decomposeMatrix(before));
 	        const dec1 = decomposeMatrix(before);
 	        this.parent = p;
-	        const after = this.globalMatrix;
+	        const after = this.global;
 	        if (!this.parent)
 	            return;
 	        const dec2 = decomposeMatrix(after);
+	        console.log("avant compensation", dec1, dec2);
 	        this.scale.x *= dec1.scale.x / dec2.scale.x;
 	        this.scale.y *= dec1.scale.y / dec2.scale.y;
 	        this.scale.z *= dec1.scale.z / dec2.scale.z;
 	        this.rotation.x += dec1.rotate.x - dec2.rotate.x;
 	        this.rotation.y += dec1.rotate.y - dec2.rotate.y;
 	        this.rotation.z += dec1.rotate.z - dec2.rotate.z;
-	        this.position.x += (dec1.translate.x - dec2.translate.x) / this.parent.size.x / this.res.x;
-	        this.position.y += (dec1.translate.y - dec2.translate.y) / this.parent.size.y / this.res.y;
-	        this.position.z += dec1.translate.z - dec2.translate.z;
+	        const pat1 = decomposeMatrix(before.inverse().multiply(this.global));
+	        this.position.x -= pat1.translate.x;
+	        this.position.y -= pat1.translate.y;
+	        this.position.z -= pat1.translate.z;
+	        console.log(pat1, pat1.translate.x, this.size.x);
+	        console.log("apres compensation", decomposeMatrix(this.global));
 	    }
 	    computeRect(updateChild = false) {
-	        resetMatrix(this.rectMatrix);
-	        const piv = this.pivot
-	            .clone()
-	            .add(-0.5, -0.5)
-	            .scale(this.res.x, this.res.y);
-	        // compute
-	        this.rectMatrix.scaleSelf(this.size.x, this.size.y, 1);
-	        if (this.parent) {
-	            this.rectMatrix.scaleSelf(1 / this.parent.size.x, 1 / this.parent.size.y, 1);
-	        }
-	        this.rectMatrix.translateSelf(-piv.x, -piv.y, 0);
 	        this.compute();
 	        if (updateChild) {
 	            for (const child of this._child) {
@@ -1798,26 +1769,30 @@
 	        }
 	    }
 	    compute() {
-	        resetMatrix(this.computedtMatrix);
-	        const skew = this.skew.clone().scale(this.res.x, this.res.y);
-	        const pos = this.position.clone().scale(this.res.x, this.res.y, 1);
+	        resetMatrix(this.matrix);
+	        // compute
+	        const skewDisp = this.skew.clone().scale(this.res.x, this.res.y);
+	        const piv = this.pivot
+	            .clone()
+	            .add(-0.5, -0.5)
+	            .scale(this.res.x, this.res.y);
 	        const anc = this.anchor
 	            .clone()
 	            .add(-0.5, -0.5)
 	            .scale(this.res.x, this.res.y);
-	        this.computedtMatrix.translateSelf(anc.x, anc.y, 0);
+	        const pos = this.position.clone().scale(this.res.x, this.res.y, 1);
 	        // compute
-	        this.computedtMatrix.translateSelf(pos.x, pos.y, pos.z);
-	        this.computedtMatrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z);
-	        if (skew.x !== 0)
-	            this.computedtMatrix.skewXSelf(skew.x);
-	        if (skew.y !== 0)
-	            this.computedtMatrix.skewYSelf(skew.y);
-	        this.computedtMatrix.scaleSelf(this.scale.x, this.scale.y, this.scale.z);
-	        // compute result
-	        resetMatrix(this.matrix);
-	        this.matrix.preMultiplySelf(this.computedtMatrix);
-	        this.matrix.multiplySelf(this.rectMatrix);
+	        this.matrix.translateSelf(pos.x + anc.x, pos.y + anc.y, pos.z);
+	        this.matrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z);
+	        if (skewDisp.x !== 0)
+	            this.matrix.skewXSelf(skewDisp.x);
+	        if (skewDisp.y !== 0)
+	            this.matrix.skewYSelf(skewDisp.y);
+	        this.matrix.scaleSelf(this.scale.x * this.size.x, this.scale.y * this.size.y, this.scale.z);
+	        if (this.parent) {
+	            this.matrix.scaleSelf(1 / this.parent.size.x, 1 / this.parent.size.y, 1);
+	        }
+	        this.matrix.translateSelf(-piv.x, -piv.y, 0);
 	        this.onChanged.emit();
 	    }
 	    toCSS() {

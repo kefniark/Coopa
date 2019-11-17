@@ -51,8 +51,8 @@ export class DelayedEvent<T> {
 	private queue: T[] = []
 	private distinct: boolean
 
-	constructor(event: Event<T> | undefined, distinct = true) {
-		if (event) event.on((evt) => this.emit(evt))
+	constructor(event?: Event<T>, distinct = true) {
+		if (event) event.on(evt => this.emit(evt))
 		this.ouput = new Event<T>()
 		this.distinct = distinct
 	}
@@ -70,7 +70,7 @@ export class DelayedEvent<T> {
 	}
 
 	update() {
-		for (var evt of this.queue) {
+		for (const evt of this.queue) {
 			this.ouput.emit(evt)
 		}
 		this.queue.length = 0

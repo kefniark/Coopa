@@ -13,7 +13,7 @@ class Logger {
 		return this.eventHandler
 	}
 
-	private _prefix: string = ""
+	private _prefix = ""
 	get prefix() {
 		return this._prefix
 	}
@@ -21,7 +21,7 @@ class Logger {
 		this._prefix = val
 	}
 
-	private _level: number = 0
+	private _level = 0
 	get level() {
 		return this._level
 	}
@@ -29,7 +29,7 @@ class Logger {
 		this._level = val
 	}
 
-	private _console: boolean = true
+	private _console = true
 	get console() {
 		return this._console
 	}

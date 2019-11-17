@@ -5,14 +5,13 @@
 		"lib": ["esnext", "dom"],
 		"target": "esnext",
 		"outDir": "./build",
-		"declarationDir": "./build/declarations/",
-		"types": ["node"],
+		"declaration": false,
 		"module": "esnext",
+		"moduleResolution": "node",
 
 		// build settings
 		"sourceMap": false,
 		"pretty": true,
-		"declaration": false,
 		"preserveConstEnums": false,
 
 		// strict
@@ -28,7 +27,8 @@
 		"noImplicitAny": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
-		"noImplicitThis": true
+		"noImplicitThis": true,
+		"esModuleInterop": true
 	},
 	"include":[
 		"./src/**/*"

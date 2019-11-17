@@ -1,5 +1,5 @@
 import pkg from "./package.json"
-import typescript from "rollup-plugin-typescript2"
+import typescript from "rollup-plugin-typescript"
 import serve from 'rollup-plugin-serve'
 
 export default {
@@ -11,7 +11,6 @@ export default {
 			format: "umd"
 		}
 	],
-	external: [...Object.keys(pkg.peerDependencies || {})],
 	plugins: [
 		typescript(),
 		serve({

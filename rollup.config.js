@@ -1,11 +1,11 @@
 import pkg from "./package.json"
-import typescript from "rollup-plugin-typescript2"
+import typescript from "rollup-plugin-typescript"
 import filesize from "rollup-plugin-filesize"
 import versionInjector from "rollup-plugin-version-injector"
 
 export default {
 	input: "src/index.ts",
-	external: [...Object.keys(pkg.peerDependencies || {})],
+	external: [...Object.keys(pkg.peerDependencies || {}), ...Object.keys(pkg.dependencies || {})],
 	plugins: [
 		typescript(),
 		versionInjector({

@@ -1,5 +1,6 @@
 // Used only as a polyfill for DOMMatrix
 /* istanbul ignore file */
+/* eslint @typescript-eslint/no-use-before-define: 0 */
 
 const enum Matrix3D {
 	M11 = 0,
@@ -31,7 +32,7 @@ const enum Matrix2D {
 const DEGREE_PER_RAD = 180 / Math.PI
 const RAD_PER_DEGREE = Math.PI / 180
 
-let parseMatrix = (init: any) => {
+const parseMatrix = (init: any) => {
 	let parsed = init.replace(/matrix\(/, "")
 	parsed = parsed.split(/,/, 7)
 
@@ -44,7 +45,7 @@ let parseMatrix = (init: any) => {
 	return [parsed[0], parsed[1], 0, 0, parsed[2], parsed[3], 0, 0, 0, 0, 1, 0, parsed[4], parsed[5], 0, 1]
 }
 
-let parseMatrix3d = (init: any) => {
+const parseMatrix3d = (init: any) => {
 	let parsed = init.replace(/matrix3d\(/, "")
 	parsed = parsed.split(/,/, 17)
 
@@ -55,8 +56,8 @@ let parseMatrix3d = (init: any) => {
 	return parsed.map(parseFloat)
 }
 
-let parseTransform = (tform: any) => {
-	let type = tform.split(/\(/, 1)[0]
+const parseTransform = (tform: any) => {
+	const type = tform.split(/\(/, 1)[0]
 
 	if (type === "matrix") {
 		return parseMatrix(tform)
@@ -67,10 +68,10 @@ let parseTransform = (tform: any) => {
 	}
 }
 
-let getNumber = (receiver: DOMMatrix | any, index: number) => {
+const getNumber = (receiver: DOMMatrix | any, index: number) => {
 	return receiver.values[index]
 }
-let setNumber2D = (receiver: DOMMatrix | any, index: number, value: number) => {
+const setNumber2D = (receiver: DOMMatrix | any, index: number, value: number) => {
 	if (typeof value !== "number") {
 		throw new TypeError("Expected number")
 	}
@@ -78,7 +79,7 @@ let setNumber2D = (receiver: DOMMatrix | any, index: number, value: number) => {
 	receiver.values[index] = value
 }
 
-let setNumber3D = (receiver: DOMMatrix | any, index: number, value: number) => {
+const setNumber3D = (receiver: DOMMatrix | any, index: number, value: number) => {
 	if (typeof value !== "number") {
 		throw new TypeError("Expected number")
 	}
@@ -94,8 +95,8 @@ let setNumber3D = (receiver: DOMMatrix | any, index: number, value: number) => {
 	receiver.values[index] = value
 }
 
-let newInstance = (values: Float64Array) => {
-	let instance = Object.create(DOMMatrix.prototype)
+const newInstance = (values: Float64Array) => {
+	const instance = Object.create(DOMMatrix.prototype)
 	instance.constructor = DOMMatrix
 	instance.is2D = true
 	instance.values = values
@@ -103,8 +104,8 @@ let newInstance = (values: Float64Array) => {
 	return instance
 }
 
-let multiply = (first: Float64Array | number[], second: Float64Array | number[]) => {
-	let dest = new Float64Array(16)
+const multiply = (first: Float64Array | number[], second: Float64Array | number[]) => {
+	const dest = new Float64Array(16)
 
 	for (let i = 0; i < 4; i++) {
 		for (let j = 0; j < 4; j++) {
@@ -263,7 +264,7 @@ export class DOMMatrix {
 	is2D: boolean
 
 	get isIdentity() {
-		let values = this.values
+		const values = this.values
 
 		return (
 			values[Matrix3D.M11] === 1 &&
@@ -316,7 +317,7 @@ export class DOMMatrix {
 			if (init === "") {
 				return
 			} else {
-				let tforms = init.split(/\)\s+/, 20).map(parseTransform)
+				const tforms = init.split(/\)\s+/, 20).map(parseTransform)
 
 				if (tforms.length === 0) {
 					return
@@ -331,7 +332,7 @@ export class DOMMatrix {
 		}
 
 		let i = 0
-		var arr = init as number[]
+		const arr = init as number[]
 		if (init && init.length === 6) {
 			setNumber2D(this, Matrix2D.A, arr[i++])
 			setNumber2D(this, Matrix2D.B, arr[i++])
@@ -471,7 +472,7 @@ export class DOMMatrix {
 	}
 
 	rotateFromVectorSelf(x = 0, y = 0) {
-		let theta = x === 0 && y === 0 ? 0 : Math.atan2(y, x) * DEGREE_PER_RAD
+		const theta = x === 0 && y === 0 ? 0 : Math.atan2(y, x) * DEGREE_PER_RAD
 		return this.rotateSelf(theta)
 	}
 
@@ -479,7 +480,7 @@ export class DOMMatrix {
 		return newInstance(this.values).rotateSelf(rotX, rotY, rotZ)
 	}
 
-	rotateSelf(rotX: number = 0, rotY: number = 0, rotZ: number = 0) {
+	rotateSelf(rotX = 0, rotY = 0, rotZ = 0) {
 		if (rotY === undefined && rotZ === undefined) {
 			rotZ = rotX
 			rotX = rotY = 0
@@ -519,7 +520,7 @@ export class DOMMatrix {
 	}
 
 	rotateAxisAngleSelf(x = 0, y = 0, z = 0, angle = 0) {
-		let length = Math.sqrt(x * x + y * y + z * z)
+		const length = Math.sqrt(x * x + y * y + z * z)
 
 		if (length === 0) {
 			return this
@@ -533,11 +534,11 @@ export class DOMMatrix {
 
 		angle *= RAD_PER_DEGREE
 
-		let c = Math.cos(angle)
-		let s = Math.sin(angle)
-		let t = 1 - c
-		let tx = t * x
-		let ty = t * y
+		const c = Math.cos(angle)
+		const s = Math.sin(angle)
+		const t = 1 - c
+		const tx = t * x
+		const ty = t * y
 
 		this.values = multiply(
 			[
@@ -577,7 +578,7 @@ export class DOMMatrix {
 			return this
 		}
 
-		let t = Math.tan(sx * RAD_PER_DEGREE)
+		const t = Math.tan(sx * RAD_PER_DEGREE)
 
 		this.values = multiply([1, 0, 0, 0, t, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], this.values)
 
@@ -593,7 +594,7 @@ export class DOMMatrix {
 			return this
 		}
 
-		let t = Math.tan(sy * RAD_PER_DEGREE)
+		const t = Math.tan(sy * RAD_PER_DEGREE)
 
 		this.values = multiply([1, t, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], this.values)
 
@@ -637,7 +638,7 @@ export class DOMMatrix {
 	}
 
 	setMatrixValue(transformList: string) {
-		let temp = new DOMMatrix(transformList)
+		const temp = new DOMMatrix(transformList)
 
 		this.values = temp.values
 		this.is2D = temp.is2D
@@ -646,20 +647,20 @@ export class DOMMatrix {
 	}
 
 	transformPoint(point: DOMPoint) {
-		let x = point.x
-		let y = point.y
-		let z = point.z
-		let w = point.w
+		const x = point.x
+		const y = point.y
+		const z = point.z
+		const w = point.w
 
-		let values = this.values
+		const values = this.values
 
-		let nx =
+		const nx =
 			values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w
-		let ny =
+		const ny =
 			values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w
-		let nz =
+		const nz =
 			values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w
-		let nw =
+		const nw =
 			values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w
 
 		return new DOMPoint(nx, ny, nz, nw)

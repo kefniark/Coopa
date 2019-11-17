@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import * as matrix from "./matrix"
 import * as point from "./point"
 import * as rect from "./rect"

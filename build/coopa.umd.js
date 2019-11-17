@@ -1,4 +1,3 @@
-// [COOPA] Build: 0.1.9 - November 17, 2019
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -108,7 +107,7 @@
 	            if (node.left == null) {
 	                return node.right;
 	            }
-	            var t = node;
+	            const t = node;
 	            node = this.min(node.right);
 	            node.right = this.recursiveDelMin(t.right);
 	            node.left = t.left;
@@ -126,7 +125,7 @@
 	     * @returns entries
 	     */
 	    entries() {
-	        var array = [];
+	        const array = [];
 	        this.entriesRecursively(this.root, array);
 	        return array;
 	    }
@@ -143,7 +142,7 @@
 	     * @returns keys
 	     */
 	    keys() {
-	        var array = [];
+	        const array = [];
 	        this.entriesRecursively(this.root, array);
 	        return array.map(x => x.key);
 	    }
@@ -153,7 +152,7 @@
 	     * @returns true if has
 	     */
 	    has(key) {
-	        var keys = this.keys();
+	        const keys = this.keys();
 	        return keys.indexOf(key) > -1;
 	    }
 	    /**
@@ -161,7 +160,7 @@
 	     * @returns values
 	     */
 	    values() {
-	        var array = [];
+	        const array = [];
 	        this.entriesRecursively(this.root, array);
 	        return array.map(x => x.val);
 	    }
@@ -179,9 +178,38 @@
 
 	// Used only as a polyfill for DOMMatrix
 	/* istanbul ignore file */
+	/* eslint @typescript-eslint/no-use-before-define: 0 */
+	var Matrix3D;
+	(function (Matrix3D) {
+	    Matrix3D[Matrix3D["M11"] = 0] = "M11";
+	    Matrix3D[Matrix3D["M12"] = 1] = "M12";
+	    Matrix3D[Matrix3D["M13"] = 2] = "M13";
+	    Matrix3D[Matrix3D["M14"] = 3] = "M14";
+	    Matrix3D[Matrix3D["M21"] = 4] = "M21";
+	    Matrix3D[Matrix3D["M22"] = 5] = "M22";
+	    Matrix3D[Matrix3D["M23"] = 6] = "M23";
+	    Matrix3D[Matrix3D["M24"] = 7] = "M24";
+	    Matrix3D[Matrix3D["M31"] = 8] = "M31";
+	    Matrix3D[Matrix3D["M32"] = 9] = "M32";
+	    Matrix3D[Matrix3D["M33"] = 10] = "M33";
+	    Matrix3D[Matrix3D["M34"] = 11] = "M34";
+	    Matrix3D[Matrix3D["M41"] = 12] = "M41";
+	    Matrix3D[Matrix3D["M42"] = 13] = "M42";
+	    Matrix3D[Matrix3D["M43"] = 14] = "M43";
+	    Matrix3D[Matrix3D["M44"] = 15] = "M44";
+	})(Matrix3D || (Matrix3D = {}));
+	var Matrix2D;
+	(function (Matrix2D) {
+	    Matrix2D[Matrix2D["A"] = 0] = "A";
+	    Matrix2D[Matrix2D["B"] = 1] = "B";
+	    Matrix2D[Matrix2D["C"] = 4] = "C";
+	    Matrix2D[Matrix2D["D"] = 5] = "D";
+	    Matrix2D[Matrix2D["E"] = 12] = "E";
+	    Matrix2D[Matrix2D["F"] = 13] = "F";
+	})(Matrix2D || (Matrix2D = {}));
 	const DEGREE_PER_RAD = 180 / Math.PI;
 	const RAD_PER_DEGREE = Math.PI / 180;
-	let parseMatrix = (init) => {
+	const parseMatrix = (init) => {
 	    let parsed = init.replace(/matrix\(/, "");
 	    parsed = parsed.split(/,/, 7);
 	    if (parsed.length !== 6) {
@@ -190,7 +218,7 @@
 	    parsed = parsed.map(parseFloat);
 	    return [parsed[0], parsed[1], 0, 0, parsed[2], parsed[3], 0, 0, 0, 0, 1, 0, parsed[4], parsed[5], 0, 1];
 	};
-	let parseMatrix3d = (init) => {
+	const parseMatrix3d = (init) => {
 	    let parsed = init.replace(/matrix3d\(/, "");
 	    parsed = parsed.split(/,/, 17);
 	    if (parsed.length !== 16) {
@@ -198,8 +226,8 @@
 	    }
 	    return parsed.map(parseFloat);
 	};
-	let parseTransform = (tform) => {
-	    let type = tform.split(/\(/, 1)[0];
+	const parseTransform = (tform) => {
+	    const type = tform.split(/\(/, 1)[0];
 	    if (type === "matrix") {
 	        return parseMatrix(tform);
 	    }
@@ -210,20 +238,20 @@
 	        throw new Error(`${type} parsing not implemented`);
 	    }
 	};
-	let getNumber = (receiver, index) => {
+	const getNumber = (receiver, index) => {
 	    return receiver.values[index];
 	};
-	let setNumber2D = (receiver, index, value) => {
+	const setNumber2D = (receiver, index, value) => {
 	    if (typeof value !== "number") {
 	        throw new TypeError("Expected number");
 	    }
 	    receiver.values[index] = value;
 	};
-	let setNumber3D = (receiver, index, value) => {
+	const setNumber3D = (receiver, index, value) => {
 	    if (typeof value !== "number") {
 	        throw new TypeError("Expected number");
 	    }
-	    if (index === 10 /* M33 */ || index === 15 /* M44 */) {
+	    if (index === Matrix3D.M33 || index === Matrix3D.M44) {
 	        if (value !== 1) {
 	            receiver.is2D = false;
 	        }
@@ -233,15 +261,15 @@
 	    }
 	    receiver.values[index] = value;
 	};
-	let newInstance = (values) => {
-	    let instance = Object.create(DOMMatrix$1.prototype);
+	const newInstance = (values) => {
+	    const instance = Object.create(DOMMatrix$1.prototype);
 	    instance.constructor = DOMMatrix$1;
 	    instance.is2D = true;
 	    instance.values = values;
 	    return instance;
 	};
-	let multiply = (first, second) => {
-	    let dest = new Float64Array(16);
+	const multiply = (first, second) => {
+	    const dest = new Float64Array(16);
 	    for (let i = 0; i < 4; i++) {
 	        for (let j = 0; j < 4; j++) {
 	            let sum = 0;
@@ -265,7 +293,7 @@
 	                return;
 	            }
 	            else {
-	                let tforms = init.split(/\)\s+/, 20).map(parseTransform);
+	                const tforms = init.split(/\)\s+/, 20).map(parseTransform);
 	                if (tforms.length === 0) {
 	                    return;
 	                }
@@ -276,187 +304,187 @@
 	            }
 	        }
 	        let i = 0;
-	        var arr = init;
+	        const arr = init;
 	        if (init && init.length === 6) {
-	            setNumber2D(this, 0 /* A */, arr[i++]);
-	            setNumber2D(this, 1 /* B */, arr[i++]);
-	            setNumber2D(this, 4 /* C */, arr[i++]);
-	            setNumber2D(this, 5 /* D */, arr[i++]);
-	            setNumber2D(this, 12 /* E */, arr[i++]);
-	            setNumber2D(this, 13 /* F */, arr[i++]);
+	            setNumber2D(this, Matrix2D.A, arr[i++]);
+	            setNumber2D(this, Matrix2D.B, arr[i++]);
+	            setNumber2D(this, Matrix2D.C, arr[i++]);
+	            setNumber2D(this, Matrix2D.D, arr[i++]);
+	            setNumber2D(this, Matrix2D.E, arr[i++]);
+	            setNumber2D(this, Matrix2D.F, arr[i++]);
 	        }
 	        else if (init && init.length === 16) {
-	            setNumber2D(this, 0 /* M11 */, arr[i++]);
-	            setNumber2D(this, 1 /* M12 */, arr[i++]);
-	            setNumber3D(this, 2 /* M13 */, arr[i++]);
-	            setNumber3D(this, 3 /* M14 */, arr[i++]);
-	            setNumber2D(this, 4 /* M21 */, arr[i++]);
-	            setNumber2D(this, 5 /* M22 */, arr[i++]);
-	            setNumber3D(this, 6 /* M23 */, arr[i++]);
-	            setNumber3D(this, 7 /* M24 */, arr[i++]);
-	            setNumber3D(this, 8 /* M31 */, arr[i++]);
-	            setNumber3D(this, 9 /* M32 */, arr[i++]);
-	            setNumber3D(this, 10 /* M33 */, arr[i++]);
-	            setNumber3D(this, 11 /* M34 */, arr[i++]);
-	            setNumber2D(this, 12 /* M41 */, arr[i++]);
-	            setNumber2D(this, 13 /* M42 */, arr[i++]);
-	            setNumber3D(this, 14 /* M43 */, arr[i++]);
-	            setNumber3D(this, 15 /* M44 */, arr[i]);
+	            setNumber2D(this, Matrix3D.M11, arr[i++]);
+	            setNumber2D(this, Matrix3D.M12, arr[i++]);
+	            setNumber3D(this, Matrix3D.M13, arr[i++]);
+	            setNumber3D(this, Matrix3D.M14, arr[i++]);
+	            setNumber2D(this, Matrix3D.M21, arr[i++]);
+	            setNumber2D(this, Matrix3D.M22, arr[i++]);
+	            setNumber3D(this, Matrix3D.M23, arr[i++]);
+	            setNumber3D(this, Matrix3D.M24, arr[i++]);
+	            setNumber3D(this, Matrix3D.M31, arr[i++]);
+	            setNumber3D(this, Matrix3D.M32, arr[i++]);
+	            setNumber3D(this, Matrix3D.M33, arr[i++]);
+	            setNumber3D(this, Matrix3D.M34, arr[i++]);
+	            setNumber2D(this, Matrix3D.M41, arr[i++]);
+	            setNumber2D(this, Matrix3D.M42, arr[i++]);
+	            setNumber3D(this, Matrix3D.M43, arr[i++]);
+	            setNumber3D(this, Matrix3D.M44, arr[i]);
 	        }
 	        else if (init !== undefined) {
 	            throw new TypeError("Expected string or array.");
 	        }
 	    }
 	    get m11() {
-	        return getNumber(this, 0 /* M11 */);
+	        return getNumber(this, Matrix3D.M11);
 	    }
 	    set m11(value) {
-	        setNumber2D(this, 0 /* M11 */, value);
+	        setNumber2D(this, Matrix3D.M11, value);
 	    }
 	    get m12() {
-	        return getNumber(this, 1 /* M12 */);
+	        return getNumber(this, Matrix3D.M12);
 	    }
 	    set m12(value) {
-	        setNumber2D(this, 1 /* M12 */, value);
+	        setNumber2D(this, Matrix3D.M12, value);
 	    }
 	    get m13() {
-	        return getNumber(this, 2 /* M13 */);
+	        return getNumber(this, Matrix3D.M13);
 	    }
 	    set m13(value) {
-	        setNumber2D(this, 2 /* M13 */, value);
+	        setNumber2D(this, Matrix3D.M13, value);
 	    }
 	    get m14() {
-	        return getNumber(this, 3 /* M14 */);
+	        return getNumber(this, Matrix3D.M14);
 	    }
 	    set m14(value) {
-	        setNumber2D(this, 3 /* M14 */, value);
+	        setNumber2D(this, Matrix3D.M14, value);
 	    }
 	    get m21() {
-	        return getNumber(this, 4 /* M21 */);
+	        return getNumber(this, Matrix3D.M21);
 	    }
 	    set m21(value) {
-	        setNumber2D(this, 4 /* M21 */, value);
+	        setNumber2D(this, Matrix3D.M21, value);
 	    }
 	    get m22() {
-	        return getNumber(this, 5 /* M22 */);
+	        return getNumber(this, Matrix3D.M22);
 	    }
 	    set m22(value) {
-	        setNumber2D(this, 5 /* M22 */, value);
+	        setNumber2D(this, Matrix3D.M22, value);
 	    }
 	    get m23() {
-	        return getNumber(this, 6 /* M23 */);
+	        return getNumber(this, Matrix3D.M23);
 	    }
 	    set m23(value) {
-	        setNumber2D(this, 6 /* M23 */, value);
+	        setNumber2D(this, Matrix3D.M23, value);
 	    }
 	    get m24() {
-	        return getNumber(this, 7 /* M24 */);
+	        return getNumber(this, Matrix3D.M24);
 	    }
 	    set m24(value) {
-	        setNumber2D(this, 7 /* M24 */, value);
+	        setNumber2D(this, Matrix3D.M24, value);
 	    }
 	    get m31() {
-	        return getNumber(this, 8 /* M31 */);
+	        return getNumber(this, Matrix3D.M31);
 	    }
 	    set m31(value) {
-	        setNumber2D(this, 8 /* M31 */, value);
+	        setNumber2D(this, Matrix3D.M31, value);
 	    }
 	    get m32() {
-	        return getNumber(this, 9 /* M32 */);
+	        return getNumber(this, Matrix3D.M32);
 	    }
 	    set m32(value) {
-	        setNumber2D(this, 9 /* M32 */, value);
+	        setNumber2D(this, Matrix3D.M32, value);
 	    }
 	    get m33() {
-	        return getNumber(this, 10 /* M33 */);
+	        return getNumber(this, Matrix3D.M33);
 	    }
 	    set m33(value) {
-	        setNumber2D(this, 10 /* M33 */, value);
+	        setNumber2D(this, Matrix3D.M33, value);
 	    }
 	    get m34() {
-	        return getNumber(this, 11 /* M34 */);
+	        return getNumber(this, Matrix3D.M34);
 	    }
 	    set m34(value) {
-	        setNumber2D(this, 11 /* M34 */, value);
+	        setNumber2D(this, Matrix3D.M34, value);
 	    }
 	    get m41() {
-	        return getNumber(this, 12 /* M41 */);
+	        return getNumber(this, Matrix3D.M41);
 	    }
 	    set m41(value) {
-	        setNumber2D(this, 12 /* M41 */, value);
+	        setNumber2D(this, Matrix3D.M41, value);
 	    }
 	    get m42() {
-	        return getNumber(this, 13 /* M42 */);
+	        return getNumber(this, Matrix3D.M42);
 	    }
 	    set m42(value) {
-	        setNumber2D(this, 13 /* M42 */, value);
+	        setNumber2D(this, Matrix3D.M42, value);
 	    }
 	    get m43() {
-	        return getNumber(this, 14 /* M43 */);
+	        return getNumber(this, Matrix3D.M43);
 	    }
 	    set m43(value) {
-	        setNumber2D(this, 14 /* M43 */, value);
+	        setNumber2D(this, Matrix3D.M43, value);
 	    }
 	    get m44() {
-	        return getNumber(this, 15 /* M44 */);
+	        return getNumber(this, Matrix3D.M44);
 	    }
 	    set m44(value) {
-	        setNumber2D(this, 15 /* M44 */, value);
+	        setNumber2D(this, Matrix3D.M44, value);
 	    }
 	    get a() {
-	        return getNumber(this, 0 /* A */);
+	        return getNumber(this, Matrix2D.A);
 	    }
 	    set a(value) {
-	        setNumber2D(this, 0 /* A */, value);
+	        setNumber2D(this, Matrix2D.A, value);
 	    }
 	    get b() {
-	        return getNumber(this, 1 /* B */);
+	        return getNumber(this, Matrix2D.B);
 	    }
 	    set b(value) {
-	        setNumber2D(this, 1 /* B */, value);
+	        setNumber2D(this, Matrix2D.B, value);
 	    }
 	    get c() {
-	        return getNumber(this, 4 /* C */);
+	        return getNumber(this, Matrix2D.C);
 	    }
 	    set c(value) {
-	        setNumber2D(this, 4 /* C */, value);
+	        setNumber2D(this, Matrix2D.C, value);
 	    }
 	    get d() {
-	        return getNumber(this, 5 /* D */);
+	        return getNumber(this, Matrix2D.D);
 	    }
 	    set d(value) {
-	        setNumber2D(this, 5 /* D */, value);
+	        setNumber2D(this, Matrix2D.D, value);
 	    }
 	    get e() {
-	        return getNumber(this, 12 /* E */);
+	        return getNumber(this, Matrix2D.E);
 	    }
 	    set e(value) {
-	        setNumber2D(this, 12 /* E */, value);
+	        setNumber2D(this, Matrix2D.E, value);
 	    }
 	    get f() {
-	        return getNumber(this, 13 /* F */);
+	        return getNumber(this, Matrix2D.F);
 	    }
 	    set f(value) {
-	        setNumber2D(this, 13 /* F */, value);
+	        setNumber2D(this, Matrix2D.F, value);
 	    }
 	    get isIdentity() {
-	        let values = this.values;
-	        return (values[0 /* M11 */] === 1 &&
-	            values[1 /* M12 */] === 0 &&
-	            values[2 /* M13 */] === 0 &&
-	            values[3 /* M14 */] === 0 &&
-	            values[4 /* M21 */] === 0 &&
-	            values[5 /* M22 */] === 1 &&
-	            values[6 /* M23 */] === 0 &&
-	            values[7 /* M24 */] === 0 &&
-	            values[8 /* M31 */] === 0 &&
-	            values[9 /* M32 */] === 0 &&
-	            values[10 /* M33 */] === 1 &&
-	            values[11 /* M34 */] === 0 &&
-	            values[12 /* M41 */] === 0 &&
-	            values[13 /* M42 */] === 0 &&
-	            values[14 /* M43 */] === 0 &&
-	            values[15 /* M44 */] === 1);
+	        const values = this.values;
+	        return (values[Matrix3D.M11] === 1 &&
+	            values[Matrix3D.M12] === 0 &&
+	            values[Matrix3D.M13] === 0 &&
+	            values[Matrix3D.M14] === 0 &&
+	            values[Matrix3D.M21] === 0 &&
+	            values[Matrix3D.M22] === 1 &&
+	            values[Matrix3D.M23] === 0 &&
+	            values[Matrix3D.M24] === 0 &&
+	            values[Matrix3D.M31] === 0 &&
+	            values[Matrix3D.M32] === 0 &&
+	            values[Matrix3D.M33] === 1 &&
+	            values[Matrix3D.M34] === 0 &&
+	            values[Matrix3D.M41] === 0 &&
+	            values[Matrix3D.M42] === 0 &&
+	            values[Matrix3D.M43] === 0 &&
+	            values[Matrix3D.M44] === 1);
 	    }
 	    static fromMatrix(init) {
 	        if (init instanceof DOMMatrix$1) {
@@ -571,7 +599,7 @@
 	        return newInstance(this.values).rotateFromVectorSelf(x, y);
 	    }
 	    rotateFromVectorSelf(x = 0, y = 0) {
-	        let theta = x === 0 && y === 0 ? 0 : Math.atan2(y, x) * DEGREE_PER_RAD;
+	        const theta = x === 0 && y === 0 ? 0 : Math.atan2(y, x) * DEGREE_PER_RAD;
 	        return this.rotateSelf(theta);
 	    }
 	    rotate(rotX, rotY, rotZ) {
@@ -607,7 +635,7 @@
 	        return newInstance(this.values).rotateAxisAngleSelf(x, y, z, angle);
 	    }
 	    rotateAxisAngleSelf(x = 0, y = 0, z = 0, angle = 0) {
-	        let length = Math.sqrt(x * x + y * y + z * z);
+	        const length = Math.sqrt(x * x + y * y + z * z);
 	        if (length === 0) {
 	            return this;
 	        }
@@ -617,11 +645,11 @@
 	            z /= length;
 	        }
 	        angle *= RAD_PER_DEGREE;
-	        let c = Math.cos(angle);
-	        let s = Math.sin(angle);
-	        let t = 1 - c;
-	        let tx = t * x;
-	        let ty = t * y;
+	        const c = Math.cos(angle);
+	        const s = Math.sin(angle);
+	        const t = 1 - c;
+	        const tx = t * x;
+	        const ty = t * y;
 	        this.values = multiply([
 	            tx * x + c,
 	            tx * y + s * z,
@@ -652,7 +680,7 @@
 	        if (typeof sx !== "number") {
 	            return this;
 	        }
-	        let t = Math.tan(sx * RAD_PER_DEGREE);
+	        const t = Math.tan(sx * RAD_PER_DEGREE);
 	        this.values = multiply([1, 0, 0, 0, t, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], this.values);
 	        return this;
 	    }
@@ -663,7 +691,7 @@
 	        if (typeof sy !== "number") {
 	            return this;
 	        }
-	        let t = Math.tan(sy * RAD_PER_DEGREE);
+	        const t = Math.tan(sy * RAD_PER_DEGREE);
 	        this.values = multiply([1, t, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], this.values);
 	        return this;
 	    }
@@ -700,21 +728,21 @@
 	        // }
 	    }
 	    setMatrixValue(transformList) {
-	        let temp = new DOMMatrix$1(transformList);
+	        const temp = new DOMMatrix$1(transformList);
 	        this.values = temp.values;
 	        this.is2D = temp.is2D;
 	        return this;
 	    }
 	    transformPoint(point) {
-	        let x = point.x;
-	        let y = point.y;
-	        let z = point.z;
-	        let w = point.w;
-	        let values = this.values;
-	        let nx = values[0 /* M11 */] * x + values[4 /* M21 */] * y + values[8 /* M31 */] * z + values[12 /* M41 */] * w;
-	        let ny = values[1 /* M12 */] * x + values[5 /* M22 */] * y + values[9 /* M32 */] * z + values[13 /* M42 */] * w;
-	        let nz = values[2 /* M13 */] * x + values[6 /* M23 */] * y + values[10 /* M33 */] * z + values[14 /* M43 */] * w;
-	        let nw = values[3 /* M14 */] * x + values[7 /* M24 */] * y + values[11 /* M34 */] * z + values[15 /* M44 */] * w;
+	        const x = point.x;
+	        const y = point.y;
+	        const z = point.z;
+	        const w = point.w;
+	        const values = this.values;
+	        const nx = values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w;
+	        const ny = values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w;
+	        const nz = values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w;
+	        const nw = values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w;
 	        return new DOMPoint(nx, ny, nz, nw);
 	    }
 	    toFloat32Array() {
@@ -809,7 +837,7 @@
 	    }
 	    static create(n, cb) {
 	        const res = new Array(n);
-	        for (var i = 0; i < n; i++) {
+	        for (let i = 0; i < n; i++) {
 	            res[i] = cb(i);
 	        }
 	        return res;
@@ -863,7 +891,7 @@
 	 */
 	// Configuration Constants
 	const EPSILON = 0.000001;
-	let ARRAY_TYPE = Array;
+	const ARRAY_TYPE = Array;
 	const RANDOM = Math.random;
 	const degree = Math.PI / 180;
 	/**
@@ -922,6 +950,7 @@
 		equals: equals
 	});
 
+	/* istanbul ignore file */
 	class DOMVector2 {
 	    constructor(x = 0, y = 0) {
 	        this.x = x;
@@ -934,7 +963,7 @@
 	        return this.x * this.x + this.y * this.y;
 	    }
 	    clone() {
-	        return new DOMVector3(this.x, this.y);
+	        return new DOMVector2(this.x, this.y);
 	    }
 	    set(x, y) {
 	        if (!isNaN(x))
@@ -1063,6 +1092,7 @@
 	    }
 	}
 
+	/* istanbul ignore file */
 	const m = globalThis.DOMMatrix ? DOMMatrix : DOMMatrix$1;
 	const p = globalThis.DOMPoint ? DOMPoint : DOMPoint$1;
 	const r = globalThis.DOMRect ? DOMRect : DOMRect$1;
@@ -1207,6 +1237,7 @@
 	};
 
 	class DOM {
+	    /* istanbul ignore next */
 	    static get doc() {
 	        if (!this.document) {
 	            if (!globalThis.document)
@@ -1219,11 +1250,11 @@
 	        DOM.document = doc;
 	    }
 	    static createElement(tagName, options = {}) {
-	        var el = DOM.doc.createElement(tagName, options);
+	        const el = DOM.doc.createElement(tagName, options);
 	        return el;
 	    }
 	    static createText(value) {
-	        var el = DOM.createElement("span");
+	        const el = DOM.createElement("span");
 	        DOM.setText(el, value);
 	        return el;
 	    }
@@ -1231,14 +1262,14 @@
 	        el.innerHTML = value;
 	    }
 	    static setAttr(el, options) {
-	        for (var id in options) {
+	        for (const id in options) {
 	            if (el.getAttribute(id) === options[id])
 	                continue;
 	            el.setAttribute(id, options[id]);
 	        }
 	    }
 	    static setStyle(el, styles) {
-	        for (var entry of Object.entries(styles)) {
+	        for (const entry of Object.entries(styles)) {
 	            if (el.style[entry[0]] === entry[1])
 	                continue;
 	            el.style[entry[0]] = entry[1];
@@ -1286,7 +1317,7 @@
 	    constructor(event, distinct = true) {
 	        this.queue = [];
 	        if (event)
-	            event.on((evt) => this.emit(evt));
+	            event.on(evt => this.emit(evt));
 	        this.ouput = new Event();
 	        this.distinct = distinct;
 	    }
@@ -1300,7 +1331,7 @@
 	        return this.ouput.off(listener);
 	    }
 	    update() {
-	        for (var evt of this.queue) {
+	        for (const evt of this.queue) {
 	            this.ouput.emit(evt);
 	        }
 	        this.queue.length = 0;
@@ -1331,6 +1362,12 @@
 	    return id;
 	}
 
+	(function (LogLevel) {
+	    LogLevel[LogLevel["INFO"] = 0] = "INFO";
+	    LogLevel[LogLevel["WARN"] = 1] = "WARN";
+	    LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
+	    LogLevel[LogLevel["OFF"] = 3] = "OFF";
+	})(exports.LogLevel || (exports.LogLevel = {}));
 	class Logger {
 	    constructor() {
 	        this.eventHandler = new Event();
@@ -1360,25 +1397,25 @@
 	        this._console = val;
 	    }
 	    info(...params) {
-	        if (this.level > 0 /* INFO */)
+	        if (this.level > exports.LogLevel.INFO)
 	            return;
 	        if (this._console)
 	            console.info(this.prefix, ...params);
-	        this.eventHandler.emit([0 /* INFO */, this.prefix, ...params]);
+	        this.eventHandler.emit([exports.LogLevel.INFO, this.prefix, ...params]);
 	    }
 	    warn(...params) {
-	        if (this.level > 1 /* WARN */)
+	        if (this.level > exports.LogLevel.WARN)
 	            return;
 	        if (this._console)
 	            console.warn(this.prefix, ...params);
-	        this.eventHandler.emit([1 /* WARN */, this.prefix, ...params]);
+	        this.eventHandler.emit([exports.LogLevel.WARN, this.prefix, ...params]);
 	    }
 	    error(...params) {
-	        if (this.level > 2 /* ERROR */)
+	        if (this.level > exports.LogLevel.ERROR)
 	            return;
 	        if (this._console)
 	            console.error(this.prefix, ...params);
-	        this.eventHandler.emit([2 /* ERROR */, this.prefix, ...params]);
+	        this.eventHandler.emit([exports.LogLevel.ERROR, this.prefix, ...params]);
 	    }
 	}
 	const logger = new Logger();
@@ -1433,6 +1470,33 @@
 	    return new Proxy(objToWatch, handler);
 	}
 
+	// To reuse export `rng` const without hacking around
+	/* eslint @typescript-eslint/no-use-before-define: 0 */
+	class SeededRandom {
+	    constructor(seed) {
+	        this.seed = seed;
+	    }
+	    next() {
+	        this.seed = (this.seed * 9301 + 49297) % 233280;
+	        return this.seed / 233280.0;
+	    }
+	    rand() {
+	        return this.next();
+	    }
+	    randBool() {
+	        return this.randRangeInt(0, 1) === 0;
+	    }
+	    randRangeFloat(min, max) {
+	        return rng.randRangeFloat(min, max, this.next());
+	    }
+	    randRangeInt(min, max) {
+	        return rng.randRangeInt(min, max, this.next());
+	    }
+	    randArray(arr) {
+	        const index = rng.randRangeInt(0, arr.length - 1);
+	        return arr[index];
+	    }
+	}
 	class Random {
 	    rand() {
 	        return Math.random();
@@ -1458,31 +1522,6 @@
 	    }
 	    createSeededRandom(seed = -1) {
 	        return new SeededRandom(seed);
-	    }
-	}
-	class SeededRandom {
-	    constructor(seed) {
-	        this.seed = seed;
-	    }
-	    next() {
-	        this.seed = (this.seed * 9301 + 49297) % 233280;
-	        return this.seed / 233280.0;
-	    }
-	    rand() {
-	        return this.next();
-	    }
-	    randBool() {
-	        return this.randRangeInt(0, 1) === 0;
-	    }
-	    randRangeFloat(min, max) {
-	        return rng.randRangeFloat(min, max, this.next());
-	    }
-	    randRangeInt(min, max) {
-	        return rng.randRangeInt(min, max, this.next());
-	    }
-	    randArray(arr) {
-	        const index = rng.randRangeInt(0, arr.length - 1);
-	        return arr[index];
 	    }
 	}
 	const rng = new Random();
@@ -1523,8 +1562,8 @@
 	        return val;
 	    }
 	    static capitalizeWords(val) {
-	        let regexp = /\s/;
-	        let words = val.split(regexp);
+	        const regexp = /\s/;
+	        const words = val.split(regexp);
 	        if (words.length == 1) {
 	            return StringExt.capitalize(words[0]);
 	        }
@@ -1561,6 +1600,7 @@
 	    }
 	}
 
+	/* istanbul ignore file */
 	/**
 	 * Basic Transform class, provide (position, rotation, scale) and take care of transformation
 	 *
@@ -1614,6 +1654,7 @@
 	    }
 	}
 
+	/* istanbul ignore file */
 	/**
 	 * Extend Transform matrix and add simple layout system with pivot, anchor and size
 	 *
@@ -1669,14 +1710,14 @@
 	        return mat;
 	    }
 	    setParentFix(p) {
-	        var before = this.global;
+	        const before = this.global;
 	        console.log(decomposeMatrix(before));
-	        var dec1 = decomposeMatrix(before);
+	        const dec1 = decomposeMatrix(before);
 	        this.parent = p;
-	        var after = this.global;
+	        const after = this.global;
 	        if (!this.parent)
 	            return;
-	        var dec2 = decomposeMatrix(after);
+	        const dec2 = decomposeMatrix(after);
 	        console.log("avant compensation", dec1, dec2);
 	        this.scale.x *= dec1.scale.x / dec2.scale.x;
 	        this.scale.y *= dec1.scale.y / dec2.scale.y;
@@ -1684,7 +1725,7 @@
 	        this.rotation.x += dec1.rotate.x - dec2.rotate.x;
 	        this.rotation.y += dec1.rotate.y - dec2.rotate.y;
 	        this.rotation.z += dec1.rotate.z - dec2.rotate.z;
-	        var pat1 = decomposeMatrix(before.inverse().multiply(this.global));
+	        const pat1 = decomposeMatrix(before.inverse().multiply(this.global));
 	        this.position.x -= pat1.translate.x;
 	        this.position.y -= pat1.translate.y;
 	        this.position.z -= pat1.translate.z;
@@ -1694,7 +1735,7 @@
 	    computeRect(updateChild = false) {
 	        this.compute();
 	        if (updateChild) {
-	            for (var child of this._child) {
+	            for (const child of this._child) {
 	                child.computeRect();
 	            }
 	        }
@@ -1702,10 +1743,16 @@
 	    compute() {
 	        resetMatrix(this.matrix);
 	        // compute
-	        var skewDisp = this.skew.clone().scale(this.res.x, this.res.y);
-	        var piv = this.pivot.clone().add(-0.5, -0.5).scale(this.res.x, this.res.y);
-	        var anc = this.anchor.clone().add(-0.5, -0.5).scale(this.res.x, this.res.y);
-	        var pos = this.position.clone().scale(this.res.x, this.res.y, 1);
+	        const skewDisp = this.skew.clone().scale(this.res.x, this.res.y);
+	        const piv = this.pivot
+	            .clone()
+	            .add(-0.5, -0.5)
+	            .scale(this.res.x, this.res.y);
+	        const anc = this.anchor
+	            .clone()
+	            .add(-0.5, -0.5)
+	            .scale(this.res.x, this.res.y);
+	        const pos = this.position.clone().scale(this.res.x, this.res.y, 1);
 	        // compute
 	        this.matrix.translateSelf(pos.x + anc.x, pos.y + anc.y, pos.z);
 	        this.matrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z);

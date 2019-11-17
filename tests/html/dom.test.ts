@@ -18,6 +18,10 @@ test("Basic", () => {
 
 	expect(div.outerHTML).toContain(`id="nano"`)
 	expect(div.outerHTML).toContain(`display: none;`)
+
+	// check diff mechanism
+	DOM.setAttr(div, { class: "stuff" })
+	DOM.setStyle(div, { display: "none" })
 })
 
 test("Text", () => {

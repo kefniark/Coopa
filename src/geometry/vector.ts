@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { roundTo } from "../math/math"
 
 export class DOMVector2 {
@@ -18,7 +19,7 @@ export class DOMVector2 {
 	}
 
 	clone() {
-		return new DOMVector3(this.x, this.y)
+		return new DOMVector2(this.x, this.y)
 	}
 
 	set(x: number, y: number) {
@@ -47,7 +48,7 @@ export class DOMVector2 {
 		return this
 	}
 
-	add(x: number = 0, y: number = 0) {
+	add(x = 0, y = 0) {
 		this.x += x
 		this.y += y
 		return this

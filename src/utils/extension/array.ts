@@ -8,7 +8,7 @@ export class ArrayExt {
 	 * @param {number} [val=0]
 	 * @returns
 	 */
-	static createSimilar(n: number, val: number = 0) {
+	static createSimilar(n: number, val = 0) {
 		return ArrayExt.create(n, () => val)
 	}
 
@@ -21,13 +21,13 @@ export class ArrayExt {
 	 * @param {number} [start=1]
 	 * @returns
 	 */
-	static createOrder(n: number, start: number = 1) {
+	static createOrder(n: number, start = 1) {
 		return ArrayExt.create(n, i => start + i)
 	}
 
 	static create(n: number, cb: (index: number) => number): number[] {
 		const res: number[] = new Array(n)
-		for (var i = 0; i < n; i++) {
+		for (let i = 0; i < n; i++) {
 			res[i] = cb(i)
 		}
 		return res

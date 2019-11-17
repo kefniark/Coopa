@@ -173,6 +173,34 @@ class BinarySearchTree {
 
 // Used only as a polyfill for DOMMatrix
 /* istanbul ignore file */
+var Matrix3D;
+(function (Matrix3D) {
+    Matrix3D[Matrix3D["M11"] = 0] = "M11";
+    Matrix3D[Matrix3D["M12"] = 1] = "M12";
+    Matrix3D[Matrix3D["M13"] = 2] = "M13";
+    Matrix3D[Matrix3D["M14"] = 3] = "M14";
+    Matrix3D[Matrix3D["M21"] = 4] = "M21";
+    Matrix3D[Matrix3D["M22"] = 5] = "M22";
+    Matrix3D[Matrix3D["M23"] = 6] = "M23";
+    Matrix3D[Matrix3D["M24"] = 7] = "M24";
+    Matrix3D[Matrix3D["M31"] = 8] = "M31";
+    Matrix3D[Matrix3D["M32"] = 9] = "M32";
+    Matrix3D[Matrix3D["M33"] = 10] = "M33";
+    Matrix3D[Matrix3D["M34"] = 11] = "M34";
+    Matrix3D[Matrix3D["M41"] = 12] = "M41";
+    Matrix3D[Matrix3D["M42"] = 13] = "M42";
+    Matrix3D[Matrix3D["M43"] = 14] = "M43";
+    Matrix3D[Matrix3D["M44"] = 15] = "M44";
+})(Matrix3D || (Matrix3D = {}));
+var Matrix2D;
+(function (Matrix2D) {
+    Matrix2D[Matrix2D["A"] = 0] = "A";
+    Matrix2D[Matrix2D["B"] = 1] = "B";
+    Matrix2D[Matrix2D["C"] = 4] = "C";
+    Matrix2D[Matrix2D["D"] = 5] = "D";
+    Matrix2D[Matrix2D["E"] = 12] = "E";
+    Matrix2D[Matrix2D["F"] = 13] = "F";
+})(Matrix2D || (Matrix2D = {}));
 const DEGREE_PER_RAD = 180 / Math.PI;
 const RAD_PER_DEGREE = Math.PI / 180;
 let parseMatrix = (init) => {
@@ -217,7 +245,7 @@ let setNumber3D = (receiver, index, value) => {
     if (typeof value !== "number") {
         throw new TypeError("Expected number");
     }
-    if (index === 10 /* M33 */ || index === 15 /* M44 */) {
+    if (index === Matrix3D.M33 || index === Matrix3D.M44) {
         if (value !== 1) {
             receiver.is2D = false;
         }
@@ -272,185 +300,185 @@ class DOMMatrix$1 {
         let i = 0;
         var arr = init;
         if (init && init.length === 6) {
-            setNumber2D(this, 0 /* A */, arr[i++]);
-            setNumber2D(this, 1 /* B */, arr[i++]);
-            setNumber2D(this, 4 /* C */, arr[i++]);
-            setNumber2D(this, 5 /* D */, arr[i++]);
-            setNumber2D(this, 12 /* E */, arr[i++]);
-            setNumber2D(this, 13 /* F */, arr[i++]);
+            setNumber2D(this, Matrix2D.A, arr[i++]);
+            setNumber2D(this, Matrix2D.B, arr[i++]);
+            setNumber2D(this, Matrix2D.C, arr[i++]);
+            setNumber2D(this, Matrix2D.D, arr[i++]);
+            setNumber2D(this, Matrix2D.E, arr[i++]);
+            setNumber2D(this, Matrix2D.F, arr[i++]);
         }
         else if (init && init.length === 16) {
-            setNumber2D(this, 0 /* M11 */, arr[i++]);
-            setNumber2D(this, 1 /* M12 */, arr[i++]);
-            setNumber3D(this, 2 /* M13 */, arr[i++]);
-            setNumber3D(this, 3 /* M14 */, arr[i++]);
-            setNumber2D(this, 4 /* M21 */, arr[i++]);
-            setNumber2D(this, 5 /* M22 */, arr[i++]);
-            setNumber3D(this, 6 /* M23 */, arr[i++]);
-            setNumber3D(this, 7 /* M24 */, arr[i++]);
-            setNumber3D(this, 8 /* M31 */, arr[i++]);
-            setNumber3D(this, 9 /* M32 */, arr[i++]);
-            setNumber3D(this, 10 /* M33 */, arr[i++]);
-            setNumber3D(this, 11 /* M34 */, arr[i++]);
-            setNumber2D(this, 12 /* M41 */, arr[i++]);
-            setNumber2D(this, 13 /* M42 */, arr[i++]);
-            setNumber3D(this, 14 /* M43 */, arr[i++]);
-            setNumber3D(this, 15 /* M44 */, arr[i]);
+            setNumber2D(this, Matrix3D.M11, arr[i++]);
+            setNumber2D(this, Matrix3D.M12, arr[i++]);
+            setNumber3D(this, Matrix3D.M13, arr[i++]);
+            setNumber3D(this, Matrix3D.M14, arr[i++]);
+            setNumber2D(this, Matrix3D.M21, arr[i++]);
+            setNumber2D(this, Matrix3D.M22, arr[i++]);
+            setNumber3D(this, Matrix3D.M23, arr[i++]);
+            setNumber3D(this, Matrix3D.M24, arr[i++]);
+            setNumber3D(this, Matrix3D.M31, arr[i++]);
+            setNumber3D(this, Matrix3D.M32, arr[i++]);
+            setNumber3D(this, Matrix3D.M33, arr[i++]);
+            setNumber3D(this, Matrix3D.M34, arr[i++]);
+            setNumber2D(this, Matrix3D.M41, arr[i++]);
+            setNumber2D(this, Matrix3D.M42, arr[i++]);
+            setNumber3D(this, Matrix3D.M43, arr[i++]);
+            setNumber3D(this, Matrix3D.M44, arr[i]);
         }
         else if (init !== undefined) {
             throw new TypeError("Expected string or array.");
         }
     }
     get m11() {
-        return getNumber(this, 0 /* M11 */);
+        return getNumber(this, Matrix3D.M11);
     }
     set m11(value) {
-        setNumber2D(this, 0 /* M11 */, value);
+        setNumber2D(this, Matrix3D.M11, value);
     }
     get m12() {
-        return getNumber(this, 1 /* M12 */);
+        return getNumber(this, Matrix3D.M12);
     }
     set m12(value) {
-        setNumber2D(this, 1 /* M12 */, value);
+        setNumber2D(this, Matrix3D.M12, value);
     }
     get m13() {
-        return getNumber(this, 2 /* M13 */);
+        return getNumber(this, Matrix3D.M13);
     }
     set m13(value) {
-        setNumber2D(this, 2 /* M13 */, value);
+        setNumber2D(this, Matrix3D.M13, value);
     }
     get m14() {
-        return getNumber(this, 3 /* M14 */);
+        return getNumber(this, Matrix3D.M14);
     }
     set m14(value) {
-        setNumber2D(this, 3 /* M14 */, value);
+        setNumber2D(this, Matrix3D.M14, value);
     }
     get m21() {
-        return getNumber(this, 4 /* M21 */);
+        return getNumber(this, Matrix3D.M21);
     }
     set m21(value) {
-        setNumber2D(this, 4 /* M21 */, value);
+        setNumber2D(this, Matrix3D.M21, value);
     }
     get m22() {
-        return getNumber(this, 5 /* M22 */);
+        return getNumber(this, Matrix3D.M22);
     }
     set m22(value) {
-        setNumber2D(this, 5 /* M22 */, value);
+        setNumber2D(this, Matrix3D.M22, value);
     }
     get m23() {
-        return getNumber(this, 6 /* M23 */);
+        return getNumber(this, Matrix3D.M23);
     }
     set m23(value) {
-        setNumber2D(this, 6 /* M23 */, value);
+        setNumber2D(this, Matrix3D.M23, value);
     }
     get m24() {
-        return getNumber(this, 7 /* M24 */);
+        return getNumber(this, Matrix3D.M24);
     }
     set m24(value) {
-        setNumber2D(this, 7 /* M24 */, value);
+        setNumber2D(this, Matrix3D.M24, value);
     }
     get m31() {
-        return getNumber(this, 8 /* M31 */);
+        return getNumber(this, Matrix3D.M31);
     }
     set m31(value) {
-        setNumber2D(this, 8 /* M31 */, value);
+        setNumber2D(this, Matrix3D.M31, value);
     }
     get m32() {
-        return getNumber(this, 9 /* M32 */);
+        return getNumber(this, Matrix3D.M32);
     }
     set m32(value) {
-        setNumber2D(this, 9 /* M32 */, value);
+        setNumber2D(this, Matrix3D.M32, value);
     }
     get m33() {
-        return getNumber(this, 10 /* M33 */);
+        return getNumber(this, Matrix3D.M33);
     }
     set m33(value) {
-        setNumber2D(this, 10 /* M33 */, value);
+        setNumber2D(this, Matrix3D.M33, value);
     }
     get m34() {
-        return getNumber(this, 11 /* M34 */);
+        return getNumber(this, Matrix3D.M34);
     }
     set m34(value) {
-        setNumber2D(this, 11 /* M34 */, value);
+        setNumber2D(this, Matrix3D.M34, value);
     }
     get m41() {
-        return getNumber(this, 12 /* M41 */);
+        return getNumber(this, Matrix3D.M41);
     }
     set m41(value) {
-        setNumber2D(this, 12 /* M41 */, value);
+        setNumber2D(this, Matrix3D.M41, value);
     }
     get m42() {
-        return getNumber(this, 13 /* M42 */);
+        return getNumber(this, Matrix3D.M42);
     }
     set m42(value) {
-        setNumber2D(this, 13 /* M42 */, value);
+        setNumber2D(this, Matrix3D.M42, value);
     }
     get m43() {
-        return getNumber(this, 14 /* M43 */);
+        return getNumber(this, Matrix3D.M43);
     }
     set m43(value) {
-        setNumber2D(this, 14 /* M43 */, value);
+        setNumber2D(this, Matrix3D.M43, value);
     }
     get m44() {
-        return getNumber(this, 15 /* M44 */);
+        return getNumber(this, Matrix3D.M44);
     }
     set m44(value) {
-        setNumber2D(this, 15 /* M44 */, value);
+        setNumber2D(this, Matrix3D.M44, value);
     }
     get a() {
-        return getNumber(this, 0 /* A */);
+        return getNumber(this, Matrix2D.A);
     }
     set a(value) {
-        setNumber2D(this, 0 /* A */, value);
+        setNumber2D(this, Matrix2D.A, value);
     }
     get b() {
-        return getNumber(this, 1 /* B */);
+        return getNumber(this, Matrix2D.B);
     }
     set b(value) {
-        setNumber2D(this, 1 /* B */, value);
+        setNumber2D(this, Matrix2D.B, value);
     }
     get c() {
-        return getNumber(this, 4 /* C */);
+        return getNumber(this, Matrix2D.C);
     }
     set c(value) {
-        setNumber2D(this, 4 /* C */, value);
+        setNumber2D(this, Matrix2D.C, value);
     }
     get d() {
-        return getNumber(this, 5 /* D */);
+        return getNumber(this, Matrix2D.D);
     }
     set d(value) {
-        setNumber2D(this, 5 /* D */, value);
+        setNumber2D(this, Matrix2D.D, value);
     }
     get e() {
-        return getNumber(this, 12 /* E */);
+        return getNumber(this, Matrix2D.E);
     }
     set e(value) {
-        setNumber2D(this, 12 /* E */, value);
+        setNumber2D(this, Matrix2D.E, value);
     }
     get f() {
-        return getNumber(this, 13 /* F */);
+        return getNumber(this, Matrix2D.F);
     }
     set f(value) {
-        setNumber2D(this, 13 /* F */, value);
+        setNumber2D(this, Matrix2D.F, value);
     }
     get isIdentity() {
         let values = this.values;
-        return (values[0 /* M11 */] === 1 &&
-            values[1 /* M12 */] === 0 &&
-            values[2 /* M13 */] === 0 &&
-            values[3 /* M14 */] === 0 &&
-            values[4 /* M21 */] === 0 &&
-            values[5 /* M22 */] === 1 &&
-            values[6 /* M23 */] === 0 &&
-            values[7 /* M24 */] === 0 &&
-            values[8 /* M31 */] === 0 &&
-            values[9 /* M32 */] === 0 &&
-            values[10 /* M33 */] === 1 &&
-            values[11 /* M34 */] === 0 &&
-            values[12 /* M41 */] === 0 &&
-            values[13 /* M42 */] === 0 &&
-            values[14 /* M43 */] === 0 &&
-            values[15 /* M44 */] === 1);
+        return (values[Matrix3D.M11] === 1 &&
+            values[Matrix3D.M12] === 0 &&
+            values[Matrix3D.M13] === 0 &&
+            values[Matrix3D.M14] === 0 &&
+            values[Matrix3D.M21] === 0 &&
+            values[Matrix3D.M22] === 1 &&
+            values[Matrix3D.M23] === 0 &&
+            values[Matrix3D.M24] === 0 &&
+            values[Matrix3D.M31] === 0 &&
+            values[Matrix3D.M32] === 0 &&
+            values[Matrix3D.M33] === 1 &&
+            values[Matrix3D.M34] === 0 &&
+            values[Matrix3D.M41] === 0 &&
+            values[Matrix3D.M42] === 0 &&
+            values[Matrix3D.M43] === 0 &&
+            values[Matrix3D.M44] === 1);
     }
     static fromMatrix(init) {
         if (init instanceof DOMMatrix$1) {
@@ -705,10 +733,10 @@ class DOMMatrix$1 {
         let z = point.z;
         let w = point.w;
         let values = this.values;
-        let nx = values[0 /* M11 */] * x + values[4 /* M21 */] * y + values[8 /* M31 */] * z + values[12 /* M41 */] * w;
-        let ny = values[1 /* M12 */] * x + values[5 /* M22 */] * y + values[9 /* M32 */] * z + values[13 /* M42 */] * w;
-        let nz = values[2 /* M13 */] * x + values[6 /* M23 */] * y + values[10 /* M33 */] * z + values[14 /* M43 */] * w;
-        let nw = values[3 /* M14 */] * x + values[7 /* M24 */] * y + values[11 /* M34 */] * z + values[15 /* M44 */] * w;
+        let nx = values[Matrix3D.M11] * x + values[Matrix3D.M21] * y + values[Matrix3D.M31] * z + values[Matrix3D.M41] * w;
+        let ny = values[Matrix3D.M12] * x + values[Matrix3D.M22] * y + values[Matrix3D.M32] * z + values[Matrix3D.M42] * w;
+        let nz = values[Matrix3D.M13] * x + values[Matrix3D.M23] * y + values[Matrix3D.M33] * z + values[Matrix3D.M43] * w;
+        let nw = values[Matrix3D.M14] * x + values[Matrix3D.M24] * y + values[Matrix3D.M34] * z + values[Matrix3D.M44] * w;
         return new DOMPoint(nx, ny, nz, nw);
     }
     toFloat32Array() {
@@ -1325,6 +1353,13 @@ function uid(len = 8) {
     return id;
 }
 
+var LogLevel;
+(function (LogLevel) {
+    LogLevel[LogLevel["INFO"] = 0] = "INFO";
+    LogLevel[LogLevel["WARN"] = 1] = "WARN";
+    LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
+    LogLevel[LogLevel["OFF"] = 3] = "OFF";
+})(LogLevel || (LogLevel = {}));
 class Logger {
     constructor() {
         this.eventHandler = new Event();
@@ -1354,25 +1389,25 @@ class Logger {
         this._console = val;
     }
     info(...params) {
-        if (this.level > 0 /* INFO */)
+        if (this.level > LogLevel.INFO)
             return;
         if (this._console)
             console.info(this.prefix, ...params);
-        this.eventHandler.emit([0 /* INFO */, this.prefix, ...params]);
+        this.eventHandler.emit([LogLevel.INFO, this.prefix, ...params]);
     }
     warn(...params) {
-        if (this.level > 1 /* WARN */)
+        if (this.level > LogLevel.WARN)
             return;
         if (this._console)
             console.warn(this.prefix, ...params);
-        this.eventHandler.emit([1 /* WARN */, this.prefix, ...params]);
+        this.eventHandler.emit([LogLevel.WARN, this.prefix, ...params]);
     }
     error(...params) {
-        if (this.level > 2 /* ERROR */)
+        if (this.level > LogLevel.ERROR)
             return;
         if (this._console)
             console.error(this.prefix, ...params);
-        this.eventHandler.emit([2 /* ERROR */, this.prefix, ...params]);
+        this.eventHandler.emit([LogLevel.ERROR, this.prefix, ...params]);
     }
 }
 const logger = new Logger();
@@ -1721,4 +1756,4 @@ class RectTransformMatrix extends TransformMatrix {
 
 const name = "Coopa";
 
-export { ArrayExt, BinarySearchTree, DOM, DOMVector2, DOMVector3, DelayedEvent, Event, ObjectExt, Random, RectTransformMatrix, SeededRandom, StringExt, TransformMatrix, createMatrix, createPoint, createRect, decomposeMatrix, logger, mapMatrix, math, matrix2dToCSS, matrix3dToCSS, matrix3dValues, name, now, onChange, perf, resetMatrix, rng, uid };
+export { ArrayExt, BinarySearchTree, DOM, DOMVector2, DOMVector3, DelayedEvent, Event, LogLevel, ObjectExt, Random, RectTransformMatrix, SeededRandom, StringExt, TransformMatrix, createMatrix, createPoint, createRect, decomposeMatrix, logger, mapMatrix, math, matrix2dToCSS, matrix3dToCSS, matrix3dValues, name, now, onChange, perf, resetMatrix, rng, uid };

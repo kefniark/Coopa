@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { TransformMatrix } from "./transform"
 import { DOMVector2, resetMatrix, decomposeMatrix, createMatrix, matrix3dValues } from "../geometry/index"
 import { ArrayExt, onChange } from "../utils/index"
@@ -57,7 +58,7 @@ export class RectTransformMatrix extends TransformMatrix {
 	public skew: DOMVector2
 	public res: DOMVector2
 
-	constructor(x: number = 1280, y: number = 720) {
+	constructor(x = 1280, y = 720) {
 		super()
 		this.skew = onChange(new DOMVector2(0, 0), () => this.computeRect())
 		this.pivot = onChange(new DOMVector2(0.5, 0.5), () => this.computeRect())
@@ -67,15 +68,15 @@ export class RectTransformMatrix extends TransformMatrix {
 	}
 
 	setParentFix(p: RectTransformMatrix | undefined) {
-		var before = this.global
+		const before = this.global
 		console.log(decomposeMatrix(before))
-		var dec1 = decomposeMatrix(before)
+		const dec1 = decomposeMatrix(before)
 
 		this.parent = p
-		var after = this.global
+		const after = this.global
 		if (!this.parent) return
 
-		var dec2 = decomposeMatrix(after)
+		const dec2 = decomposeMatrix(after)
 		console.log("avant compensation", dec1, dec2)
 
 		this.scale.x *= dec1.scale.x / dec2.scale.x
@@ -86,7 +87,7 @@ export class RectTransformMatrix extends TransformMatrix {
 		this.rotation.y += dec1.rotate.y - dec2.rotate.y
 		this.rotation.z += dec1.rotate.z - dec2.rotate.z
 
-		var pat1 = decomposeMatrix(before.inverse().multiply(this.global))
+		const pat1 = decomposeMatrix(before.inverse().multiply(this.global))
 
 		this.position.x -= pat1.translate.x
 		this.position.y -= pat1.translate.y
@@ -99,7 +100,7 @@ export class RectTransformMatrix extends TransformMatrix {
 	computeRect(updateChild = false) {
 		this.compute()
 		if (updateChild) {
-			for (var child of this._child) {
+			for (const child of this._child) {
 				child.computeRect()
 			}
 		}
@@ -109,10 +110,16 @@ export class RectTransformMatrix extends TransformMatrix {
 		resetMatrix(this.matrix)
 
 		// compute
-		var skewDisp = this.skew.clone().scale(this.res.x, this.res.y)
-		var piv = this.pivot.clone().add(-0.5, -0.5).scale(this.res.x, this.res.y)
-		var anc = this.anchor.clone().add(-0.5, -0.5).scale(this.res.x, this.res.y)
-		var pos = this.position.clone().scale(this.res.x, this.res.y, 1)
+		const skewDisp = this.skew.clone().scale(this.res.x, this.res.y)
+		const piv = this.pivot
+			.clone()
+			.add(-0.5, -0.5)
+			.scale(this.res.x, this.res.y)
+		const anc = this.anchor
+			.clone()
+			.add(-0.5, -0.5)
+			.scale(this.res.x, this.res.y)
+		const pos = this.position.clone().scale(this.res.x, this.res.y, 1)
 
 		// compute
 		this.matrix.translateSelf(pos.x + anc.x, pos.y + anc.y, pos.z)

@@ -2,7 +2,7 @@
 import { onChange } from "../../src"
 
 test("on-change", () => {
-	var a: any = {}
+	const a: any = {}
 	const proxy = onChange(a, (prop, val, prev) => {
 		console.log("on-change", prop, val, prev)
 	})
@@ -18,7 +18,7 @@ test("on-change", () => {
 
 test("on-change event", () => {
 	let events = 0
-	var a: any = { a: 1, b: 2 }
+	const a: any = { a: 1, b: 2 }
 	const proxy = onChange(a, () => events++)
 
 	proxy.a = 1

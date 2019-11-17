@@ -16,12 +16,12 @@ export class StringExt {
 	}
 
 	static capitalizeWords(val: string): string {
-		let regexp: RegExp = /\s/
-		let words = val.split(regexp)
+		const regexp = /\s/
+		const words = val.split(regexp)
 		if (words.length == 1) {
 			return StringExt.capitalize(words[0])
 		}
-		let result: string = ""
+		let result = ""
 		for (let i = 0; i < words.length; i++) {
 			if (StringExt.capitalize(words[i]) !== null) {
 				result += StringExt.capitalize(words[i]) + " "
@@ -34,7 +34,7 @@ export class StringExt {
 		return val.indexOf(search) !== -1
 	}
 
-	static slugify(val: string, lower: boolean = true): string {
+	static slugify(val: string, lower = true): string {
 		if (lower) val = val.toLowerCase()
 		return val.normalize().replace(/[^a-z0-9]/gi, "-")
 	}

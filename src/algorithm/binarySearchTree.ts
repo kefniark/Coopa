@@ -114,7 +114,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 				return node.right
 			}
 
-			var t = node
+			const t = node
 			node = this.min(node.right)
 			node.right = this.recursiveDelMin(t.right)
 			node.left = t.left
@@ -135,7 +135,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns entries
 	 */
 	public entries(): TreeNode<Key, Val>[] {
-		var array: TreeNode<Key, Val>[] = []
+		const array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
 		return array
 	}
@@ -155,7 +155,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns keys
 	 */
 	public keys(): Key[] {
-		var array: TreeNode<Key, Val>[] = []
+		const array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
 		return array.map(x => x.key)
 	}
@@ -166,7 +166,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns true if has
 	 */
 	public has(key: Key): boolean {
-		var keys = this.keys()
+		const keys = this.keys()
 		return keys.indexOf(key) > -1
 	}
 
@@ -175,7 +175,7 @@ export class BinarySearchTree<Key extends number | string, Val> {
 	 * @returns values
 	 */
 	public values(): Val[] {
-		var array: TreeNode<Key, Val>[] = []
+		const array: TreeNode<Key, Val>[] = []
 		this.entriesRecursively(this.root, array)
 		return array.map(x => x.val)
 	}

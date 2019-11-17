@@ -6,7 +6,7 @@
 
 // Configuration Constants
 export const EPSILON = 0.000001
-export let ARRAY_TYPE = Array
+export const ARRAY_TYPE = Array
 export const RANDOM = Math.random
 const degree = Math.PI / 180
 
@@ -41,7 +41,7 @@ export function numberEqual(a: number, b: number) {
  * @param {number} value
  * @param {number} [decimals=2]
  */
-export function roundTo(value: number, decimals: number = 2) {
+export function roundTo(value: number, decimals = 2) {
 	return +value.toFixed(decimals + EPSILON)
 }
 

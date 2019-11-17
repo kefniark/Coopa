@@ -1,33 +1,5 @@
-export class Random {
-	public rand() {
-		return Math.random()
-	}
-
-	public randBool(): boolean {
-		return this.randRangeInt(0, 1) === 0
-	}
-
-	public randRangeFloat(min: number, max: number, rng?: number): number {
-		if (!rng) rng = Math.random()
-		return rng * (max - min) + min
-	}
-
-	public randRangeInt(min: number, max: number, rng?: number): number {
-		if (!rng) rng = Math.random()
-		min = Math.ceil(min)
-		max = Math.floor(max)
-		return Math.floor(rng * (max - min + 1)) + min
-	}
-
-	public randArray<T>(arr: T[]): T {
-		const index = this.randRangeInt(0, arr.length - 1)
-		return arr[index]
-	}
-
-	public createSeededRandom(seed: number = -1) {
-		return new SeededRandom(seed)
-	}
-}
+// To reuse export `rng` const without hacking around
+/* eslint @typescript-eslint/no-use-before-define: 0 */
 
 export class SeededRandom {
 	private seed: number
@@ -60,6 +32,37 @@ export class SeededRandom {
 	public randArray<T>(arr: T[]): T {
 		const index = rng.randRangeInt(0, arr.length - 1)
 		return arr[index]
+	}
+}
+
+export class Random {
+	public rand() {
+		return Math.random()
+	}
+
+	public randBool(): boolean {
+		return this.randRangeInt(0, 1) === 0
+	}
+
+	public randRangeFloat(min: number, max: number, rng?: number): number {
+		if (!rng) rng = Math.random()
+		return rng * (max - min) + min
+	}
+
+	public randRangeInt(min: number, max: number, rng?: number): number {
+		if (!rng) rng = Math.random()
+		min = Math.ceil(min)
+		max = Math.floor(max)
+		return Math.floor(rng * (max - min + 1)) + min
+	}
+
+	public randArray<T>(arr: T[]): T {
+		const index = this.randRangeInt(0, arr.length - 1)
+		return arr[index]
+	}
+
+	public createSeededRandom(seed = -1) {
+		return new SeededRandom(seed)
 	}
 }
 

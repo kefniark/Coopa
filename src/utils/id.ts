@@ -7,7 +7,7 @@ const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
  * @return {String} uid
  */
 
-export function uid(len: number = 8) {
+export function uid(len = 8) {
 	let id = ""
 	while (len--) {
 		id += url[(Math.random() * 62) | 0]

@@ -30,13 +30,26 @@ ___
 
 ## Dev
 
+### Getting Started
 Automatically rebuild code on changed and start a local server with samples on `localhost:8085`
-```
+```sh
 npm run dev
 ```
 
-If you want to work on sample, I recommend using:
-```
+If you want to work on sample, I recommend using in another termin:
+```sh
 npm run dev:livereload
 ```
 This command will automatically reload the browser when samples are edited
+
+### Commands
+
+```sh
+npm run help # provide the list of available commands
+
+npm run autofix # try to use both eslint & prettier autofix feature
+npm run test # run unit tests, lint, ...
+npm run build # build the project in both ESM (default) & UMD (compatibility)
+npm run coverage # build coverage in ./coverage/
+npm run update # let update project dependencies
+```

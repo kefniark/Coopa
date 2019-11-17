@@ -1,6 +1,6 @@
 {
 	"name": "coopa",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "",
 	"main": "build/coopa.umd.js",
 	"module": "build/coopa.es.mjs",

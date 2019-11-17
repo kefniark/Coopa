@@ -1,4 +1,4 @@
-// [COOPA] Build: 0.2.1 - November 17, 2019
+// [COOPA] Build: 0.2.2 - November 17, 2019
 // inspired by https://algs4.cs.princeton.edu/31elementary/
 class TreeNode {
     constructor(key, val) {

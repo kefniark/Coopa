@@ -18,7 +18,7 @@ export declare class TransformMatrix {
     position: DOMVector3;
     rotation: DOMVector3;
     scale: DOMVector3;
-    get global(): DOMMatrix;
+    get globalMatrix(): DOMMatrix;
     constructor();
     compute(): void;
     toCSS(): {

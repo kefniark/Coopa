@@ -1,4 +1,6 @@
 /* istanbul ignore file */
+/* eslint @typescript-eslint/no-this-alias: 0 */
+
 import { TransformMatrix } from "./transform"
 import { DOMVector2, resetMatrix, decomposeMatrix, createMatrix, matrix3dValues } from "../geometry/index"
 import { ArrayExt, onChange } from "../utils/index"
@@ -38,20 +40,46 @@ export class RectTransformMatrix extends TransformMatrix {
 		if (this.parent) {
 			return this.parent.size.clone().invert()
 		}
-		return new DOMVector2(1, 1)
+		return new DOMVector2((this.anchor.x - 0.5) * this.res.x, (this.anchor.y - 0.5) * this.res.y)
 	}
 
-	public get global(): DOMMatrix {
-		const mat = createMatrix(matrix3dValues(this.matrix))
-		mat.m41 /= this.res.x
-		mat.m42 /= this.res.y
-		if (this.parent) {
-			const el: TransformMatrix = this.parent
-			mat.multiplySelf(el.global)
+	public get localOrigin(): DOMPoint {
+		let point = new DOMPoint()
+		point = point.matrixTransform(this.matrix)
+		point.x /= this.res.x
+		point.y /= this.res.y
+		return point
+	}
+
+	public get globalOrigin(): DOMPoint {
+		let point = new DOMPoint()
+		point = point.matrixTransform(this.globalMatrix)
+		point.x /= this.res.x
+		point.y /= this.res.y
+		return point
+	}
+
+	public get globalMatrix(): DOMMatrix {
+		const queue: RectTransformMatrix[] = [this]
+		let self: RectTransformMatrix = this
+		while (self.parent) {
+			queue.push(self.parent)
+			self = self.parent
 		}
+
+		const mat = createMatrix(matrix3dValues(queue[queue.length - 1].matrix))
+		queue.pop()
+		while (queue.length > 0) {
+			const element = queue.pop()
+			if (!element) continue
+			mat.multiplySelf(element.matrix)
+		}
+
 		return mat
 	}
 
+	protected rectMatrix: DOMMatrix
+	protected computedtMatrix: DOMMatrix
 	public pivot: DOMVector2
 	public anchor: DOMVector2
 	public size: DOMVector2
@@ -60,6 +88,8 @@ export class RectTransformMatrix extends TransformMatrix {
 
 	constructor(x = 1280, y = 720) {
 		super()
+		this.rectMatrix = createMatrix()
+		this.computedtMatrix = createMatrix()
 		this.skew = onChange(new DOMVector2(0, 0), () => this.computeRect())
 		this.pivot = onChange(new DOMVector2(0.5, 0.5), () => this.computeRect())
 		this.anchor = onChange(new DOMVector2(0.5, 0.5), () => this.computeRect())
@@ -68,16 +98,14 @@ export class RectTransformMatrix extends TransformMatrix {
 	}
 
 	setParentFix(p: RectTransformMatrix | undefined) {
-		const before = this.global
-		console.log(decomposeMatrix(before))
+		const before = this.globalMatrix
 		const dec1 = decomposeMatrix(before)
 
 		this.parent = p
-		const after = this.global
+		const after = this.globalMatrix
 		if (!this.parent) return
 
 		const dec2 = decomposeMatrix(after)
-		console.log("avant compensation", dec1, dec2)
 
 		this.scale.x *= dec1.scale.x / dec2.scale.x
 		this.scale.y *= dec1.scale.y / dec2.scale.y
@@ -87,17 +115,26 @@ export class RectTransformMatrix extends TransformMatrix {
 		this.rotation.y += dec1.rotate.y - dec2.rotate.y
 		this.rotation.z += dec1.rotate.z - dec2.rotate.z
 
-		const pat1 = decomposeMatrix(before.inverse().multiply(this.global))
-
-		this.position.x -= pat1.translate.x
-		this.position.y -= pat1.translate.y
-		this.position.z -= pat1.translate.z
-		console.log(pat1, pat1.translate.x, this.size.x)
-
-		console.log("apres compensation", decomposeMatrix(this.global))
+		this.position.x += (dec1.translate.x - dec2.translate.x) / this.parent.size.x / this.res.x
+		this.position.y += (dec1.translate.y - dec2.translate.y) / this.parent.size.y / this.res.y
+		this.position.z += dec1.translate.z - dec2.translate.z
 	}
 
 	computeRect(updateChild = false) {
+		resetMatrix(this.rectMatrix)
+
+		const piv = this.pivot
+			.clone()
+			.add(-0.5, -0.5)
+			.scale(this.res.x, this.res.y)
+
+		// compute
+		this.rectMatrix.scaleSelf(this.size.x, this.size.y, 1)
+		if (this.parent) {
+			this.rectMatrix.scaleSelf(1 / this.parent.size.x, 1 / this.parent.size.y, 1)
+		}
+		this.rectMatrix.translateSelf(-piv.x, -piv.y, 0)
+
 		this.compute()
 		if (updateChild) {
 			for (const child of this._child) {
@@ -107,30 +144,28 @@ export class RectTransformMatrix extends TransformMatrix {
 	}
 
 	compute() {
-		resetMatrix(this.matrix)
+		resetMatrix(this.computedtMatrix)
 
-		// compute
-		const skewDisp = this.skew.clone().scale(this.res.x, this.res.y)
-		const piv = this.pivot
-			.clone()
-			.add(-0.5, -0.5)
-			.scale(this.res.x, this.res.y)
+		const skew = this.skew.clone().scale(this.res.x, this.res.y)
+		const pos = this.position.clone().scale(this.res.x, this.res.y, 1)
 		const anc = this.anchor
 			.clone()
 			.add(-0.5, -0.5)
 			.scale(this.res.x, this.res.y)
-		const pos = this.position.clone().scale(this.res.x, this.res.y, 1)
+
+		this.computedtMatrix.translateSelf(anc.x, anc.y, 0)
 
 		// compute
-		this.matrix.translateSelf(pos.x + anc.x, pos.y + anc.y, pos.z)
-		this.matrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z)
-		if (skewDisp.x !== 0) this.matrix.skewXSelf(skewDisp.x)
-		if (skewDisp.y !== 0) this.matrix.skewYSelf(skewDisp.y)
-		this.matrix.scaleSelf(this.scale.x * this.size.x, this.scale.y * this.size.y, this.scale.z)
-		if (this.parent) {
-			this.matrix.scaleSelf(1 / this.parent.size.x, 1 / this.parent.size.y, 1)
-		}
-		this.matrix.translateSelf(-piv.x, -piv.y, 0)
+		this.computedtMatrix.translateSelf(pos.x, pos.y, pos.z)
+		this.computedtMatrix.rotateSelf(this.rotation.x, this.rotation.y, this.rotation.z)
+		if (skew.x !== 0) this.computedtMatrix.skewXSelf(skew.x)
+		if (skew.y !== 0) this.computedtMatrix.skewYSelf(skew.y)
+		this.computedtMatrix.scaleSelf(this.scale.x, this.scale.y, this.scale.z)
+
+		// compute result
+		resetMatrix(this.matrix)
+		this.matrix.preMultiplySelf(this.computedtMatrix)
+		this.matrix.multiplySelf(this.rectMatrix)
 
 		this.onChanged.emit()
 	}

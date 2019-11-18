@@ -14,7 +14,11 @@ export declare class RectTransformMatrix extends TransformMatrix {
     get angle(): number;
     set angle(val: number);
     get compensatedSize(): DOMVector2;
-    get global(): DOMMatrix;
+    get localOrigin(): DOMPoint;
+    get globalOrigin(): DOMPoint;
+    get globalMatrix(): DOMMatrix;
+    protected rectMatrix: DOMMatrix;
+    protected computedtMatrix: DOMMatrix;
     pivot: DOMVector2;
     anchor: DOMVector2;
     size: DOMVector2;

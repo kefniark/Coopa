@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<script src="../../build/coopa.umd.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/fatina@3.0.2/build/fatina.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+
+		<style>
+			html, body {
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+			}
+
+			#app {
+				transform-style: preserve-3d;
+			}
+
+			.element {
+				/* transform-style: preserve-3d; */
+				/* backface-visibility: hidden; */
+				will-change: transform, opacity;
+				position: absolute;
+				width: 1280px;
+				height: 960px;
+			}
+		</style>
+	</head>
+	<body>
+		Coopa
+
+		<table>
+			<tr>
+				<td>
+					<div style="width: 640px; height: 480px;">
+						<div id="app" style="position: absolute; overflow: hidden; width: 1280px; height: 960px; background-color: #000000; transform: scale(0.5); transform-origin: top left;"></div>
+					</div>
+				</td>
+				<td style="padding-left: 20px;">
+					<p>
+						<h3 class="title is-3">Sample description :</h3>
+						<ul class="list">
+							<li class="list-item">Use DOM to create HTML element</li>
+							<li class="list-item">Use Event and onChange to detect modification of data like tween</li>
+							<li class="list-item">Use TransformMatrix to compute CSS position, rotation, scale</li>
+							<li class="list-item">Use RectTransformMatrix to compute CSS pivot, anchor, size</li>
+						</ul>
+
+						<h5 class="title is-5">Pivot</h5>
+						<button id="btnChangePivotReset" class="button is-small">Reset</button>
+						<button id="btnChangePivot" class="button is-small">Change</button>
+						<br><br>
+
+						<h5 class="title is-5">Anchor</h5>
+						<button id="btnChangeAnchorReset" class="button is-small">Reset</button>
+						<button id="btnChangeAnchor" class="button is-small">Change</button>
+
+						<br><br>
+						<h5 class="title is-5">Parent</h5>
+						<button id="btnChangeParentReset" class="button is-small">Reset</button>
+						<button id="btnChangeParent" class="button is-small">Change</button>
+						<button id="btnChangeParentFix" class="button is-small">Change (but keep position)</button>
+					</p>
+				</td>
+			</tr>
+		</table>
+
+		<script src="./matrix.js"></script>
+		<script>
+		document.write(
+			'<script src="http://' +
+				(location.host || "localhost").split(":")[0] +
+				':35729/livereload.js?snipver=1"></' +
+				"script>"
+		)
+		</script>
+	</body>
+</html>

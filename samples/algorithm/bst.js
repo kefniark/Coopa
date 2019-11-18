@@ -11,10 +11,10 @@ Coopa.DOM.setStyle(rootDiv, rootTransform.toCSS())
 const circleAsset = Coopa.createCircle({ size: 128, color: "#EEE", strokeColor: "#333" })
 const circleRootAsset = Coopa.createCircle({ size: 128, color: "#fce6a2", strokeColor: "#ffd861" })
 
-const data = Coopa.ArrayExt.shuffle(Coopa.ArrayExt.createOrder(100, 0))
+const data = Coopa.ArrayExt.shuffle(Coopa.ArrayExt.createOrder(250, 0))
 
 const bst = new Coopa.BinarySearchTree()
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < 50; i++) {
 	const entry = data.pop()
 	bst.set(entry, entry)
 }
@@ -116,6 +116,15 @@ document.getElementById("addBtn").addEventListener("click", () => {
 	const entry = data.pop()
 	bst.set(entry, entry)
 
+	// refresh UI
+	iterateNodes(bst.root, undefined, 0, 0, bst.height)
+})
+
+document.getElementById("addAllBtn").addEventListener("click", () => {
+	while (data.length > 0) {
+		const entry = data.pop()
+		bst.set(entry, entry)
+	}
 	// refresh UI
 	iterateNodes(bst.root, undefined, 0, 0, bst.height)
 })

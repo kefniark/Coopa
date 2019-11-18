@@ -5,7 +5,8 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
 
 		<style>
-			html, body {
+			html,
+			body {
 				padding: 0;
 				margin: 0;
 				overflow: hidden;
@@ -23,55 +24,79 @@
 				width: 1280px;
 				height: 960px;
 			}
+
+			.container {
+				display: flex;
+				/* flex-wrap: wrap; */
+			}
+
+			.list-item a {
+				color: #4a4a4a;
+			}
 		</style>
 	</head>
 	<body>
-		Coopa
+		<div class="container is-fluid">
+			<div class="item" style="padding: 15px">
+				<h3 class="title is-3">Rect Transform</h3>
+				<ul class="list">
+					<li class="list-item">Use DOM to create HTML element</li>
+					<li class="list-item">Use Event and onChange to detect modification of data like tween</li>
+					<li class="list-item">Use TransformMatrix to compute CSS position, rotation, scale</li>
+					<li class="list-item">Use RectTransformMatrix to compute CSS pivot, anchor, size</li>
+				</ul>
 
-		<table>
-			<tr>
-				<td>
-					<div style="width: 640px; height: 480px;">
-						<div id="app" style="position: absolute; overflow: hidden; width: 1280px; height: 960px; background-color: #000000; transform: scale(0.5); transform-origin: top left;"></div>
-					</div>
-				</td>
-				<td style="padding-left: 20px;">
-					<p>
-						<h3 class="title is-3">Sample description :</h3>
-						<ul class="list">
-							<li class="list-item">Use DOM to create HTML element</li>
-							<li class="list-item">Use Event and onChange to detect modification of data like tween</li>
-							<li class="list-item">Use TransformMatrix to compute CSS position, rotation, scale</li>
-							<li class="list-item">Use RectTransformMatrix to compute CSS pivot, anchor, size</li>
-						</ul>
+				<h5 class="title is-5">Pivot</h5>
+				<button id="btnChangePivotReset" class="button is-small">Reset</button>
+				<button id="btnChangePivot" class="button is-small">Change</button>
+				<br /><br />
 
-						<h5 class="title is-5">Pivot</h5>
-						<button id="btnChangePivotReset" class="button is-small">Reset</button>
-						<button id="btnChangePivot" class="button is-small">Change</button>
-						<br><br>
+				<h5 class="title is-5">Anchor</h5>
+				<button id="btnChangeAnchorReset" class="button is-small">Reset</button>
+				<button id="btnChangeAnchor" class="button is-small">Change</button>
 
-						<h5 class="title is-5">Anchor</h5>
-						<button id="btnChangeAnchorReset" class="button is-small">Reset</button>
-						<button id="btnChangeAnchor" class="button is-small">Change</button>
-
-						<br><br>
-						<h5 class="title is-5">Parent</h5>
-						<button id="btnChangeParentReset" class="button is-small">Reset</button>
-						<button id="btnChangeParent" class="button is-small">Change</button>
-						<button id="btnChangeParentFix" class="button is-small">Change (but keep position)</button>
-					</p>
-				</td>
-			</tr>
-		</table>
+				<br /><br />
+				<h5 class="title is-5">Parent</h5>
+				<button id="btnChangeParentReset" class="button is-small">Reset</button>
+				<button id="btnChangeParent" class="button is-small">Change</button>
+				<button id="btnChangeParentFix" class="button is-small">Change (but keep position)</button>
+			</div>
+			<div class="item">
+				<div id="appContainer" style="width: 640px; height: 480px;">
+					<div
+						id="app"
+						style="position: absolute; overflow: hidden; width: 1280px; height: 960px; background-color: #000; transform: scale(0.5); transform-origin: top left;"
+					></div>
+				</div>
+			</div>
+		</div>
 
 		<script src="./matrix.js"></script>
 		<script>
-		document.write(
-			'<script src="http://' +
-				(location.host || "localhost").split(":")[0] +
-				':35729/livereload.js?snipver=1"></' +
-				"script>"
-		)
+			function resize() {
+				const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+				const h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+
+				const parent = document.getElementById("appContainer")
+				if (w > h) {
+					parent.style.width = "150vh"
+					parent.style.height = "150vh"
+				} else {
+					parent.style.width = "100vw"
+					parent.style.height = "100vw"
+				}
+				const app = document.getElementById("app")
+				const scale = Math.min(parent.clientWidth / 960, 1)
+				app.style.transform = `scale(${scale})`
+			}
+			resize()
+			window.addEventListener("resize", () => resize())
+			document.write(
+				'<script src="http://' +
+					(location.host || "localhost").split(":")[0] +
+					':35729/livereload.js?snipver=1"></' +
+					"script>"
+			)
 		</script>
 	</body>
 </html>

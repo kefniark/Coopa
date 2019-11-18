@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { roundTo } from "../math/math"
+import { roundTo, toDegree } from "../math/math"
 
 export class DOMVector2 {
 	get length() {
@@ -26,6 +26,11 @@ export class DOMVector2 {
 		if (!isNaN(x)) this.x = x
 		if (!isNaN(y)) this.y = y
 		return this
+	}
+
+	angle() {
+		const angle = Math.atan2(this.y, this.x)
+		return toDegree(angle)
 	}
 
 	invert() {

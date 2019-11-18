@@ -25,8 +25,10 @@
 	"scripts": {
 		"autofix": "run-s autofix:**",
 		"autofix:eslint-src": "eslint \"src/**/*.ts\" --fix --quiet",
+		"autofix:eslint-samples": "eslint \"samples/**/*.js\" --fix --quiet",
 		"autofix:eslint-tests": "eslint \"tests/**/*.ts\" --fix --quiet",
 		"autofix:prettier-src": "prettier --config .prettierrc.yaml --write \"src/**/*.ts\"",
+		"autofix:prettier-samples": "prettier --config .prettierrc.yaml --write \"samples/**/*.js\"",
 		"autofix:prettier-tests": "prettier --config .prettierrc.yaml --write \"tests/**/*.ts\"",
 		"build": "rimraf build && run-s build:**",
 		"build:esm": "rollup -c rollup.config.js --file build/coopa.es.mjs --format esm",

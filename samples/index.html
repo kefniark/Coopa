@@ -19,24 +19,25 @@
 				height: calc(100vh - 5px);
 			}
 
-			#menu {
-				position: absolute;
+			.menu {
+				z-index: 10;
+				top: 20px;
 				right: 20px;
-				top: 0;
-				text-align: right;
-			}
-
-			#menu .button {
-				margin: 5px;
+				position: absolute;
+				width: 200px;
 			}
 		</style>
 	</head>
 
 	<body>
-		<ul id="menu">
-			<li><a class="button is-link" href="./matrix.html" target="frame">Matrix</a></li>
-		</ul>
+		<aside class="menu">
+			<p class="menu-label">Menu</p>
+			<ul class="menu-list">
+				<li><a href="./algorithm/bst.html" target="frame">Binary Search Tree</a></li>
+				<li><a href="./transform/matrix.html" target="frame">Transform</a></li>
+			</ul>
+		</aside>
 
-		<iframe id="samples" name="frame" src="./matrix.html"></iframe>
+		<iframe id="samples" name="frame" src="./algorithm/bst.html"></iframe>
 	</body>
 </html>

@@ -7,7 +7,9 @@
 		"jest": true
 	},
 	"globals": {
-		"globalThis": false
+		"globalThis": false,
+		"Fatina": false,
+		"Coopa": false
 	},
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
@@ -18,6 +20,7 @@
 	"rules": {
 		"@typescript-eslint/explicit-function-return-type": "off",
 		"@typescript-eslint/no-explicit-any": "off",
-		"@typescript-eslint/member-delimiter-style": "off"
+		"@typescript-eslint/member-delimiter-style": "off",
+		"@typescript-eslint/interface-name-prefix": "off"
 	}
 }

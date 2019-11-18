@@ -1,0 +1,101 @@
+<html>
+	<head>
+		<script src="../../build/coopa.umd.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/fatina@3.0.2/build/fatina.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+
+		<style>
+			html, body {
+				padding: 0;
+				margin: 0;
+				overflow: hidden;
+			}
+
+			#app {
+				transform-style: preserve-3d;
+			}
+
+			.element {
+				will-change: transform, opacity;
+				position: absolute;
+				transform-origin: center;
+				width: 960px;
+				height: 960px;
+				pointer-events: none;
+			}
+
+			.root {
+				display: none;
+			}
+
+			.line {
+				background-color: #000;
+				z-index: 10;
+			}
+
+			.node img {
+				position: absolute;
+				width: 960px;
+				height: 960px;
+				pointer-events: all;
+				cursor: pointer;
+				z-index: 100;
+			}
+
+			.node span {
+				display: inline-block;
+				vertical-align: middle;
+				text-align: center;
+				position: absolute;
+				width: 960px;
+				height: 960px;
+				line-height: 960px;
+				font-size: 32px;
+				font-weight: bold;
+				pointer-events: none;
+				z-index: 110;
+			}
+
+			.container {
+				display: inline-flex;
+			}
+
+			.list-item a {
+				color: #4a4a4a;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="item">
+				<div style="width: 960px; height: 960px;">
+					<div id="app" style="position: absolute; overflow: hidden; width: 960px; height: 960px; background-color: #FFF; transform-origin: top left;"></div>
+				</div>
+			</div>
+			<div class="item" style="padding-top: 20px">
+				<h3 class="title is-3">Binary Search Tree</h3>
+				<ul class="list">
+					<li class="list-item"><a href="https://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">Wikipedia</a></li>
+					<li class="list-item"><a href="../../src/algorithm/Readme.md" target="_blank">API Documentation</a></li>
+
+				</ul>
+
+				<h5 class="title is-5">Actions</h5>
+				<button id="addBtn" class="button is-small">Add</button>
+				<!-- <button id="deleteBtn" class="button is-small">Delete</button> -->
+			</div>
+		</div>
+
+		<img id="img"/>
+
+		<script src="./bst.js"></script>
+		<script>
+		document.write(
+			'<script src="http://' +
+				(location.host || "localhost").split(":")[0] +
+				':35729/livereload.js?snipver=1"></' +
+				"script>"
+		)
+		</script>
+	</body>
+</html>

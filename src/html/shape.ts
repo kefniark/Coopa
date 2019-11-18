@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export function createImageContext(width = 200, height = 200, action: (ctx: CanvasRenderingContext2D) => void) {
 	const canvas = document.createElement("canvas") as HTMLCanvasElement
 	canvas.width = width

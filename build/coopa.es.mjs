@@ -1303,6 +1303,7 @@ class DOM {
     }
 }
 
+/* istanbul ignore file */
 function createImageContext(width = 200, height = 200, action) {
     const canvas = document.createElement("canvas");
     canvas.width = width;

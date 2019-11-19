@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues, DOMVector3 } from "../geometry/index"
+import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues, DOMVector3, matrix2dToCSS } from "../geometry/index"
 import { ArrayExt, Event, onChange } from "../utils/index"
 
 /**
@@ -63,6 +63,12 @@ export class TransformMatrix {
 	toCSS() {
 		return {
 			transform: matrix3dToCSS(this.matrix)
+		}
+	}
+
+	toCSS2D() {
+		return {
+			transform: matrix2dToCSS(this.matrix)
 		}
 	}
 }

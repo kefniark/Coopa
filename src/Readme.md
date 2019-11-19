@@ -12,6 +12,7 @@
     * Vector
 * [HTML](./html/Readme.md)
     * DOM Manipulation
+    * Color
 * [Transform](./transform/Readme.md)
     * Transform (translate, rotate, scale)
     * Rect Transform (size, pivot, anchor, skew)

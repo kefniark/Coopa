@@ -169,8 +169,4 @@ export class RectTransformMatrix extends TransformMatrix {
 
 		this.onChanged.emit()
 	}
-
-	toCSS() {
-		return super.toCSS()
-	}
 }

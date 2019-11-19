@@ -23,6 +23,14 @@ export function toDegree(a: number) {
 	return a / degree
 }
 
+export function clamp(val: number, min: number, max: number) {
+	return Math.max(Math.min(val, max), min)
+}
+
+export function clamp01(val: number) {
+	return clamp(val, 0, 1)
+}
+
 /**
  * Number Equal, approximately (+-epsilon)
  *

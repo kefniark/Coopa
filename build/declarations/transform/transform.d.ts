@@ -24,4 +24,7 @@ export declare class TransformMatrix {
     toCSS(): {
         transform: string;
     };
+    toCSS2D(): {
+        transform: string;
+    };
 }

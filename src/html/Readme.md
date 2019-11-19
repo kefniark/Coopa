@@ -1,3 +1,5 @@
+# HTML
+
 ## HTML / DOM manipulation
 
 ### Description
@@ -39,4 +41,32 @@ rootEvent.emit(null, true) // for initialization
 // at the end of every frame, process event queue
 // nothing happen if no event to apply
 afterUpdate.addTick(() => rootEvent.update())
+```
+___
+
+## Color
+
+### Description
+
+Small class to simplify conversion and generation of colors
+
+### Usage
+
+```ts
+import { Color } from "coopa"
+
+// create from different format
+const color1 = Color.fromHSL([125, 98, 50])
+const color2 = Color.fromHex(`#03FC17`)
+const color3 = Color.fromRGB([3, 252, 23])
+const color4 = Color.random()
+
+// export
+color1.rgb() // <- [3, 252, 23]
+color1.hex() // <- #03FC17
+color1.hsl() // <- [125, 98, 50]
+
+// methods
+Color.gradient(color1, color2, 16) // <- 16 Color between 2 colors
+Color.palette(8, 4) // <- palette of 8 colors x 4 different luminosity level
 ```

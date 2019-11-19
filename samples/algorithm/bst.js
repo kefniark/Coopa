@@ -5,7 +5,7 @@ rootTransform.anchor.set(0.5, 0)
 rootTransform.scale.set(0.4, 0.4, 1)
 const rootDiv = Coopa.DOM.createElement("div")
 Coopa.DOM.setAttr(rootDiv, { id: "root", class: "element" })
-Coopa.DOM.setStyle(rootDiv, rootTransform.toCSS())
+Coopa.DOM.setStyle(rootDiv, rootTransform.toCSS2D())
 
 // circle asset
 const circleAsset = Coopa.createCircle({ size: 128, color: "#EEE", strokeColor: "#333" })
@@ -55,15 +55,15 @@ function createNode(node, nodeParent = undefined, side = -1, level) {
 
 	const lineDiv = Coopa.DOM.createElement("div")
 	Coopa.DOM.setAttr(lineDiv, { id: "line", class: `element line ${side === 0 ? "root" : ""}` })
-	Coopa.DOM.setStyle(lineDiv, lineTransform.toCSS())
-	nodeTransform.onChanged.on(() => Coopa.DOM.setStyle(lineDiv, lineTransform.toCSS()))
+	Coopa.DOM.setStyle(lineDiv, lineTransform.toCSS2D())
+	nodeTransform.onChanged.on(() => Coopa.DOM.setStyle(lineDiv, lineTransform.toCSS2D()))
 
 	// create html
 	const nodeDiv = Coopa.DOM.createElement("div")
 	Coopa.DOM.setAttr(nodeDiv, { id: "node", class: "element node" })
-	Coopa.DOM.setStyle(nodeDiv, nodeTransform.toCSS())
+	Coopa.DOM.setStyle(nodeDiv, nodeTransform.toCSS2D())
 	nodeTransform.onChanged.on(() => {
-		Coopa.DOM.setStyle(nodeDiv, nodeTransform.toCSS())
+		Coopa.DOM.setStyle(nodeDiv, nodeTransform.toCSS2D())
 		updateLine(nodeTransform, lineTransform)
 	})
 	updateLine(nodeTransform, lineTransform)

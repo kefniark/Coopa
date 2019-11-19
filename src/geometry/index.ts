@@ -65,7 +65,7 @@ export const matrix3dToCSS = (matrix: DOMMatrix) => {
 }
 
 export const matrix2dToCSS = (matrix: DOMMatrix) => {
-	return `matrix2d(${[matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].join(",")})`
+	return `matrix(${[matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].join(",")})`
 }
 
 const quatToDeg = (quaternion: number[]) => {

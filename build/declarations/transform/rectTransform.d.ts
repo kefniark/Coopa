@@ -28,7 +28,4 @@ export declare class RectTransformMatrix extends TransformMatrix {
     setParentFix(p: RectTransformMatrix | undefined): void;
     computeRect(updateChild?: boolean): void;
     compute(): void;
-    toCSS(): {
-        transform: string;
-    };
 }

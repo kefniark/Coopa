@@ -11,6 +11,8 @@ export declare const RANDOM: () => number;
  */
 export declare function toRadian(a: number): number;
 export declare function toDegree(a: number): number;
+export declare function clamp(val: number, min: number, max: number): number;
+export declare function clamp01(val: number): number;
 /**
  * Number Equal, approximately (+-epsilon)
  *

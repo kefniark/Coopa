@@ -1,4 +1,5 @@
 export * from "./algorithm/index"
+export * from "./data/index"
 export * from "./geometry/index"
 export * from "./html/index"
 export * from "./math/index"

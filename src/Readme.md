@@ -5,6 +5,9 @@
     * Object
 * [Algorithm](./algorithm/Readme.md):
     * Binary Search Tree
+    * Priority Queue
+* [Data](./data/Readme.md):
+    * 2D Grid
 * [Geometry](./geometry/Readme.md)
     * Matrix
     * Rect

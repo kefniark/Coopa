@@ -1,4 +1,5 @@
 // inspired by https://algs4.cs.princeton.edu/31elementary/
+const errorTreeEmpty = "No Element in the tree"
 
 class TreeNode<Key extends number | string, Val> {
 	public key: Key
@@ -18,6 +19,33 @@ class TreeNode<Key extends number | string, Val> {
  */
 export class BinarySearchTree<Key extends number | string, Val> {
 	private root: TreeNode<Key, Val> | null
+
+	get minKey() {
+		return this.min.key
+	}
+
+	get min() {
+		if (!this.root) throw new Error(errorTreeEmpty)
+		return this.findMin(this.root)
+	}
+
+	get maxKey() {
+		return this.max.key
+	}
+
+	get max() {
+		if (!this.root) throw new Error(errorTreeEmpty)
+		return this.findMax(this.root)
+	}
+
+	/**
+	 * Check if the tree has at least one element
+	 *
+	 * @returns
+	 */
+	isEmpty() {
+		return !!this.root
+	}
 
 	/**
 	 * Set tree node into the tree.
@@ -103,19 +131,27 @@ export class BinarySearchTree<Key extends number | string, Val> {
 			}
 
 			const t = node
-			node = this.min(node.right)
+			node = this.findMin(node.right)
 			node.right = this.recursiveDelMin(t.right)
 			node.left = t.left
 		}
 		return node
 	}
 
-	private min(node: TreeNode<Key, Val>): TreeNode<Key, Val> {
+	private findMin(node: TreeNode<Key, Val>): TreeNode<Key, Val> {
 		if (node.left == null) {
 			return node
 		}
 
-		return this.min(node.left)
+		return this.findMin(node.left)
+	}
+
+	private findMax(node: TreeNode<Key, Val>): TreeNode<Key, Val> {
+		if (node.right == null) {
+			return node
+		}
+
+		return this.findMax(node.right)
 	}
 
 	/**

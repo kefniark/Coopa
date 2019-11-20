@@ -1,4 +1,3 @@
-// [COOPA] Build: 0.2.2 - November 20, 2019
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -6,6 +5,7 @@
 }(this, (function (exports) { 'use strict';
 
 	// inspired by https://algs4.cs.princeton.edu/31elementary/
+	const errorTreeEmpty = "No Element in the tree";
 	class TreeNode {
 	    constructor(key, val) {
 	        this.key = key;
@@ -18,6 +18,30 @@
 	 * @template Val
 	 */
 	class BinarySearchTree {
+	    get minKey() {
+	        return this.min.key;
+	    }
+	    get min() {
+	        if (!this.root)
+	            throw new Error(errorTreeEmpty);
+	        return this.findMin(this.root);
+	    }
+	    get maxKey() {
+	        return this.max.key;
+	    }
+	    get max() {
+	        if (!this.root)
+	            throw new Error(errorTreeEmpty);
+	        return this.findMax(this.root);
+	    }
+	    /**
+	     * Check if the tree has at least one element
+	     *
+	     * @returns
+	     */
+	    isEmpty() {
+	        return !!this.root;
+	    }
 	    /**
 	     * Set tree node into the tree.
 	     * @param key
@@ -99,17 +123,23 @@
 	                return node.right;
 	            }
 	            const t = node;
-	            node = this.min(node.right);
+	            node = this.findMin(node.right);
 	            node.right = this.recursiveDelMin(t.right);
 	            node.left = t.left;
 	        }
 	        return node;
 	    }
-	    min(node) {
+	    findMin(node) {
 	        if (node.left == null) {
 	            return node;
 	        }
-	        return this.min(node.left);
+	        return this.findMin(node.left);
+	    }
+	    findMax(node) {
+	        if (node.right == null) {
+	            return node;
+	        }
+	        return this.findMax(node.right);
 	    }
 	    /**
 	     * Return all tree nodes in binary search tree
@@ -201,6 +231,699 @@
 	        if (node.left == null && node.right == null)
 	            return 1;
 	        return 1 + Math.max(this.getMaxHeightRecursively(node.left), this.getMaxHeightRecursively(node.right));
+	    }
+	}
+	//# sourceMappingURL=binarySearchTree.js.map
+
+	/// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
+	class Event {
+	    constructor() {
+	        this.listeners = [];
+	        this.listenersOncer = [];
+	    }
+	    on(listener) {
+	        this.listeners.push(listener);
+	        return { dispose: () => this.off(listener) };
+	    }
+	    once(listener) {
+	        this.listenersOncer.push(listener);
+	    }
+	    off(listener) {
+	        const callbackIndex = this.listeners.indexOf(listener);
+	        if (callbackIndex > -1)
+	            this.listeners.splice(callbackIndex, 1);
+	    }
+	    emit(event) {
+	        /** Update any general listeners */
+	        this.listeners.forEach(listener => listener(event));
+	        /** Clear the `once` queue */
+	        if (this.listenersOncer.length > 0) {
+	            const toCall = this.listenersOncer;
+	            this.listenersOncer = [];
+	            toCall.forEach(listener => listener(event));
+	        }
+	    }
+	}
+	/**
+	 * Delay event to be processed later
+	 * Example: render event computed only once a frame at the end
+	 *
+	 * @export
+	 * @class DelayedEvent
+	 */
+	class DelayedEvent {
+	    constructor(event, distinct = true) {
+	        this.queue = [];
+	        if (event)
+	            event.on(evt => this.emit(evt));
+	        this.ouput = new Event();
+	        this.distinct = distinct;
+	    }
+	    on(listener) {
+	        return this.ouput.on(listener);
+	    }
+	    once(listener) {
+	        this.ouput.once(listener);
+	    }
+	    off(listener) {
+	        return this.ouput.off(listener);
+	    }
+	    update() {
+	        for (const evt of this.queue) {
+	            this.ouput.emit(evt);
+	        }
+	        this.queue.length = 0;
+	    }
+	    emit(event, force = false) {
+	        if (force)
+	            return this.ouput.emit(event);
+	        if (this.distinct) {
+	            if (this.queue.includes(event))
+	                return;
+	        }
+	        this.queue.push(event);
+	    }
+	}
+	//# sourceMappingURL=events.js.map
+
+	const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	/**
+	 * Create a `uid` [a-zA-z0-9]
+	 *
+	 * @param {Number} len
+	 * @return {String} uid
+	 */
+	function uid(len = 8) {
+	    let id = "";
+	    while (len--) {
+	        id += url[(Math.random() * 62) | 0];
+	    }
+	    return id;
+	}
+	//# sourceMappingURL=id.js.map
+
+	(function (LogLevel) {
+	    LogLevel[LogLevel["INFO"] = 0] = "INFO";
+	    LogLevel[LogLevel["WARN"] = 1] = "WARN";
+	    LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
+	    LogLevel[LogLevel["OFF"] = 3] = "OFF";
+	})(exports.LogLevel || (exports.LogLevel = {}));
+	class Logger {
+	    constructor() {
+	        this.eventHandler = new Event();
+	        this._prefix = "";
+	        this._level = 0;
+	        this._console = true;
+	    }
+	    get events() {
+	        return this.eventHandler;
+	    }
+	    get prefix() {
+	        return this._prefix;
+	    }
+	    set prefix(val) {
+	        this._prefix = val;
+	    }
+	    get level() {
+	        return this._level;
+	    }
+	    set level(val) {
+	        this._level = val;
+	    }
+	    get console() {
+	        return this._console;
+	    }
+	    set console(val) {
+	        this._console = val;
+	    }
+	    info(...params) {
+	        if (this.level > exports.LogLevel.INFO)
+	            return;
+	        if (this._console)
+	            console.info(this.prefix, ...params);
+	        this.eventHandler.emit([exports.LogLevel.INFO, this.prefix, ...params]);
+	    }
+	    warn(...params) {
+	        if (this.level > exports.LogLevel.WARN)
+	            return;
+	        if (this._console)
+	            console.warn(this.prefix, ...params);
+	        this.eventHandler.emit([exports.LogLevel.WARN, this.prefix, ...params]);
+	    }
+	    error(...params) {
+	        if (this.level > exports.LogLevel.ERROR)
+	            return;
+	        if (this._console)
+	            console.error(this.prefix, ...params);
+	        this.eventHandler.emit([exports.LogLevel.ERROR, this.prefix, ...params]);
+	    }
+	}
+	const logger = new Logger();
+	//# sourceMappingURL=logger.js.map
+
+	/**
+	 * Method used to create a proxy around some data an get event
+	 *
+	 * Inspired by `on-change` but simpler (https://github.com/sindresorhus/on-change/)
+	 *
+	 * @export
+	 * @param {*} objToWatch
+	 * @param {(prop: string, value?: any, previous?: any) => void} onChangeFunction
+	 * @returns {Proxy}
+	 */
+	function onChange(objToWatch, onChangeFunction) {
+	    const map = new WeakMap();
+	    const getRootPath = (val) => {
+	        const path = map.get(val) || "";
+	        return path ? `${path}.` : "";
+	    };
+	    const handler = {
+	        get(target, property, receiver) {
+	            const path = getRootPath(target) + property;
+	            const value = Reflect.get(target, property, receiver);
+	            if (typeof value === "object" && value !== null) {
+	                map.set(value, path);
+	                return new Proxy(value, handler);
+	            }
+	            /* istanbul ignore next */
+	            return value;
+	        },
+	        set(target, property, value) {
+	            const path = getRootPath(target) + property;
+	            const prev = target[property];
+	            if (value === prev)
+	                return true;
+	            const res = Reflect.set(target, property, value);
+	            onChangeFunction(path, value, prev);
+	            return res;
+	        },
+	        deleteProperty(target, property) {
+	            const path = getRootPath(target) + property;
+	            const prev = target[property];
+	            if (map.has(target))
+	                map.delete(target);
+	            const res = Reflect.deleteProperty(target, property);
+	            onChangeFunction(path, undefined, prev);
+	            return res;
+	        }
+	    };
+	    map.set(objToWatch, "");
+	    return new Proxy(objToWatch, handler);
+	}
+	//# sourceMappingURL=onchange.js.map
+
+	// To reuse export `rng` const without hacking around
+	/* eslint @typescript-eslint/no-use-before-define: 0 */
+	class SeededRandom {
+	    constructor(seed) {
+	        this.seed = seed;
+	    }
+	    next() {
+	        this.seed = (this.seed * 9301 + 49297) % 233280;
+	        return this.seed / 233280.0;
+	    }
+	    rand() {
+	        return this.next();
+	    }
+	    randBool() {
+	        return this.randRangeInt(0, 1) === 0;
+	    }
+	    randRangeFloat(min, max) {
+	        return rng.randRangeFloat(min, max, this.next());
+	    }
+	    randRangeInt(min, max) {
+	        return rng.randRangeInt(min, max, this.next());
+	    }
+	    randArray(arr) {
+	        const index = rng.randRangeInt(0, arr.length - 1);
+	        return arr[index];
+	    }
+	}
+	class Random {
+	    rand() {
+	        return Math.random();
+	    }
+	    randBool() {
+	        return this.randRangeInt(0, 1) === 0;
+	    }
+	    randRangeFloat(min, max, rng) {
+	        if (!rng)
+	            rng = Math.random();
+	        return rng * (max - min) + min;
+	    }
+	    randRangeInt(min, max, rng) {
+	        if (!rng)
+	            rng = Math.random();
+	        min = Math.ceil(min);
+	        max = Math.floor(max);
+	        return Math.floor(rng * (max - min + 1)) + min;
+	    }
+	    randArray(arr) {
+	        const index = this.randRangeInt(0, arr.length - 1);
+	        return arr[index];
+	    }
+	    createSeededRandom(seed = -1) {
+	        return new SeededRandom(seed);
+	    }
+	}
+	const rng = new Random();
+	//# sourceMappingURL=random.js.map
+
+	/**
+	 * Provide polyfill around Date.now()
+	 */
+	const now = typeof Date.now === "function" ? Date.now : new Date().getTime;
+	const start = now();
+	/**
+	 * Provide polyfill around performance.now()
+	 */
+	/* istanbul ignore next */
+	const perf = () => {
+	    if (globalThis && globalThis.performance) {
+	        return globalThis.performance.now();
+	    }
+	    else if (globalThis.process) {
+	        return process.hrtime()[1];
+	    }
+	    return now() - start;
+	};
+	//# sourceMappingURL=date.js.map
+
+	class ArrayExt {
+	    /**
+	     * Create an array of n elements with value val
+	     *
+	     * createSimilar(3, 2) -> [2, 2, 2]
+	     *
+	     * @param {number} n
+	     * @param {number} [val=0]
+	     * @returns
+	     */
+	    static createSimilar(n, val = 0) {
+	        return ArrayExt.create(n, () => val);
+	    }
+	    /**
+	     * Create an array of n elements ordered starting at start
+	     *
+	     * createOrder(3, 1) -> [1, 2, 3]
+	     *
+	     * @param {number} n
+	     * @param {number} [start=1]
+	     * @returns
+	     */
+	    static createOrder(n, start = 1) {
+	        return ArrayExt.create(n, i => start + i);
+	    }
+	    static create(n, cb) {
+	        const res = new Array(n);
+	        for (let i = 0; i < n; i++) {
+	            res[i] = cb(i);
+	        }
+	        return res;
+	    }
+	    static isEmpty(arr) {
+	        if (arr.length === 0) {
+	            return true;
+	        }
+	        return false;
+	    }
+	    static clone(arr) {
+	        return arr.slice();
+	    }
+	    static first(arr) {
+	        return arr[0];
+	    }
+	    static last(arr) {
+	        return arr[arr.length - 1];
+	    }
+	    static insert(arr, index, value) {
+	        const array = ArrayExt.clone(arr);
+	        array.splice(index, 0, value);
+	        return array;
+	    }
+	    static removeIndex(arr, index) {
+	        const array = ArrayExt.clone(arr);
+	        array.splice(index, 1);
+	        return array;
+	    }
+	    static remove(arr, element) {
+	        return ArrayExt.clone(arr).filter(x => x !== element);
+	    }
+	    static sum(arr) {
+	        return arr.reduce((prev, curr) => prev + curr);
+	    }
+	    static avg(arr) {
+	        return ArrayExt.sum(arr) / arr.length;
+	    }
+	    static random(arr) {
+	        const index = Math.floor(Math.random() * (Math.floor(arr.length - 1) + 1));
+	        return arr[index];
+	    }
+	    static shuffle(arr) {
+	        return ArrayExt.clone(arr).sort(() => Math.random() - 0.5);
+	    }
+	}
+	//# sourceMappingURL=array.js.map
+
+	class StringExt {
+	    static isNullOrEmpty(val) {
+	        if (val === undefined || val === null || val.trim() === "") {
+	            return true;
+	        }
+	        return false;
+	    }
+	    static capitalize(val) {
+	        if (val.length == 1) {
+	            return val.toUpperCase();
+	        }
+	        else if (val.length > 0) {
+	            return val.substring(0, 1).toUpperCase() + val.substring(1);
+	        }
+	        return val;
+	    }
+	    static capitalizeWords(val) {
+	        const regexp = /\s/;
+	        const words = val.split(regexp);
+	        if (words.length == 1) {
+	            return StringExt.capitalize(words[0]);
+	        }
+	        let result = "";
+	        for (let i = 0; i < words.length; i++) {
+	            if (StringExt.capitalize(words[i]) !== null) {
+	                result += StringExt.capitalize(words[i]) + " ";
+	            }
+	        }
+	        return result.trim();
+	    }
+	    static contains(val, search) {
+	        return val.indexOf(search) !== -1;
+	    }
+	    static slugify(val, lower = true) {
+	        if (lower)
+	            val = val.toLowerCase();
+	        return val.normalize().replace(/[^a-z0-9]/gi, "-");
+	    }
+	}
+	//# sourceMappingURL=string.js.map
+
+	class ObjectExt {
+	    static isString(val) {
+	        return Object.prototype.toString.call(val) === "[object String]";
+	    }
+	    static isArray(val) {
+	        return Array.isArray(val);
+	    }
+	    static isNumeric(value) {
+	        return !isNaN(value - parseFloat(value));
+	    }
+	    static clone(obj) {
+	        return Object.assign({}, obj);
+	    }
+	    static IsDefined(val) {
+	        return !ObjectExt.IsNullOrUndefined(val);
+	    }
+	    static IsNullOrUndefined(val) {
+	        return !val && val !== 0;
+	    }
+	}
+	//# sourceMappingURL=object.js.map
+
+	(function (PriorityQueueOrder) {
+	    PriorityQueueOrder["Lower"] = "lower";
+	    PriorityQueueOrder["Higher"] = "higher";
+	})(exports.PriorityQueueOrder || (exports.PriorityQueueOrder = {}));
+	/**
+	 * Simple priority queue based on the binary search tree
+	 *
+	 * Add
+	 *
+	 * @export
+	 * @class PriorityQueue
+	 * @template T
+	 */
+	class PriorityQueue {
+	    constructor(order = exports.PriorityQueueOrder.Lower) {
+	        this.length = 0;
+	        this.tree = new BinarySearchTree();
+	        this.order = order;
+	    }
+	    get size() {
+	        return this.length;
+	    }
+	    get priorityMin() {
+	        return this.tree.minKey;
+	    }
+	    get priorityMax() {
+	        return this.tree.maxKey;
+	    }
+	    /**
+	     * Check if there are still element inside the queue
+	     *
+	     * @returns
+	     */
+	    hasNext() {
+	        return this.length > 0;
+	    }
+	    /**
+	     * Add an element in the queue
+	     *
+	     * @param {number} priority
+	     * @param {T} obj
+	     */
+	    add(priority, obj) {
+	        let res = this.tree.get(priority);
+	        if (!res)
+	            res = [];
+	        res.push(obj);
+	        this.tree.set(priority, res);
+	        this.length++;
+	    }
+	    /**
+	     * Add multiple element in the queue
+	     *
+	     * @param {number} priority
+	     * @param {T[]} obj
+	     */
+	    addMany(priority, obj) {
+	        let res = this.tree.get(priority);
+	        if (!res)
+	            res = [];
+	        res = res.concat(obj);
+	        this.tree.set(priority, res);
+	        this.length += obj.length;
+	    }
+	    /**
+	     * Get the next element in the queue (first or last based on order)
+	     *
+	     * @returns {T}
+	     */
+	    next() {
+	        if (!this.tree.isEmpty())
+	            return undefined;
+	        const entry = this.order === exports.PriorityQueueOrder.Higher ? this.tree.max : this.tree.min;
+	        const res = entry.val.pop();
+	        if (entry.val.length === 0)
+	            this.tree.delete(entry.key);
+	        this.length--;
+	        return res;
+	    }
+	    /**
+	     * Get the next element in the queue
+	     * (like .next() but let the value in the queue)
+	     *
+	     * @returns
+	     */
+	    peek() {
+	        const entry = this.order === exports.PriorityQueueOrder.Higher ? this.tree.max : this.tree.min;
+	        return ArrayExt.last(entry.val);
+	    }
+	    toString() {
+	        return `[PriorityQueue: ${this.length} (${this.tree.minKey} < ${this.tree.maxKey})]`;
+	    }
+	}
+	//# sourceMappingURL=priorityQueue.js.map
+
+	/* istanbul ignore file */
+	/**
+	 * Common utilities
+	 */
+	// Configuration Constants
+	const EPSILON = 0.000001;
+	const ARRAY_TYPE = Array;
+	const RANDOM = Math.random;
+	const degree = Math.PI / 180;
+	/**
+	 * Convert Degree To Radian
+	 *
+	 * @param {Number} a Angle in Degrees
+	 */
+	function toRadian(a) {
+	    return a * degree;
+	}
+	function toDegree(a) {
+	    return a / degree;
+	}
+	function clamp(val, min, max) {
+	    return Math.max(Math.min(val, max), min);
+	}
+	function clamp01(val) {
+	    return clamp(val, 0, 1);
+	}
+	function inRange(val, min, max) {
+	    return val >= min && val <= max;
+	}
+	/**
+	 * Number Equal, approximately (+-epsilon)
+	 *
+	 * @export
+	 * @param {number} a
+	 * @param {number} b
+	 */
+	function numberEqual(a, b) {
+	    return Math.abs(a - b) < EPSILON;
+	}
+	/**
+	 * Round to a certain amount of decimals
+	 *
+	 * @export
+	 * @param {number} value
+	 * @param {number} [decimals=2]
+	 */
+	function roundTo(value, decimals = 2) {
+	    return +value.toFixed(decimals + EPSILON);
+	}
+	/**
+	 * Tests whether or not the arguments have approximately the same value, within an absolute
+	 * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
+	 * than or equal to 1.0, and a relative tolerance is used for larger values)
+	 *
+	 * @param {Number} a The first number to test.
+	 * @param {Number} b The second number to test.
+	 * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
+	 */
+	function equals(a, b) {
+	    return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
+	}
+	//# sourceMappingURL=math.js.map
+
+	var math = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		EPSILON: EPSILON,
+		ARRAY_TYPE: ARRAY_TYPE,
+		RANDOM: RANDOM,
+		toRadian: toRadian,
+		toDegree: toDegree,
+		clamp: clamp,
+		clamp01: clamp01,
+		inRange: inRange,
+		numberEqual: numberEqual,
+		roundTo: roundTo,
+		equals: equals
+	});
+
+	/**
+	 * Implementation of 2D Grid
+	 *
+	 * @export
+	 * @class SquareGrid
+	 * @template T
+	 */
+	class SquareGrid {
+	    constructor(width, height, init) {
+	        this.width = width;
+	        this.height = height;
+	        this.cells = new Array(width * height);
+	        this.map = new Map();
+	        if (init) {
+	            for (let i = 0; i < this.cells.length; i++) {
+	                this.cells[i] = init(i % this.width, Math.floor(i / this.width));
+	            }
+	        }
+	    }
+	    getIndex(x, y) {
+	        return y * this.width + x;
+	    }
+	    getNode(x, y) {
+	        const index = this.getIndex(x, y);
+	        const node = this.map.get(index);
+	        if (node)
+	            return node;
+	        const newNode = {
+	            x,
+	            y,
+	            index,
+	            up: () => this.getNode(x, y - 1),
+	            down: () => this.getNode(x, y + 1),
+	            right: () => this.getNode(x + 1, y),
+	            left: () => this.getNode(x - 1, y),
+	            neighbors: () => {
+	                const neighbors = [];
+	                if (inRange(y - 1, 0, this.height))
+	                    neighbors.push(newNode.up());
+	                if (inRange(y + 1, 0, this.height - 1))
+	                    neighbors.push(newNode.down());
+	                if (inRange(x - 1, 0, this.width))
+	                    neighbors.push(newNode.left());
+	                if (inRange(x + 1, 0, this.width - 1))
+	                    neighbors.push(newNode.right());
+	                return neighbors;
+	            },
+	            content: () => {
+	                return inRange(index, 0, this.cells.length) ? this.cells[index] : undefined;
+	            },
+	            set: (val) => {
+	                this.cells[index] = val;
+	            },
+	            toString: () => (ObjectExt.IsDefined(newNode.content()) ? newNode.content() : "")
+	        };
+	        if (ObjectExt.IsDefined(newNode.content))
+	            this.map.set(index, newNode);
+	        return newNode;
+	    }
+	    print() {
+	        let str = "";
+	        for (let y = 0; y < this.height; y++) {
+	            const line = [];
+	            for (let x = 0; x < this.width; x++) {
+	                line.push(this.getNode(x, y).toString());
+	            }
+	            str += `| ${line.join("  ")} |\n`;
+	        }
+	        console.log(str);
+	    }
+	    distanceNode(nodeA, nodeB) {
+	        return Math.hypot(nodeB.x - nodeA.x, nodeB.y - nodeA.y);
+	    }
+	    pathfinding(from, to, isValid) {
+	        const parent = new Map();
+	        const queue = new PriorityQueue();
+	        queue.add(1, from);
+	        parent.set(from, undefined);
+	        while (queue.hasNext()) {
+	            const node = queue.next();
+	            if (!node)
+	                continue;
+	            if (node === to) {
+	                const res = [];
+	                let current = node;
+	                while (current) {
+	                    const before = parent.get(current);
+	                    if (before)
+	                        res.push(current);
+	                    current = before;
+	                }
+	                return res.reverse();
+	            }
+	            for (const next of node.neighbors()) {
+	                if (!isValid(next))
+	                    continue;
+	                if (parent.has(next))
+	                    continue;
+	                queue.add(this.distanceNode(to, next), next);
+	                parent.set(next, node);
+	            }
+	        }
+	        return [];
 	    }
 	}
 
@@ -788,6 +1511,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=matrix.js.map
 
 	// Used only as a polyfill for DOMPoint
 	// cf: https://drafts.fxtf.org/geometry/#DOMPoint
@@ -811,6 +1535,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=point.js.map
 
 	// Used only as a polyfill for DOMRect
 	/* istanbul ignore file */
@@ -837,154 +1562,7 @@
 	        return this.y + this.height;
 	    }
 	}
-
-	class ArrayExt {
-	    /**
-	     * Create an array of n elements with value val
-	     *
-	     * createSimilar(3, 2) -> [2, 2, 2]
-	     *
-	     * @param {number} n
-	     * @param {number} [val=0]
-	     * @returns
-	     */
-	    static createSimilar(n, val = 0) {
-	        return ArrayExt.create(n, () => val);
-	    }
-	    /**
-	     * Create an array of n elements ordered starting at start
-	     *
-	     * createOrder(3, 1) -> [1, 2, 3]
-	     *
-	     * @param {number} n
-	     * @param {number} [start=1]
-	     * @returns
-	     */
-	    static createOrder(n, start = 1) {
-	        return ArrayExt.create(n, i => start + i);
-	    }
-	    static create(n, cb) {
-	        const res = new Array(n);
-	        for (let i = 0; i < n; i++) {
-	            res[i] = cb(i);
-	        }
-	        return res;
-	    }
-	    static isEmpty(arr) {
-	        if (arr.length === 0) {
-	            return true;
-	        }
-	        return false;
-	    }
-	    static clone(arr) {
-	        return arr.slice();
-	    }
-	    static first(arr) {
-	        return arr[0];
-	    }
-	    static last(arr) {
-	        return arr[arr.length - 1];
-	    }
-	    static insert(arr, index, value) {
-	        const array = ArrayExt.clone(arr);
-	        array.splice(index, 0, value);
-	        return array;
-	    }
-	    static removeIndex(arr, index) {
-	        const array = ArrayExt.clone(arr);
-	        array.splice(index, 1);
-	        return array;
-	    }
-	    static remove(arr, element) {
-	        return ArrayExt.clone(arr).filter(x => x !== element);
-	    }
-	    static sum(arr) {
-	        return arr.reduce((prev, curr) => prev + curr);
-	    }
-	    static avg(arr) {
-	        return ArrayExt.sum(arr) / arr.length;
-	    }
-	    static random(arr) {
-	        const index = Math.floor(Math.random() * (Math.floor(arr.length - 1) + 1));
-	        return arr[index];
-	    }
-	    static shuffle(arr) {
-	        return ArrayExt.clone(arr).sort(() => Math.random() - 0.5);
-	    }
-	}
-
-	/* istanbul ignore file */
-	/**
-	 * Common utilities
-	 */
-	// Configuration Constants
-	const EPSILON = 0.000001;
-	const ARRAY_TYPE = Array;
-	const RANDOM = Math.random;
-	const degree = Math.PI / 180;
-	/**
-	 * Convert Degree To Radian
-	 *
-	 * @param {Number} a Angle in Degrees
-	 */
-	function toRadian(a) {
-	    return a * degree;
-	}
-	function toDegree(a) {
-	    return a / degree;
-	}
-	function clamp(val, min, max) {
-	    return Math.max(Math.min(val, max), min);
-	}
-	function clamp01(val) {
-	    return clamp(val, 0, 1);
-	}
-	/**
-	 * Number Equal, approximately (+-epsilon)
-	 *
-	 * @export
-	 * @param {number} a
-	 * @param {number} b
-	 */
-	function numberEqual(a, b) {
-	    return Math.abs(a - b) < EPSILON;
-	}
-	/**
-	 * Round to a certain amount of decimals
-	 *
-	 * @export
-	 * @param {number} value
-	 * @param {number} [decimals=2]
-	 */
-	function roundTo(value, decimals = 2) {
-	    return +value.toFixed(decimals + EPSILON);
-	}
-	/**
-	 * Tests whether or not the arguments have approximately the same value, within an absolute
-	 * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
-	 * than or equal to 1.0, and a relative tolerance is used for larger values)
-	 *
-	 * @param {Number} a The first number to test.
-	 * @param {Number} b The second number to test.
-	 * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
-	 */
-	function equals(a, b) {
-	    return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
-	}
-
-	var math = /*#__PURE__*/Object.freeze({
-		__proto__: null,
-		EPSILON: EPSILON,
-		ARRAY_TYPE: ARRAY_TYPE,
-		RANDOM: RANDOM,
-		toRadian: toRadian,
-		toDegree: toDegree,
-		clamp: clamp,
-		clamp01: clamp01,
-		numberEqual: numberEqual,
-		roundTo: roundTo,
-		equals: equals
-	});
+	//# sourceMappingURL=rect.js.map
 
 	/* istanbul ignore file */
 	class DOMVector2 {
@@ -1131,6 +1709,7 @@
 	        return `[Vector ${this.x}, ${this.y}, ${this.z}]`;
 	    }
 	}
+	//# sourceMappingURL=vector.js.map
 
 	/* istanbul ignore file */
 	const m = globalThis.DOMMatrix ? DOMMatrix : DOMMatrix$1;
@@ -1275,6 +1854,7 @@
 	        scale: { x: roundTo(scale[0], 4), y: roundTo(scale[1], 4), z: roundTo(scale[2], 4) }
 	    };
 	};
+	//# sourceMappingURL=index.js.map
 
 	class DOM {
 	    /* istanbul ignore next */
@@ -1316,6 +1896,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=dom.js.map
 
 	/* istanbul ignore file */
 	function createImageContext(width = 200, height = 200, action) {
@@ -1340,329 +1921,7 @@
 	        ctx.stroke();
 	    });
 	}
-
-	/// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
-	class Event {
-	    constructor() {
-	        this.listeners = [];
-	        this.listenersOncer = [];
-	    }
-	    on(listener) {
-	        this.listeners.push(listener);
-	        return { dispose: () => this.off(listener) };
-	    }
-	    once(listener) {
-	        this.listenersOncer.push(listener);
-	    }
-	    off(listener) {
-	        const callbackIndex = this.listeners.indexOf(listener);
-	        if (callbackIndex > -1)
-	            this.listeners.splice(callbackIndex, 1);
-	    }
-	    emit(event) {
-	        /** Update any general listeners */
-	        this.listeners.forEach(listener => listener(event));
-	        /** Clear the `once` queue */
-	        if (this.listenersOncer.length > 0) {
-	            const toCall = this.listenersOncer;
-	            this.listenersOncer = [];
-	            toCall.forEach(listener => listener(event));
-	        }
-	    }
-	}
-	/**
-	 * Delay event to be processed later
-	 * Example: render event computed only once a frame at the end
-	 *
-	 * @export
-	 * @class DelayedEvent
-	 */
-	class DelayedEvent {
-	    constructor(event, distinct = true) {
-	        this.queue = [];
-	        if (event)
-	            event.on(evt => this.emit(evt));
-	        this.ouput = new Event();
-	        this.distinct = distinct;
-	    }
-	    on(listener) {
-	        return this.ouput.on(listener);
-	    }
-	    once(listener) {
-	        this.ouput.once(listener);
-	    }
-	    off(listener) {
-	        return this.ouput.off(listener);
-	    }
-	    update() {
-	        for (const evt of this.queue) {
-	            this.ouput.emit(evt);
-	        }
-	        this.queue.length = 0;
-	    }
-	    emit(event, force = false) {
-	        if (force)
-	            return this.ouput.emit(event);
-	        if (this.distinct) {
-	            if (this.queue.includes(event))
-	                return;
-	        }
-	        this.queue.push(event);
-	    }
-	}
-
-	const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	/**
-	 * Create a `uid` [a-zA-z0-9]
-	 *
-	 * @param {Number} len
-	 * @return {String} uid
-	 */
-	function uid(len = 8) {
-	    let id = "";
-	    while (len--) {
-	        id += url[(Math.random() * 62) | 0];
-	    }
-	    return id;
-	}
-
-	(function (LogLevel) {
-	    LogLevel[LogLevel["INFO"] = 0] = "INFO";
-	    LogLevel[LogLevel["WARN"] = 1] = "WARN";
-	    LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
-	    LogLevel[LogLevel["OFF"] = 3] = "OFF";
-	})(exports.LogLevel || (exports.LogLevel = {}));
-	class Logger {
-	    constructor() {
-	        this.eventHandler = new Event();
-	        this._prefix = "";
-	        this._level = 0;
-	        this._console = true;
-	    }
-	    get events() {
-	        return this.eventHandler;
-	    }
-	    get prefix() {
-	        return this._prefix;
-	    }
-	    set prefix(val) {
-	        this._prefix = val;
-	    }
-	    get level() {
-	        return this._level;
-	    }
-	    set level(val) {
-	        this._level = val;
-	    }
-	    get console() {
-	        return this._console;
-	    }
-	    set console(val) {
-	        this._console = val;
-	    }
-	    info(...params) {
-	        if (this.level > exports.LogLevel.INFO)
-	            return;
-	        if (this._console)
-	            console.info(this.prefix, ...params);
-	        this.eventHandler.emit([exports.LogLevel.INFO, this.prefix, ...params]);
-	    }
-	    warn(...params) {
-	        if (this.level > exports.LogLevel.WARN)
-	            return;
-	        if (this._console)
-	            console.warn(this.prefix, ...params);
-	        this.eventHandler.emit([exports.LogLevel.WARN, this.prefix, ...params]);
-	    }
-	    error(...params) {
-	        if (this.level > exports.LogLevel.ERROR)
-	            return;
-	        if (this._console)
-	            console.error(this.prefix, ...params);
-	        this.eventHandler.emit([exports.LogLevel.ERROR, this.prefix, ...params]);
-	    }
-	}
-	const logger = new Logger();
-
-	/**
-	 * Method used to create a proxy around some data an get event
-	 *
-	 * Inspired by `on-change` but simpler (https://github.com/sindresorhus/on-change/)
-	 *
-	 * @export
-	 * @param {*} objToWatch
-	 * @param {(prop: string, value?: any, previous?: any) => void} onChangeFunction
-	 * @returns {Proxy}
-	 */
-	function onChange(objToWatch, onChangeFunction) {
-	    const map = new WeakMap();
-	    const getRootPath = (val) => {
-	        const path = map.get(val) || "";
-	        return path ? `${path}.` : "";
-	    };
-	    const handler = {
-	        get(target, property, receiver) {
-	            const path = getRootPath(target) + property;
-	            const value = Reflect.get(target, property, receiver);
-	            if (typeof value === "object" && value !== null) {
-	                map.set(value, path);
-	                return new Proxy(value, handler);
-	            }
-	            /* istanbul ignore next */
-	            return value;
-	        },
-	        set(target, property, value) {
-	            const path = getRootPath(target) + property;
-	            const prev = target[property];
-	            if (value === prev)
-	                return true;
-	            const res = Reflect.set(target, property, value);
-	            onChangeFunction(path, value, prev);
-	            return res;
-	        },
-	        deleteProperty(target, property) {
-	            const path = getRootPath(target) + property;
-	            const prev = target[property];
-	            if (map.has(target))
-	                map.delete(target);
-	            const res = Reflect.deleteProperty(target, property);
-	            onChangeFunction(path, undefined, prev);
-	            return res;
-	        }
-	    };
-	    map.set(objToWatch, "");
-	    return new Proxy(objToWatch, handler);
-	}
-
-	// To reuse export `rng` const without hacking around
-	/* eslint @typescript-eslint/no-use-before-define: 0 */
-	class SeededRandom {
-	    constructor(seed) {
-	        this.seed = seed;
-	    }
-	    next() {
-	        this.seed = (this.seed * 9301 + 49297) % 233280;
-	        return this.seed / 233280.0;
-	    }
-	    rand() {
-	        return this.next();
-	    }
-	    randBool() {
-	        return this.randRangeInt(0, 1) === 0;
-	    }
-	    randRangeFloat(min, max) {
-	        return rng.randRangeFloat(min, max, this.next());
-	    }
-	    randRangeInt(min, max) {
-	        return rng.randRangeInt(min, max, this.next());
-	    }
-	    randArray(arr) {
-	        const index = rng.randRangeInt(0, arr.length - 1);
-	        return arr[index];
-	    }
-	}
-	class Random {
-	    rand() {
-	        return Math.random();
-	    }
-	    randBool() {
-	        return this.randRangeInt(0, 1) === 0;
-	    }
-	    randRangeFloat(min, max, rng) {
-	        if (!rng)
-	            rng = Math.random();
-	        return rng * (max - min) + min;
-	    }
-	    randRangeInt(min, max, rng) {
-	        if (!rng)
-	            rng = Math.random();
-	        min = Math.ceil(min);
-	        max = Math.floor(max);
-	        return Math.floor(rng * (max - min + 1)) + min;
-	    }
-	    randArray(arr) {
-	        const index = this.randRangeInt(0, arr.length - 1);
-	        return arr[index];
-	    }
-	    createSeededRandom(seed = -1) {
-	        return new SeededRandom(seed);
-	    }
-	}
-	const rng = new Random();
-
-	/**
-	 * Provide polyfill around Date.now()
-	 */
-	const now = typeof Date.now === "function" ? Date.now : new Date().getTime;
-	const start = now();
-	/**
-	 * Provide polyfill around performance.now()
-	 */
-	/* istanbul ignore next */
-	const perf = () => {
-	    if (globalThis && globalThis.performance) {
-	        return globalThis.performance.now();
-	    }
-	    else if (globalThis.process) {
-	        return process.hrtime()[1];
-	    }
-	    return now() - start;
-	};
-
-	class StringExt {
-	    static isNullOrEmpty(val) {
-	        if (val === undefined || val === null || val.trim() === "") {
-	            return true;
-	        }
-	        return false;
-	    }
-	    static capitalize(val) {
-	        if (val.length == 1) {
-	            return val.toUpperCase();
-	        }
-	        else if (val.length > 0) {
-	            return val.substring(0, 1).toUpperCase() + val.substring(1);
-	        }
-	        return val;
-	    }
-	    static capitalizeWords(val) {
-	        const regexp = /\s/;
-	        const words = val.split(regexp);
-	        if (words.length == 1) {
-	            return StringExt.capitalize(words[0]);
-	        }
-	        let result = "";
-	        for (let i = 0; i < words.length; i++) {
-	            if (StringExt.capitalize(words[i]) !== null) {
-	                result += StringExt.capitalize(words[i]) + " ";
-	            }
-	        }
-	        return result.trim();
-	    }
-	    static contains(val, search) {
-	        return val.indexOf(search) !== -1;
-	    }
-	    static slugify(val, lower = true) {
-	        if (lower)
-	            val = val.toLowerCase();
-	        return val.normalize().replace(/[^a-z0-9]/gi, "-");
-	    }
-	}
-
-	class ObjectExt {
-	    static isString(val) {
-	        return Object.prototype.toString.call(val) === "[object String]";
-	    }
-	    static isArray(val) {
-	        return Array.isArray(val);
-	    }
-	    static isNumeric(value) {
-	        return !isNaN(value - parseFloat(value));
-	    }
-	    static clone(obj) {
-	        return Object.assign({}, obj);
-	    }
-	}
+	//# sourceMappingURL=shape.js.map
 
 	class Color {
 	    constructor(h, s, l) {
@@ -1811,6 +2070,7 @@
 	        return new Color(h, s, l);
 	    }
 	}
+	//# sourceMappingURL=color.js.map
 
 	/* istanbul ignore file */
 	/**
@@ -1870,6 +2130,7 @@
 	        };
 	    }
 	}
+	//# sourceMappingURL=transform.js.map
 
 	/* istanbul ignore file */
 	/**
@@ -2010,8 +2271,10 @@
 	        this.onChanged.emit();
 	    }
 	}
+	//# sourceMappingURL=rectTransform.js.map
 
 	const name = "Coopa";
+	//# sourceMappingURL=index.js.map
 
 	exports.ArrayExt = ArrayExt;
 	exports.BinarySearchTree = BinarySearchTree;
@@ -2022,9 +2285,11 @@
 	exports.DelayedEvent = DelayedEvent;
 	exports.Event = Event;
 	exports.ObjectExt = ObjectExt;
+	exports.PriorityQueue = PriorityQueue;
 	exports.Random = Random;
 	exports.RectTransformMatrix = RectTransformMatrix;
 	exports.SeededRandom = SeededRandom;
+	exports.SquareGrid = SquareGrid;
 	exports.StringExt = StringExt;
 	exports.TransformMatrix = TransformMatrix;
 	exports.createCircle = createCircle;

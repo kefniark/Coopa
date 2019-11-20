@@ -108,6 +108,23 @@ test("Has Key", () => {
 	}
 })
 
+test("Has Key", () => {
+	const bst = new BinarySearchTree<number, number>()
+	const input = [41, 20, 65, 11, 29, 32, 50, 91, 72, 99]
+	for (let i = 0; i < input.length; i++) {
+		bst.set(input[i], i)
+	}
+
+	expect(bst.minKey).toBe(11)
+	expect(bst.maxKey).toBe(99)
+
+	const bst2 = new BinarySearchTree<number, number>()
+	expect(() => bst2.minKey).toThrowError()
+	expect(() => bst2.min).toThrowError()
+	expect(() => bst2.maxKey).toThrowError()
+	expect(() => bst2.max).toThrowError()
+})
+
 test("Print and Get Max Height", () => {
 	const bst = new BinarySearchTree<number, number>()
 	bst.print()

@@ -14,4 +14,12 @@ export class ObjectExt {
 	static clone(obj: any): boolean {
 		return Object.assign({}, obj)
 	}
+
+	static IsDefined(val: any) {
+		return !ObjectExt.IsNullOrUndefined(val)
+	}
+
+	static IsNullOrUndefined(val: any) {
+		return !val && val !== 0
+	}
 }

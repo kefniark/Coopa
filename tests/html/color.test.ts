@@ -12,7 +12,7 @@ test("Import / Export", () => {
 	const colorG = Color.fromRGB([0, 255, 0])
 	const colorB = Color.fromRGB([0, 0, 255])
 
-	for (var color of [colorWhite, colorBlack, colorR, colorG, colorB]) {
+	for (const color of [colorWhite, colorBlack, colorR, colorG, colorB]) {
 		color.hsl()
 	}
 

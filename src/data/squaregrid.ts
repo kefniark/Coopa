@@ -16,6 +16,11 @@ export interface SquareGridNode<T> {
 	toString(): string
 }
 
+export interface IPathfindingArg<T> {
+	from: SquareGridNode<T>
+	to: SquareGridNode<T>
+}
+
 /**
  * Implementation of 2D Grid
  *
@@ -26,12 +31,14 @@ export interface SquareGridNode<T> {
 export class SquareGrid<T> {
 	readonly width: number
 	readonly height: number
-	private cells: T[]
-	private map: Map<number, SquareGridNode<T>>
+	readonly diagonal: boolean
+	protected cells: T[]
+	protected map: Map<number, SquareGridNode<T>>
 
-	constructor(width: number, height: number, init?: (x: number, y: number) => T) {
+	constructor(width: number, height: number, diagonal = false, init?: (x: number, y: number) => T) {
 		this.width = width
 		this.height = height
+		this.diagonal = diagonal
 		this.cells = new Array(width * height)
 		this.map = new Map()
 		if (init) {
@@ -41,7 +48,7 @@ export class SquareGrid<T> {
 		}
 	}
 
-	private getIndex(x: number, y: number) {
+	protected getIndex(x: number, y: number) {
 		return y * this.width + x
 	}
 
@@ -65,6 +72,17 @@ export class SquareGrid<T> {
 				if (inRange(y + 1, 0, this.height - 1)) neighbors.push(newNode.down())
 				if (inRange(x - 1, 0, this.width)) neighbors.push(newNode.left())
 				if (inRange(x + 1, 0, this.width - 1)) neighbors.push(newNode.right())
+				if (this.diagonal) {
+					const topLeft = inRange(x - 1, 0, this.width) && inRange(y - 1, 0, this.height)
+					const topRight = inRange(x + 1, 0, this.width) && inRange(y - 1, 0, this.height)
+					const bottomLeft = inRange(x - 1, 0, this.width) && inRange(y + 1, 0, this.height)
+					const bottomRight = inRange(x + 1, 0, this.width) && inRange(y + 1, 0, this.height)
+
+					if (topLeft) neighbors.push(newNode.up().left())
+					if (topRight) neighbors.push(newNode.up().right())
+					if (bottomLeft) neighbors.push(newNode.down().left())
+					if (bottomRight) neighbors.push(newNode.down().right())
+				}
 				return neighbors
 			},
 			content: () => {
@@ -87,7 +105,7 @@ export class SquareGrid<T> {
 			for (let x = 0; x < this.width; x++) {
 				line.push(this.getNode(x, y).toString())
 			}
-			str += `| ${line.join("  ")} |\n`
+			str += `${line.join("  ")}\n`
 		}
 		console.log(str)
 	}
@@ -99,7 +117,7 @@ export class SquareGrid<T> {
 	pathfinding(
 		from: SquareGridNode<T>,
 		to: SquareGridNode<T>,
-		isValid: (node: SquareGridNode<T>) => boolean
+		isValid: (arg: IPathfindingArg<T>) => boolean
 	): SquareGridNode<T>[] {
 		const parent = new Map<SquareGridNode<T>, SquareGridNode<T> | undefined>()
 		const queue = new PriorityQueue<SquareGridNode<T>>()
@@ -122,7 +140,7 @@ export class SquareGrid<T> {
 			}
 
 			for (const next of node.neighbors()) {
-				if (!isValid(next)) continue
+				if (!isValid({ from: node, to: next })) continue
 				if (parent.has(next)) continue
 				queue.add(this.distanceNode(to, next), next)
 				parent.set(next, node)

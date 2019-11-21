@@ -1,1 +1,2 @@
-export * from "./2dgrid"
+export * from "./squaregrid"
+export * from "./squaregridwall"

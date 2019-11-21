@@ -82,7 +82,7 @@ export class PriorityQueue<T> {
 	next() {
 		if (!this.tree.isEmpty()) return undefined
 		const entry = this.order === PriorityQueueOrder.Higher ? this.tree.max : this.tree.min
-		const res = entry.val.pop()
+		const res = entry.val.shift()
 		if (entry.val.length === 0) this.tree.delete(entry.key)
 		this.length--
 		return res

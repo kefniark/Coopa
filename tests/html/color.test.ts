@@ -33,6 +33,13 @@ test("Gradient", () => {
 	const to = Color.random()
 	const colors = Color.gradient(from, to, 12)
 	expect(colors.length).toBe(12)
+
+	const from2 = Color.fromRGB([0, 50, 50])
+	const to2 = Color.fromRGB([185, 50, 50])
+	const colors2 = Color.gradient(from2, to2, 12)
+	expect(colors2.length).toBe(12)
+	const colors3 = Color.gradient(to2, from2, 12)
+	expect(colors3.length).toBe(12)
 })
 
 test("Palette", () => {

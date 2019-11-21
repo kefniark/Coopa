@@ -110,7 +110,7 @@ export class SquareGrid<T> {
 		console.log(str)
 	}
 
-	private distanceNode(nodeA: SquareGridNode<T>, nodeB: SquareGridNode<T>) {
+	private distanceToGoal(nodeA: SquareGridNode<T>, nodeB: SquareGridNode<T>) {
 		return Math.hypot(nodeB.x - nodeA.x, nodeB.y - nodeA.y)
 	}
 
@@ -119,7 +119,7 @@ export class SquareGrid<T> {
 		to: SquareGridNode<T>,
 		isValid: (arg: IPathfindingArg<T>) => boolean
 	): SquareGridNode<T>[] {
-		const parent = new Map<SquareGridNode<T>, SquareGridNode<T> | undefined>()
+		const parent = new Map<SquareGridNode<T>, { parent: SquareGridNode<T>; cost: number } | undefined>()
 		const queue = new PriorityQueue<SquareGridNode<T>>()
 		queue.add(1, from)
 		parent.set(from, undefined)
@@ -134,16 +134,20 @@ export class SquareGrid<T> {
 				while (current) {
 					const before = parent.get(current)
 					if (before) res.push(current)
-					current = before
+					current = before ? before.parent : undefined
 				}
 				return res.reverse()
 			}
 
+			const cur = parent.get(node)
+
 			for (const next of node.neighbors()) {
 				if (!isValid({ from: node, to: next })) continue
+				const distanceToOrigin = cur ? cur.cost : 0
 				if (parent.has(next)) continue
-				queue.add(this.distanceNode(to, next), next)
-				parent.set(next, node)
+				const heuristic = distanceToOrigin + this.distanceToGoal(to, next)
+				queue.add(heuristic, next)
+				parent.set(next, { parent: node, cost: distanceToOrigin + 1 })
 			}
 		}
 

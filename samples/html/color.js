@@ -62,7 +62,7 @@ for (let i = 0; i < colors.length; i++) {
 // predefined palette
 
 const colors3 = Coopa.ArrayExt.random([
-	Coopa.Color.germanPallete(),
+	Coopa.Color.germanPalette(),
 	Coopa.Color.flatPalette(),
 	Coopa.Color.americanPalette()
 ])

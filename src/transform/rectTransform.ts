@@ -3,7 +3,8 @@
 
 import { TransformMatrix } from "./transform"
 import { DOMVector2, resetMatrix, decomposeMatrix, createMatrix, matrix3dValues } from "../geometry/index"
-import { ArrayExt, onChange } from "../utils/index"
+import { ArrayExt } from "../extension/index"
+import { onChange } from "../events/index"
 
 /**
  * Extend Transform matrix and add simple layout system with pivot, anchor and size

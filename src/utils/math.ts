@@ -31,6 +31,10 @@ export function clamp01(val: number) {
 	return clamp(val, 0, 1)
 }
 
+export function inRange(val: number, min: number, max: number) {
+	return val >= min && val <= max
+}
+
 /**
  * Number Equal, approximately (+-epsilon)
  *

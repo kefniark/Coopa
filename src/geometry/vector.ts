@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { roundTo, toDegree } from "../math/math"
+import { roundTo, toDegree } from "../utils/index"
 
 export class DOMVector2 {
 	get length() {

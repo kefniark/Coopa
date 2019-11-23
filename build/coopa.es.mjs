@@ -1,5 +1,6 @@
-// [COOPA] Build: 0.2.2 - November 20, 2019
+// [COOPA] Build: 0.2.3 - November 23, 2019
 // inspired by https://algs4.cs.princeton.edu/31elementary/
+const errorTreeEmpty = "No Element in the tree";
 class TreeNode {
     constructor(key, val) {
         this.key = key;
@@ -12,6 +13,30 @@ class TreeNode {
  * @template Val
  */
 class BinarySearchTree {
+    get minKey() {
+        return this.min.key;
+    }
+    get min() {
+        if (!this.root)
+            throw new Error(errorTreeEmpty);
+        return this.findMin(this.root);
+    }
+    get maxKey() {
+        return this.max.key;
+    }
+    get max() {
+        if (!this.root)
+            throw new Error(errorTreeEmpty);
+        return this.findMax(this.root);
+    }
+    /**
+     * Check if the tree has at least one element
+     *
+     * @returns
+     */
+    isEmpty() {
+        return !!this.root;
+    }
     /**
      * Set tree node into the tree.
      * @param key
@@ -93,17 +118,23 @@ class BinarySearchTree {
                 return node.right;
             }
             const t = node;
-            node = this.min(node.right);
+            node = this.findMin(node.right);
             node.right = this.recursiveDelMin(t.right);
             node.left = t.left;
         }
         return node;
     }
-    min(node) {
+    findMin(node) {
         if (node.left == null) {
             return node;
         }
-        return this.min(node.left);
+        return this.findMin(node.left);
+    }
+    findMax(node) {
+        if (node.right == null) {
+            return node;
+        }
+        return this.findMax(node.right);
     }
     /**
      * Return all tree nodes in binary search tree
@@ -196,6 +227,988 @@ class BinarySearchTree {
             return 1;
         return 1 + Math.max(this.getMaxHeightRecursively(node.left), this.getMaxHeightRecursively(node.right));
     }
+}
+
+/**
+ * Provide polyfill around Date.now()
+ */
+const now = typeof Date.now === "function" ? Date.now : new Date().getTime;
+const start = now();
+/**
+ * Provide polyfill around performance.now()
+ */
+/* istanbul ignore next */
+const perf = () => {
+    if (globalThis && globalThis.performance) {
+        return globalThis.performance.now();
+    }
+    else if (globalThis.process) {
+        return process.hrtime()[1];
+    }
+    return now() - start;
+};
+
+class ArrayExt {
+    /**
+     * Create an array of n elements with value val
+     *
+     * createSimilar(3, 2) -> [2, 2, 2]
+     *
+     * @param {number} n
+     * @param {number} [val=0]
+     * @returns
+     */
+    static createSimilar(n, val = 0) {
+        return ArrayExt.create(n, () => val);
+    }
+    /**
+     * Create an array of n elements ordered starting at start
+     *
+     * createOrder(3, 1) -> [1, 2, 3]
+     *
+     * @param {number} n
+     * @param {number} [start=1]
+     * @returns
+     */
+    static createOrder(n, start = 1) {
+        return ArrayExt.create(n, i => start + i);
+    }
+    static create(n, cb) {
+        const res = new Array(n);
+        for (let i = 0; i < n; i++) {
+            res[i] = cb(i);
+        }
+        return res;
+    }
+    static isEmpty(arr) {
+        if (arr.length === 0) {
+            return true;
+        }
+        return false;
+    }
+    static clone(arr) {
+        return arr.slice();
+    }
+    static first(arr) {
+        return arr[0];
+    }
+    static last(arr) {
+        return arr[arr.length - 1];
+    }
+    static insert(arr, index, value) {
+        const array = ArrayExt.clone(arr);
+        array.splice(index, 0, value);
+        return array;
+    }
+    static removeIndex(arr, index) {
+        const array = ArrayExt.clone(arr);
+        array.splice(index, 1);
+        return array;
+    }
+    static remove(arr, element) {
+        return ArrayExt.clone(arr).filter(x => x !== element);
+    }
+    static sum(arr) {
+        return arr.reduce((prev, curr) => prev + curr);
+    }
+    static avg(arr) {
+        return ArrayExt.sum(arr) / arr.length;
+    }
+    static random(arr) {
+        const index = Math.floor(Math.random() * (Math.floor(arr.length - 1) + 1));
+        return arr[index];
+    }
+    static shuffle(arr) {
+        return ArrayExt.clone(arr).sort(() => Math.random() - 0.5);
+    }
+}
+
+class StringExt {
+    static isNullOrEmpty(val) {
+        if (val === undefined || val === null || val.trim() === "") {
+            return true;
+        }
+        return false;
+    }
+    static capitalize(val) {
+        if (val.length == 1) {
+            return val.toUpperCase();
+        }
+        else if (val.length > 0) {
+            return val.substring(0, 1).toUpperCase() + val.substring(1);
+        }
+        return val;
+    }
+    static capitalizeWords(val) {
+        const regexp = /\s/;
+        const words = val.split(regexp);
+        if (words.length == 1) {
+            return StringExt.capitalize(words[0]);
+        }
+        let result = "";
+        for (let i = 0; i < words.length; i++) {
+            result += StringExt.capitalize(words[i]) + " ";
+        }
+        return result.trim();
+    }
+    static contains(val, search) {
+        return val.indexOf(search) !== -1;
+    }
+    static slugify(val, lower = true) {
+        if (lower)
+            val = val.toLowerCase();
+        return val.normalize().replace(/[^a-z0-9]/gi, "-");
+    }
+}
+
+class ObjectExt {
+    static isString(val) {
+        return Object.prototype.toString.call(val) === "[object String]";
+    }
+    static isArray(val) {
+        return Array.isArray(val);
+    }
+    static isNumeric(value) {
+        return !isNaN(value - parseFloat(value));
+    }
+    static clone(obj) {
+        return Object.assign({}, obj);
+    }
+    static IsDefined(val) {
+        return !ObjectExt.IsNullOrUndefined(val);
+    }
+    static IsNullOrUndefined(val) {
+        return !val && val !== 0;
+    }
+}
+
+var PriorityQueueOrder;
+(function (PriorityQueueOrder) {
+    PriorityQueueOrder["Lower"] = "lower";
+    PriorityQueueOrder["Higher"] = "higher";
+})(PriorityQueueOrder || (PriorityQueueOrder = {}));
+/**
+ * Simple priority queue based on the binary search tree
+ *
+ * Add
+ *
+ * @export
+ * @class PriorityQueue
+ * @template T
+ */
+class PriorityQueue {
+    constructor(order = PriorityQueueOrder.Lower) {
+        this.length = 0;
+        this.tree = new BinarySearchTree();
+        this.order = order;
+    }
+    get size() {
+        return this.length;
+    }
+    get priorityMin() {
+        return this.tree.minKey;
+    }
+    get priorityMax() {
+        return this.tree.maxKey;
+    }
+    /**
+     * Check if there are still element inside the queue
+     *
+     * @returns
+     */
+    hasNext() {
+        return this.length > 0;
+    }
+    /**
+     * Add an element in the queue
+     *
+     * @param {number} priority
+     * @param {T} obj
+     */
+    add(priority, obj) {
+        let res = this.tree.get(priority);
+        if (!res)
+            res = [];
+        res.push(obj);
+        this.tree.set(priority, res);
+        this.length++;
+    }
+    /**
+     * Add multiple element in the queue
+     *
+     * @param {number} priority
+     * @param {T[]} obj
+     */
+    addMany(priority, obj) {
+        let res = this.tree.get(priority);
+        if (!res)
+            res = [];
+        res = res.concat(obj);
+        this.tree.set(priority, res);
+        this.length += obj.length;
+    }
+    /**
+     * Get the next element in the queue (first or last based on order)
+     *
+     * @returns {T}
+     */
+    next() {
+        if (!this.tree.isEmpty())
+            return undefined;
+        const entry = this.order === PriorityQueueOrder.Higher ? this.tree.max : this.tree.min;
+        const res = entry.val.shift();
+        if (entry.val.length === 0)
+            this.tree.delete(entry.key);
+        this.length--;
+        return res;
+    }
+    /**
+     * Get the next element in the queue
+     * (like .next() but let the value in the queue)
+     *
+     * @returns
+     */
+    peek() {
+        const entry = this.order === PriorityQueueOrder.Higher ? this.tree.max : this.tree.min;
+        return ArrayExt.last(entry.val);
+    }
+    toString() {
+        return `[PriorityQueue: ${this.length} (${this.tree.minKey} < ${this.tree.maxKey})]`;
+    }
+}
+
+const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+/**
+ * Create a `uid` [a-zA-z0-9]
+ *
+ * @param {Number} len
+ * @return {String} uid
+ */
+function uid(len = 8) {
+    let id = "";
+    while (len--) {
+        id += url[(Math.random() * 62) | 0];
+    }
+    return id;
+}
+
+/// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
+/* eslint @typescript-eslint/no-inferrable-types: 0 */
+class Event {
+    constructor() {
+        this.enable = true;
+        this.listeners = [];
+        this.listenersOncer = [];
+    }
+    clear() {
+        this.enable = false;
+        this.listeners.length = 0;
+        this.listenersOncer.length = 0;
+    }
+    on(listener) {
+        this.listeners.push(listener);
+        return { dispose: () => this.off(listener) };
+    }
+    once(listener) {
+        this.listenersOncer.push(listener);
+    }
+    off(listener) {
+        const callbackIndex = this.listeners.indexOf(listener);
+        if (callbackIndex > -1)
+            this.listeners.splice(callbackIndex, 1);
+    }
+    emit(event) {
+        if (!this.enable)
+            return;
+        /** Update any general listeners */
+        this.listeners.forEach(listener => listener(event));
+        /** Clear the `once` queue */
+        if (this.listenersOncer.length > 0) {
+            const toCall = this.listenersOncer;
+            this.listenersOncer = [];
+            toCall.forEach(listener => listener(event));
+        }
+    }
+}
+
+var LogLevel;
+(function (LogLevel) {
+    LogLevel[LogLevel["DEBUG"] = -1] = "DEBUG";
+    LogLevel[LogLevel["INFO"] = 0] = "INFO";
+    LogLevel[LogLevel["WARN"] = 1] = "WARN";
+    LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
+    LogLevel[LogLevel["OFF"] = 3] = "OFF";
+})(LogLevel || (LogLevel = {}));
+class Logger {
+    constructor() {
+        this.eventHandler = new Event();
+        this._prefix = "";
+        this._level = 0;
+        this._console = true;
+    }
+    get events() {
+        return this.eventHandler;
+    }
+    get prefix() {
+        return this._prefix;
+    }
+    set prefix(val) {
+        this._prefix = val;
+    }
+    get level() {
+        return this._level;
+    }
+    set level(val) {
+        this._level = val;
+    }
+    get console() {
+        return this._console;
+    }
+    set console(val) {
+        this._console = val;
+    }
+    debug(...params) {
+        if (this.level > LogLevel.DEBUG)
+            return;
+        if (this._console)
+            console.debug(this.prefix, ...params);
+        this.eventHandler.emit([LogLevel.DEBUG, this.prefix, ...params]);
+    }
+    info(...params) {
+        if (this.level > LogLevel.INFO)
+            return;
+        if (this._console)
+            console.info(this.prefix, ...params);
+        this.eventHandler.emit([LogLevel.INFO, this.prefix, ...params]);
+    }
+    warn(...params) {
+        if (this.level > LogLevel.WARN)
+            return;
+        if (this._console)
+            console.warn(this.prefix, ...params);
+        this.eventHandler.emit([LogLevel.WARN, this.prefix, ...params]);
+    }
+    error(...params) {
+        if (this.level > LogLevel.ERROR)
+            return;
+        if (this._console)
+            console.error(this.prefix, ...params);
+        this.eventHandler.emit([LogLevel.ERROR, this.prefix, ...params]);
+    }
+}
+const logger = new Logger();
+
+// To reuse export `rng` const without hacking around
+/* eslint @typescript-eslint/no-use-before-define: 0 */
+class SeededRandom {
+    constructor(seed) {
+        this.seed = seed;
+    }
+    next() {
+        this.seed = (this.seed * 9301 + 49297) % 233280;
+        return this.seed / 233280.0;
+    }
+    rand() {
+        return this.next();
+    }
+    randBool() {
+        return this.randRangeInt(0, 1) === 0;
+    }
+    randRangeFloat(min, max) {
+        return rng.randRangeFloat(min, max, this.next());
+    }
+    randRangeInt(min, max) {
+        return rng.randRangeInt(min, max, this.next());
+    }
+    randArray(arr) {
+        const index = rng.randRangeInt(0, arr.length - 1);
+        return arr[index];
+    }
+}
+class Random {
+    rand() {
+        return Math.random();
+    }
+    randBool() {
+        return this.randRangeInt(0, 1) === 0;
+    }
+    randRangeFloat(min, max, rng) {
+        if (!rng)
+            rng = Math.random();
+        return rng * (max - min) + min;
+    }
+    randRangeInt(min, max, rng) {
+        if (!rng)
+            rng = Math.random();
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(rng * (max - min + 1)) + min;
+    }
+    randArray(arr) {
+        const index = this.randRangeInt(0, arr.length - 1);
+        return arr[index];
+    }
+    createSeededRandom(seed = -1) {
+        return new SeededRandom(seed);
+    }
+}
+const rng = new Random();
+
+/* istanbul ignore file */
+/**
+ * Common utilities
+ */
+// Configuration Constants
+const EPSILON = 0.000001;
+const ARRAY_TYPE = Array;
+const RANDOM = Math.random;
+const degree = Math.PI / 180;
+/**
+ * Convert Degree To Radian
+ *
+ * @param {Number} a Angle in Degrees
+ */
+function toRadian(a) {
+    return a * degree;
+}
+function toDegree(a) {
+    return a / degree;
+}
+function clamp(val, min, max) {
+    return Math.max(Math.min(val, max), min);
+}
+function clamp01(val) {
+    return clamp(val, 0, 1);
+}
+function inRange(val, min, max) {
+    return val >= min && val <= max;
+}
+/**
+ * Number Equal, approximately (+-epsilon)
+ *
+ * @export
+ * @param {number} a
+ * @param {number} b
+ */
+function numberEqual(a, b) {
+    return Math.abs(a - b) < EPSILON;
+}
+/**
+ * Round to a certain amount of decimals
+ *
+ * @export
+ * @param {number} value
+ * @param {number} [decimals=2]
+ */
+function roundTo(value, decimals = 2) {
+    return +value.toFixed(decimals + EPSILON);
+}
+/**
+ * Tests whether or not the arguments have approximately the same value, within an absolute
+ * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
+ * than or equal to 1.0, and a relative tolerance is used for larger values)
+ *
+ * @param {Number} a The first number to test.
+ * @param {Number} b The second number to test.
+ * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
+ */
+function equals(a, b) {
+    return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
+}
+
+/**
+ * Implementation of 2D Grid
+ *
+ * @export
+ * @class SquareGrid
+ * @template T
+ */
+class SquareGrid {
+    constructor(width, height, diagonal = false, init) {
+        this.width = width;
+        this.height = height;
+        this.diagonal = diagonal;
+        this.cells = new Array(width * height);
+        this.map = new Map();
+        if (init) {
+            for (let i = 0; i < this.cells.length; i++) {
+                this.cells[i] = init(i % this.width, Math.floor(i / this.width));
+            }
+        }
+    }
+    getIndex(x, y) {
+        return y * this.width + x;
+    }
+    getNode(x, y) {
+        const index = this.getIndex(x, y);
+        const node = this.map.get(index);
+        if (node)
+            return node;
+        const newNode = {
+            x,
+            y,
+            index,
+            up: () => this.getNode(x, y - 1),
+            down: () => this.getNode(x, y + 1),
+            right: () => this.getNode(x + 1, y),
+            left: () => this.getNode(x - 1, y),
+            neighbors: () => {
+                const neighbors = [];
+                if (inRange(y - 1, 0, this.height - 1))
+                    neighbors.push(newNode.up());
+                if (inRange(y + 1, 0, this.height - 1))
+                    neighbors.push(newNode.down());
+                if (inRange(x - 1, 0, this.width - 1))
+                    neighbors.push(newNode.left());
+                if (inRange(x + 1, 0, this.width - 1))
+                    neighbors.push(newNode.right());
+                if (this.diagonal) {
+                    const topLeft = inRange(x - 1, 0, this.width - 1) && inRange(y - 1, 0, this.height - 1);
+                    const topRight = inRange(x + 1, 0, this.width - 1) && inRange(y - 1, 0, this.height - 1);
+                    const bottomLeft = inRange(x - 1, 0, this.width - 1) && inRange(y + 1, 0, this.height - 1);
+                    const bottomRight = inRange(x + 1, 0, this.width - 1) && inRange(y + 1, 0, this.height - 1);
+                    if (topLeft)
+                        neighbors.push(newNode.up().left());
+                    if (topRight)
+                        neighbors.push(newNode.up().right());
+                    if (bottomLeft)
+                        neighbors.push(newNode.down().left());
+                    if (bottomRight)
+                        neighbors.push(newNode.down().right());
+                }
+                return neighbors;
+            },
+            content: () => {
+                return inRange(index, 0, this.cells.length) ? this.cells[index] : undefined;
+            },
+            set: (val) => {
+                this.cells[index] = val;
+            },
+            toString: () => (ObjectExt.IsDefined(newNode.content()) ? newNode.content() : "")
+        };
+        if (ObjectExt.IsDefined(newNode.content))
+            this.map.set(index, newNode);
+        return newNode;
+    }
+    print() {
+        let str = "";
+        for (let y = 0; y < this.height; y++) {
+            const line = [];
+            for (let x = 0; x < this.width; x++) {
+                line.push(this.getNode(x, y).toString());
+            }
+            str += `${line.join("  ")}\n`;
+        }
+        console.log(str);
+    }
+    distanceToGoal(nodeA, nodeB) {
+        return Math.hypot(nodeB.x - nodeA.x, nodeB.y - nodeA.y);
+    }
+    pathfinding(from, to, isValid) {
+        const parent = new Map();
+        const queue = new PriorityQueue();
+        queue.add(1, from);
+        parent.set(from, undefined);
+        while (queue.hasNext()) {
+            const node = queue.next();
+            if (node === to) {
+                const res = [];
+                let current = node;
+                while (current) {
+                    const before = parent.get(current);
+                    if (before)
+                        res.push(current);
+                    current = before ? before.parent : undefined;
+                }
+                return res.reverse();
+            }
+            const cur = parent.get(node);
+            for (const next of node.neighbors()) {
+                if (!isValid({ from: node, to: next }))
+                    continue;
+                const distanceToOrigin = cur ? cur.cost : 0;
+                if (parent.has(next))
+                    continue;
+                const heuristic = distanceToOrigin + this.distanceToGoal(to, next);
+                queue.add(heuristic, next);
+                parent.set(next, { parent: node, cost: distanceToOrigin + 1 });
+            }
+        }
+        return [];
+    }
+}
+
+var SquareGridNodeType;
+(function (SquareGridNodeType) {
+    SquareGridNodeType[SquareGridNodeType["TILE"] = 0] = "TILE";
+    SquareGridNodeType[SquareGridNodeType["HWALL"] = 1] = "HWALL";
+    SquareGridNodeType[SquareGridNodeType["VWALL"] = 2] = "VWALL";
+    SquareGridNodeType[SquareGridNodeType["CORNER"] = 3] = "CORNER";
+})(SquareGridNodeType || (SquareGridNodeType = {}));
+/**
+ * Implementation of 2D Grid with thin walls
+ *
+ * @export
+ * @class SquareGrid
+ * @template T
+ */
+class SquareGridWall extends SquareGrid {
+    constructor(width, height, diagonal = false, init) {
+        super(width * 2 + 1, height * 2 + 1, diagonal);
+        this.widthTile = width;
+        this.heightTile = height;
+        if (init) {
+            // init tiles
+            for (let i = 0; i < this.widthTile; i++) {
+                for (let j = 0; j < this.heightTile; j++) {
+                    const index = this.getIndex(i * 2 + 1, j * 2 + 1);
+                    this.cells[index] = init(i, j, SquareGridNodeType.TILE);
+                }
+            }
+            // init walls
+            for (let i = 0; i < this.widthTile + 1; i++) {
+                for (let j = 0; j < this.heightTile + 1; j++) {
+                    // corner
+                    const indexCorner = this.getIndex(i * 2, j * 2);
+                    this.cells[indexCorner] = init(i - 0.5, j - 0.5, SquareGridNodeType.CORNER);
+                    // left
+                    const indexLeft = this.getIndex(i * 2, j * 2 + 1);
+                    this.cells[indexLeft] = init(i - 0.5, j, SquareGridNodeType.VWALL);
+                    // top
+                    if (i < this.widthTile) {
+                        const indexTop = this.getIndex(i * 2 + 1, j * 2);
+                        this.cells[indexTop] = init(i, j - 0.5, SquareGridNodeType.HWALL);
+                    }
+                }
+            }
+        }
+    }
+    getTile(x, y, type = SquareGridNodeType.TILE) {
+        if (type === SquareGridNodeType.CORNER)
+            return this.getNode(x * 2, y * 2);
+        else if (type === SquareGridNodeType.VWALL)
+            return this.getNode(x * 2, y * 2 + 1);
+        else if (type === SquareGridNodeType.HWALL)
+            return this.getNode(x * 2 + 1, y * 2);
+        return this.getNode(x * 2 + 1, y * 2 + 1);
+    }
+    getNode(x, y) {
+        const index = this.getIndex(x, y);
+        const node = this.map.get(index);
+        if (node)
+            return node;
+        const newNode = {
+            x,
+            y,
+            index,
+            up: () => this.getNode(x, y - 2),
+            down: () => this.getNode(x, y + 2),
+            right: () => this.getNode(x + 2, y),
+            left: () => this.getNode(x - 2, y),
+            upWall: () => this.getNode(x, y - 1),
+            downWall: () => this.getNode(x, y + 1),
+            rightWall: () => this.getNode(x + 1, y),
+            leftWall: () => this.getNode(x - 1, y),
+            walls: () => {
+                const neighbors = [];
+                if (inRange(y - 1, 0, this.height - 1))
+                    neighbors.push(newNode.upWall());
+                if (inRange(y + 1, 0, this.height - 1))
+                    neighbors.push(newNode.downWall());
+                if (inRange(x - 1, 0, this.width - 1))
+                    neighbors.push(newNode.leftWall());
+                if (inRange(x + 1, 0, this.width - 1))
+                    neighbors.push(newNode.rightWall());
+                return neighbors;
+            },
+            neighbors: () => {
+                const neighbors = [];
+                if (inRange(y - 2, 0, this.height - 1))
+                    neighbors.push(newNode.up());
+                if (inRange(y + 2, 0, this.height - 1))
+                    neighbors.push(newNode.down());
+                if (inRange(x - 2, 0, this.width - 1))
+                    neighbors.push(newNode.left());
+                if (inRange(x + 2, 0, this.width - 1))
+                    neighbors.push(newNode.right());
+                if (this.diagonal) {
+                    const topLeft = inRange(x - 2, 0, this.width - 1) && inRange(y - 2, 0, this.height - 1);
+                    const topRight = inRange(x + 2, 0, this.width - 1) && inRange(y - 2, 0, this.height - 1);
+                    const bottomLeft = inRange(x - 2, 0, this.width - 1) && inRange(y + 2, 0, this.height - 1);
+                    const bottomRight = inRange(x + 2, 0, this.width - 1) && inRange(y + 2, 0, this.height - 1);
+                    if (topLeft)
+                        neighbors.push(newNode.up().left());
+                    if (topRight)
+                        neighbors.push(newNode.up().right());
+                    if (bottomLeft)
+                        neighbors.push(newNode.down().left());
+                    if (bottomRight)
+                        neighbors.push(newNode.down().right());
+                }
+                return neighbors;
+            },
+            content: () => {
+                return inRange(index, 0, this.cells.length) ? this.cells[index] : undefined;
+            },
+            set: (val) => {
+                this.cells[index] = val;
+            },
+            toString: () => (ObjectExt.IsDefined(newNode.content()) ? newNode.content() : "")
+        };
+        if (ObjectExt.IsDefined(newNode.content))
+            this.map.set(index, newNode);
+        return newNode;
+    }
+    pathfinding(from, to, isValid) {
+        return super.pathfinding(from, to, arg => {
+            const middle = this.getNode(ArrayExt.avg([arg.from.x, arg.to.x]), ArrayExt.avg([arg.from.y, arg.to.y]));
+            return isValid({
+                from: arg.from,
+                to: arg.from,
+                wall: middle
+            });
+        });
+    }
+}
+
+/**
+ * Delay event to be processed later (based on an update)
+ *
+ * Example: render event computed only once a frame at the end
+ *
+ * @export
+ * @class DelayedEvent
+ */
+class DelayedEvent {
+    constructor(event, distinct = true) {
+        this.queue = [];
+        if (event)
+            event.on(evt => this.emit(evt));
+        this.ouput = new Event();
+        this.distinct = distinct;
+    }
+    get enable() {
+        return this.ouput.enable;
+    }
+    clear() {
+        this.queue.length = 0;
+        this.ouput.clear();
+    }
+    on(listener) {
+        return this.ouput.on(listener);
+    }
+    once(listener) {
+        this.ouput.once(listener);
+    }
+    off(listener) {
+        return this.ouput.off(listener);
+    }
+    update() {
+        if (!this.enable)
+            return;
+        for (const evt of this.queue) {
+            this.ouput.emit(evt);
+        }
+        this.queue.length = 0;
+    }
+    emit(event, force = false) {
+        if (!this.enable)
+            return;
+        if (force)
+            return this.ouput.emit(event);
+        if (this.distinct) {
+            if (this.queue.includes(event))
+                return;
+        }
+        this.queue.push(event);
+    }
+}
+
+/* eslint @typescript-eslint/no-use-before-define: 0 */
+const updateLoopChannel = "_updateLoop";
+var EventBusChannelType;
+(function (EventBusChannelType) {
+    EventBusChannelType["Direct"] = "direct";
+    EventBusChannelType["Delayed"] = "delayed";
+})(EventBusChannelType || (EventBusChannelType = {}));
+class EventBusChannelDelayed extends DelayedEvent {
+    constructor(name) {
+        super();
+        this.name = name;
+        this.logger = new Logger();
+        this.logger.prefix = `[EventBus: ${name}]`;
+        this.logger.debug("Create EventBus Channel Delayed");
+        this.evt = EventBus.channel(updateLoopChannel).on(() => this.update());
+    }
+    clear() {
+        this.logger.debug(`Delete EventBus Channel`);
+        this.evt.dispose();
+        super.clear();
+    }
+    on(listener) {
+        this.logger.debug(`Add Listener ${listener}`);
+        return super.on(listener);
+    }
+    once(listener) {
+        this.logger.debug(`Add OnceListener ${listener}`);
+        super.once(listener);
+    }
+    off(listener) {
+        this.logger.debug(`Remove Listener ${listener}`);
+        super.off(listener);
+    }
+    update() {
+        if (!this.enable)
+            return;
+        for (const event of this.queue) {
+            this.logger.debug(`UpdateLoop: Emit event ${event}`);
+        }
+        super.update();
+    }
+    emit(event, force = false) {
+        if (!this.enable)
+            return;
+        this.logger.debug(`Queue Emit event ${event}`);
+        super.emit(event, force);
+    }
+}
+class EventBusChannel extends Event {
+    constructor(name) {
+        super();
+        this.name = name;
+        this.logger = new Logger();
+        this.logger.prefix = `[EventBus: ${name}]`;
+        this.logger.debug("Create EventBus Channel");
+    }
+    clear() {
+        this.logger.debug(`Delete EventBus Channel`);
+        super.clear();
+    }
+    on(listener) {
+        this.logger.debug(`Add Listener ${listener}`);
+        return super.on(listener);
+    }
+    once(listener) {
+        this.logger.debug(`Add OnceListener ${listener}`);
+        super.once(listener);
+    }
+    off(listener) {
+        this.logger.debug(`Remove Listener ${listener}`);
+        super.off(listener);
+    }
+    emit(event) {
+        if (!this.enable)
+            return;
+        this.logger.debug(`Emit event ${event}`);
+        super.emit(event);
+    }
+}
+/**
+ * Event Bus is a good way to decouple components and share event without having direct dependencies
+ *
+ * @export
+ * @class EventBus
+ */
+class EventBus {
+    static initialize() {
+        if (this.map)
+            return;
+        this.map = new Map();
+        this.create(updateLoopChannel);
+    }
+    static get channelNames() {
+        this.initialize();
+        return Array.from(this.map.keys());
+    }
+    static create(name, type = EventBusChannelType.Direct) {
+        this.initialize();
+        const chan = this.map.get(name);
+        if (chan) {
+            logger.warn("channel already exist", name);
+            return chan;
+        }
+        let newChan;
+        switch (type) {
+            case EventBusChannelType.Direct:
+                newChan = new EventBusChannel(name);
+                break;
+            case EventBusChannelType.Delayed:
+                newChan = new EventBusChannelDelayed(name);
+                break;
+            default:
+                throw new Error("unknown type of event bus");
+        }
+        this.map.set(name, newChan);
+        return newChan;
+    }
+    static update() {
+        this.initialize();
+        this.channel(updateLoopChannel).emit(0);
+    }
+    static delete(name) {
+        this.initialize();
+        const chan = this.map.get(name);
+        if (!chan)
+            return;
+        chan.clear();
+        this.map.delete(name);
+    }
+    static channel(name) {
+        this.initialize();
+        if (!this.map.has(name))
+            throw new Error("Unknown bus channel : " + name);
+        return this.map.get(name);
+    }
+}
+
+/**
+ * Method used to create a proxy around some data an get event
+ *
+ * Inspired by `on-change` but simpler (https://github.com/sindresorhus/on-change/)
+ *
+ * @export
+ * @param {*} objToWatch
+ * @param {(prop: string, value?: any, previous?: any) => void} onChangeFunction
+ * @returns {Proxy}
+ */
+function onChange(objToWatch, onChangeFunction) {
+    const map = new WeakMap();
+    const getRootPath = (val) => {
+        const path = map.get(val) || "";
+        return path ? `${path}.` : "";
+    };
+    const handler = {
+        get(target, property, receiver) {
+            const path = getRootPath(target) + property;
+            const value = Reflect.get(target, property, receiver);
+            if (typeof value === "object" && value !== null) {
+                map.set(value, path);
+                return new Proxy(value, handler);
+            }
+            /* istanbul ignore next */
+            return value;
+        },
+        set(target, property, value) {
+            const path = getRootPath(target) + property;
+            const prev = target[property];
+            if (value === prev)
+                return true;
+            const res = Reflect.set(target, property, value);
+            onChangeFunction(path, value, prev);
+            return res;
+        },
+        deleteProperty(target, property) {
+            const path = getRootPath(target) + property;
+            const prev = target[property];
+            if (map.has(target))
+                map.delete(target);
+            const res = Reflect.deleteProperty(target, property);
+            onChangeFunction(path, undefined, prev);
+            return res;
+        }
+    };
+    map.set(objToWatch, "");
+    return new Proxy(objToWatch, handler);
 }
 
 // Used only as a polyfill for DOMMatrix
@@ -832,154 +1845,6 @@ class DOMRect$1 {
     }
 }
 
-class ArrayExt {
-    /**
-     * Create an array of n elements with value val
-     *
-     * createSimilar(3, 2) -> [2, 2, 2]
-     *
-     * @param {number} n
-     * @param {number} [val=0]
-     * @returns
-     */
-    static createSimilar(n, val = 0) {
-        return ArrayExt.create(n, () => val);
-    }
-    /**
-     * Create an array of n elements ordered starting at start
-     *
-     * createOrder(3, 1) -> [1, 2, 3]
-     *
-     * @param {number} n
-     * @param {number} [start=1]
-     * @returns
-     */
-    static createOrder(n, start = 1) {
-        return ArrayExt.create(n, i => start + i);
-    }
-    static create(n, cb) {
-        const res = new Array(n);
-        for (let i = 0; i < n; i++) {
-            res[i] = cb(i);
-        }
-        return res;
-    }
-    static isEmpty(arr) {
-        if (arr.length === 0) {
-            return true;
-        }
-        return false;
-    }
-    static clone(arr) {
-        return arr.slice();
-    }
-    static first(arr) {
-        return arr[0];
-    }
-    static last(arr) {
-        return arr[arr.length - 1];
-    }
-    static insert(arr, index, value) {
-        const array = ArrayExt.clone(arr);
-        array.splice(index, 0, value);
-        return array;
-    }
-    static removeIndex(arr, index) {
-        const array = ArrayExt.clone(arr);
-        array.splice(index, 1);
-        return array;
-    }
-    static remove(arr, element) {
-        return ArrayExt.clone(arr).filter(x => x !== element);
-    }
-    static sum(arr) {
-        return arr.reduce((prev, curr) => prev + curr);
-    }
-    static avg(arr) {
-        return ArrayExt.sum(arr) / arr.length;
-    }
-    static random(arr) {
-        const index = Math.floor(Math.random() * (Math.floor(arr.length - 1) + 1));
-        return arr[index];
-    }
-    static shuffle(arr) {
-        return ArrayExt.clone(arr).sort(() => Math.random() - 0.5);
-    }
-}
-
-/* istanbul ignore file */
-/**
- * Common utilities
- */
-// Configuration Constants
-const EPSILON = 0.000001;
-const ARRAY_TYPE = Array;
-const RANDOM = Math.random;
-const degree = Math.PI / 180;
-/**
- * Convert Degree To Radian
- *
- * @param {Number} a Angle in Degrees
- */
-function toRadian(a) {
-    return a * degree;
-}
-function toDegree(a) {
-    return a / degree;
-}
-function clamp(val, min, max) {
-    return Math.max(Math.min(val, max), min);
-}
-function clamp01(val) {
-    return clamp(val, 0, 1);
-}
-/**
- * Number Equal, approximately (+-epsilon)
- *
- * @export
- * @param {number} a
- * @param {number} b
- */
-function numberEqual(a, b) {
-    return Math.abs(a - b) < EPSILON;
-}
-/**
- * Round to a certain amount of decimals
- *
- * @export
- * @param {number} value
- * @param {number} [decimals=2]
- */
-function roundTo(value, decimals = 2) {
-    return +value.toFixed(decimals + EPSILON);
-}
-/**
- * Tests whether or not the arguments have approximately the same value, within an absolute
- * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less
- * than or equal to 1.0, and a relative tolerance is used for larger values)
- *
- * @param {Number} a The first number to test.
- * @param {Number} b The second number to test.
- * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
- */
-function equals(a, b) {
-    return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
-}
-
-var math = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	EPSILON: EPSILON,
-	ARRAY_TYPE: ARRAY_TYPE,
-	RANDOM: RANDOM,
-	toRadian: toRadian,
-	toDegree: toDegree,
-	clamp: clamp,
-	clamp01: clamp01,
-	numberEqual: numberEqual,
-	roundTo: roundTo,
-	equals: equals
-});
-
 /* istanbul ignore file */
 class DOMVector2 {
     constructor(x = 0, y = 0) {
@@ -1335,334 +2200,85 @@ function createCircle(options) {
     });
 }
 
-/// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
-class Event {
-    constructor() {
-        this.listeners = [];
-        this.listenersOncer = [];
-    }
-    on(listener) {
-        this.listeners.push(listener);
-        return { dispose: () => this.off(listener) };
-    }
-    once(listener) {
-        this.listenersOncer.push(listener);
-    }
-    off(listener) {
-        const callbackIndex = this.listeners.indexOf(listener);
-        if (callbackIndex > -1)
-            this.listeners.splice(callbackIndex, 1);
-    }
-    emit(event) {
-        /** Update any general listeners */
-        this.listeners.forEach(listener => listener(event));
-        /** Clear the `once` queue */
-        if (this.listenersOncer.length > 0) {
-            const toCall = this.listenersOncer;
-            this.listenersOncer = [];
-            toCall.forEach(listener => listener(event));
-        }
-    }
-}
-/**
- * Delay event to be processed later
- * Example: render event computed only once a frame at the end
- *
- * @export
- * @class DelayedEvent
- */
-class DelayedEvent {
-    constructor(event, distinct = true) {
-        this.queue = [];
-        if (event)
-            event.on(evt => this.emit(evt));
-        this.ouput = new Event();
-        this.distinct = distinct;
-    }
-    on(listener) {
-        return this.ouput.on(listener);
-    }
-    once(listener) {
-        this.ouput.once(listener);
-    }
-    off(listener) {
-        return this.ouput.off(listener);
-    }
-    update() {
-        for (const evt of this.queue) {
-            this.ouput.emit(evt);
-        }
-        this.queue.length = 0;
-    }
-    emit(event, force = false) {
-        if (force)
-            return this.ouput.emit(event);
-        if (this.distinct) {
-            if (this.queue.includes(event))
-                return;
-        }
-        this.queue.push(event);
-    }
-}
-
-const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-/**
- * Create a `uid` [a-zA-z0-9]
- *
- * @param {Number} len
- * @return {String} uid
- */
-function uid(len = 8) {
-    let id = "";
-    while (len--) {
-        id += url[(Math.random() * 62) | 0];
-    }
-    return id;
-}
-
-var LogLevel;
-(function (LogLevel) {
-    LogLevel[LogLevel["INFO"] = 0] = "INFO";
-    LogLevel[LogLevel["WARN"] = 1] = "WARN";
-    LogLevel[LogLevel["ERROR"] = 2] = "ERROR";
-    LogLevel[LogLevel["OFF"] = 3] = "OFF";
-})(LogLevel || (LogLevel = {}));
-class Logger {
-    constructor() {
-        this.eventHandler = new Event();
-        this._prefix = "";
-        this._level = 0;
-        this._console = true;
-    }
-    get events() {
-        return this.eventHandler;
-    }
-    get prefix() {
-        return this._prefix;
-    }
-    set prefix(val) {
-        this._prefix = val;
-    }
-    get level() {
-        return this._level;
-    }
-    set level(val) {
-        this._level = val;
-    }
-    get console() {
-        return this._console;
-    }
-    set console(val) {
-        this._console = val;
-    }
-    info(...params) {
-        if (this.level > LogLevel.INFO)
-            return;
-        if (this._console)
-            console.info(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.INFO, this.prefix, ...params]);
-    }
-    warn(...params) {
-        if (this.level > LogLevel.WARN)
-            return;
-        if (this._console)
-            console.warn(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.WARN, this.prefix, ...params]);
-    }
-    error(...params) {
-        if (this.level > LogLevel.ERROR)
-            return;
-        if (this._console)
-            console.error(this.prefix, ...params);
-        this.eventHandler.emit([LogLevel.ERROR, this.prefix, ...params]);
-    }
-}
-const logger = new Logger();
-
-/**
- * Method used to create a proxy around some data an get event
- *
- * Inspired by `on-change` but simpler (https://github.com/sindresorhus/on-change/)
- *
- * @export
- * @param {*} objToWatch
- * @param {(prop: string, value?: any, previous?: any) => void} onChangeFunction
- * @returns {Proxy}
- */
-function onChange(objToWatch, onChangeFunction) {
-    const map = new WeakMap();
-    const getRootPath = (val) => {
-        const path = map.get(val) || "";
-        return path ? `${path}.` : "";
-    };
-    const handler = {
-        get(target, property, receiver) {
-            const path = getRootPath(target) + property;
-            const value = Reflect.get(target, property, receiver);
-            if (typeof value === "object" && value !== null) {
-                map.set(value, path);
-                return new Proxy(value, handler);
-            }
-            /* istanbul ignore next */
-            return value;
-        },
-        set(target, property, value) {
-            const path = getRootPath(target) + property;
-            const prev = target[property];
-            if (value === prev)
-                return true;
-            const res = Reflect.set(target, property, value);
-            onChangeFunction(path, value, prev);
-            return res;
-        },
-        deleteProperty(target, property) {
-            const path = getRootPath(target) + property;
-            const prev = target[property];
-            if (map.has(target))
-                map.delete(target);
-            const res = Reflect.deleteProperty(target, property);
-            onChangeFunction(path, undefined, prev);
-            return res;
-        }
-    };
-    map.set(objToWatch, "");
-    return new Proxy(objToWatch, handler);
-}
-
-// To reuse export `rng` const without hacking around
-/* eslint @typescript-eslint/no-use-before-define: 0 */
-class SeededRandom {
-    constructor(seed) {
-        this.seed = seed;
-    }
-    next() {
-        this.seed = (this.seed * 9301 + 49297) % 233280;
-        return this.seed / 233280.0;
-    }
-    rand() {
-        return this.next();
-    }
-    randBool() {
-        return this.randRangeInt(0, 1) === 0;
-    }
-    randRangeFloat(min, max) {
-        return rng.randRangeFloat(min, max, this.next());
-    }
-    randRangeInt(min, max) {
-        return rng.randRangeInt(min, max, this.next());
-    }
-    randArray(arr) {
-        const index = rng.randRangeInt(0, arr.length - 1);
-        return arr[index];
-    }
-}
-class Random {
-    rand() {
-        return Math.random();
-    }
-    randBool() {
-        return this.randRangeInt(0, 1) === 0;
-    }
-    randRangeFloat(min, max, rng) {
-        if (!rng)
-            rng = Math.random();
-        return rng * (max - min) + min;
-    }
-    randRangeInt(min, max, rng) {
-        if (!rng)
-            rng = Math.random();
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(rng * (max - min + 1)) + min;
-    }
-    randArray(arr) {
-        const index = this.randRangeInt(0, arr.length - 1);
-        return arr[index];
-    }
-    createSeededRandom(seed = -1) {
-        return new SeededRandom(seed);
-    }
-}
-const rng = new Random();
-
-/**
- * Provide polyfill around Date.now()
- */
-const now = typeof Date.now === "function" ? Date.now : new Date().getTime;
-const start = now();
-/**
- * Provide polyfill around performance.now()
- */
-/* istanbul ignore next */
-const perf = () => {
-    if (globalThis && globalThis.performance) {
-        return globalThis.performance.now();
-    }
-    else if (globalThis.process) {
-        return process.hrtime()[1];
-    }
-    return now() - start;
-};
-
-class StringExt {
-    static isNullOrEmpty(val) {
-        if (val === undefined || val === null || val.trim() === "") {
-            return true;
-        }
-        return false;
-    }
-    static capitalize(val) {
-        if (val.length == 1) {
-            return val.toUpperCase();
-        }
-        else if (val.length > 0) {
-            return val.substring(0, 1).toUpperCase() + val.substring(1);
-        }
-        return val;
-    }
-    static capitalizeWords(val) {
-        const regexp = /\s/;
-        const words = val.split(regexp);
-        if (words.length == 1) {
-            return StringExt.capitalize(words[0]);
-        }
-        let result = "";
-        for (let i = 0; i < words.length; i++) {
-            if (StringExt.capitalize(words[i]) !== null) {
-                result += StringExt.capitalize(words[i]) + " ";
-            }
-        }
-        return result.trim();
-    }
-    static contains(val, search) {
-        return val.indexOf(search) !== -1;
-    }
-    static slugify(val, lower = true) {
-        if (lower)
-            val = val.toLowerCase();
-        return val.normalize().replace(/[^a-z0-9]/gi, "-");
-    }
-}
-
-class ObjectExt {
-    static isString(val) {
-        return Object.prototype.toString.call(val) === "[object String]";
-    }
-    static isArray(val) {
-        return Array.isArray(val);
-    }
-    static isNumeric(value) {
-        return !isNaN(value - parseFloat(value));
-    }
-    static clone(obj) {
-        return Object.assign({}, obj);
-    }
-}
-
 class Color {
+    //#endregion Default Palette
     constructor(h, s, l) {
         this.color = { h: Math.round(h), s: Math.round(s), l: Math.round(l) };
         this.validate();
+    }
+    //#endregion Default Colors
+    //#region Default Palette
+    static americanPalette() {
+        return [
+            Color.fromRGB([85, 239, 196]),
+            Color.fromRGB([0, 184, 148]),
+            Color.fromRGB([255, 234, 167]),
+            Color.fromRGB([253, 203, 110]),
+            Color.fromRGB([129, 236, 236]),
+            Color.fromRGB([0, 206, 201]),
+            Color.fromRGB([250, 177, 160]),
+            Color.fromRGB([225, 112, 85]),
+            Color.fromRGB([116, 185, 255]),
+            Color.fromRGB([9, 132, 227]),
+            Color.fromRGB([255, 118, 117]),
+            Color.fromRGB([214, 48, 49]),
+            Color.fromRGB([162, 155, 254]),
+            Color.fromRGB([108, 92, 231]),
+            Color.fromRGB([253, 121, 168]),
+            Color.fromRGB([232, 67, 147]),
+            Color.fromRGB([223, 230, 233]),
+            Color.fromRGB([178, 190, 195]),
+            Color.fromRGB([99, 110, 114]),
+            Color.fromRGB([45, 52, 54])
+        ];
+    }
+    static flatPalette() {
+        return [
+            Color.fromRGB([26, 188, 156]),
+            Color.fromRGB([22, 160, 133]),
+            Color.fromRGB([241, 196, 15]),
+            Color.fromRGB([243, 156, 18]),
+            Color.fromRGB([46, 204, 113]),
+            Color.fromRGB([39, 174, 96]),
+            Color.fromRGB([230, 126, 34]),
+            Color.fromRGB([211, 84, 0]),
+            Color.fromRGB([52, 152, 219]),
+            Color.fromRGB([41, 128, 185]),
+            Color.fromRGB([231, 76, 60]),
+            Color.fromRGB([192, 57, 43]),
+            Color.fromRGB([155, 89, 182]),
+            Color.fromRGB([142, 68, 173]),
+            Color.fromRGB([236, 240, 241]),
+            Color.fromRGB([189, 195, 199]),
+            Color.fromRGB([52, 73, 94]),
+            Color.fromRGB([44, 62, 80]),
+            Color.fromRGB([149, 165, 166]),
+            Color.fromRGB([127, 140, 141])
+        ];
+    }
+    static germanPalette() {
+        return [
+            Color.fromRGB([252, 92, 101]),
+            Color.fromRGB([253, 150, 68]),
+            Color.fromRGB([254, 211, 48]),
+            Color.fromRGB([38, 222, 129]),
+            Color.fromRGB([43, 203, 186]),
+            Color.fromRGB([235, 59, 90]),
+            Color.fromRGB([250, 130, 49]),
+            Color.fromRGB([247, 183, 49]),
+            Color.fromRGB([32, 191, 107]),
+            Color.fromRGB([15, 185, 177]),
+            Color.fromRGB([69, 170, 242]),
+            Color.fromRGB([75, 123, 236]),
+            Color.fromRGB([165, 94, 234]),
+            Color.fromRGB([209, 216, 224]),
+            Color.fromRGB([119, 140, 163]),
+            Color.fromRGB([45, 152, 218]),
+            Color.fromRGB([56, 103, 214]),
+            Color.fromRGB([136, 84, 208]),
+            Color.fromRGB([165, 177, 194]),
+            Color.fromRGB([75, 101, 132])
+        ];
     }
     validate() {
         this.color.h = Math.max(this.color.h % 360, 0);
@@ -1778,7 +2394,7 @@ class Color {
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
         let h = (max + min) / 2;
-        let s = h;
+        let s = 0;
         let l = h;
         if (max == min) {
             h = 0;
@@ -1806,6 +2422,39 @@ class Color {
         return new Color(h, s, l);
     }
 }
+//#region Default Colors
+// gray scale
+Color.white = () => Color.fromRGB([255, 255, 255]);
+Color.silver = () => Color.fromRGB([192, 192, 192]);
+Color.gray = () => Color.fromRGB([128, 128, 128]);
+Color.black = () => Color.fromRGB([0, 0, 0]);
+// rgb
+Color.red = () => Color.fromRGB([255, 0, 0]);
+Color.maroon = () => Color.fromRGB([128, 0, 0]);
+Color.green = () => Color.fromRGB([0, 255, 0]);
+Color.greenDeep = () => Color.fromRGB([0, 128, 0]);
+Color.blue = () => Color.fromRGB([0, 0, 255]);
+Color.navy = () => Color.fromRGB([0, 0, 128]);
+// mix
+Color.yellow = () => Color.fromRGB([255, 255, 0]);
+Color.yellowPale = () => Color.fromRGB([255, 255, 128]);
+Color.olive = () => Color.fromRGB([128, 128, 0]);
+Color.aqua = () => Color.fromRGB([0, 255, 255]);
+Color.cyan = () => Color.fromRGB([128, 255, 255]);
+Color.teal = () => Color.fromRGB([0, 128, 128]);
+Color.pink = () => Color.fromRGB([255, 0, 255]);
+Color.purple = () => Color.fromRGB([128, 0, 128]);
+Color.magenta = () => Color.fromRGB([255, 128, 255]);
+// half mix
+Color.orange = () => Color.fromRGB([255, 128, 0]);
+Color.rose = () => Color.fromRGB([255, 0, 128]);
+Color.flamingo = () => Color.fromRGB([255, 128, 128]);
+Color.kiwi = () => Color.fromRGB([128, 255, 0]);
+Color.greenLime = () => Color.fromRGB([0, 255, 128]);
+Color.greenPale = () => Color.fromRGB([128, 255, 128]);
+Color.blueBolt = () => Color.fromRGB([0, 128, 255]);
+Color.violet = () => Color.fromRGB([128, 0, 255]);
+Color.blueSky = () => Color.fromRGB([128, 128, 255]);
 
 /* istanbul ignore file */
 /**
@@ -2008,4 +2657,4 @@ class RectTransformMatrix extends TransformMatrix {
 
 const name = "Coopa";
 
-export { ArrayExt, BinarySearchTree, Color, DOM, DOMVector2, DOMVector3, DelayedEvent, Event, LogLevel, ObjectExt, Random, RectTransformMatrix, SeededRandom, StringExt, TransformMatrix, createCircle, createImageContext, createMatrix, createPoint, createRect, decomposeMatrix, logger, mapMatrix, math, matrix2dToCSS, matrix3dToCSS, matrix3dValues, name, now, onChange, perf, resetMatrix, rng, uid };
+export { ARRAY_TYPE, ArrayExt, BinarySearchTree, Color, DOM, DOMVector2, DOMVector3, DelayedEvent, EPSILON, Event, EventBus, EventBusChannel, EventBusChannelDelayed, EventBusChannelType, LogLevel, Logger, ObjectExt, PriorityQueue, PriorityQueueOrder, RANDOM, Random, RectTransformMatrix, SeededRandom, SquareGrid, SquareGridNodeType, SquareGridWall, StringExt, TransformMatrix, clamp, clamp01, createCircle, createImageContext, createMatrix, createPoint, createRect, decomposeMatrix, equals, inRange, logger, mapMatrix, matrix2dToCSS, matrix3dToCSS, matrix3dValues, name, now, numberEqual, onChange, perf, resetMatrix, rng, roundTo, toDegree, toRadian, uid };

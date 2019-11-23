@@ -12,6 +12,16 @@ declare class TreeNode<Key extends number | string, Val> {
  */
 export declare class BinarySearchTree<Key extends number | string, Val> {
     private root;
+    get minKey(): Key;
+    get min(): TreeNode<Key, Val>;
+    get maxKey(): Key;
+    get max(): TreeNode<Key, Val>;
+    /**
+     * Check if the tree has at least one element
+     *
+     * @returns
+     */
+    isEmpty(): boolean;
     /**
      * Set tree node into the tree.
      * @param key
@@ -37,7 +47,8 @@ export declare class BinarySearchTree<Key extends number | string, Val> {
      */
     clear(): void;
     private delRecursively;
-    private min;
+    private findMin;
+    private findMax;
     /**
      * Return all tree nodes in binary search tree
      * @returns entries

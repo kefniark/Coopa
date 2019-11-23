@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 import { createMatrix, resetMatrix, matrix3dToCSS, matrix3dValues, DOMVector3, matrix2dToCSS } from "../geometry/index"
-import { ArrayExt, Event, onChange } from "../utils/index"
+import { ArrayExt } from "../extension/index"
+import { Event, onChange } from "../events/index"
 
 /**
  * Basic Transform class, provide (position, rotation, scale) and take care of transformation

@@ -23,9 +23,7 @@ export class StringExt {
 		}
 		let result = ""
 		for (let i = 0; i < words.length; i++) {
-			if (StringExt.capitalize(words[i]) !== null) {
-				result += StringExt.capitalize(words[i]) + " "
-			}
+			result += StringExt.capitalize(words[i]) + " "
 		}
 		return result.trim()
 	}

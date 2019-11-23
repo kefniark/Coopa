@@ -13,6 +13,7 @@ export declare function toRadian(a: number): number;
 export declare function toDegree(a: number): number;
 export declare function clamp(val: number, min: number, max: number): number;
 export declare function clamp01(val: number): number;
+export declare function inRange(val: number, min: number, max: number): boolean;
 /**
  * Number Equal, approximately (+-epsilon)
  *

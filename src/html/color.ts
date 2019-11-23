@@ -1,8 +1,124 @@
-import { clamp, numberEqual } from "../math/math"
-import { rng } from "../utils"
+import { rng, clamp, numberEqual } from "../utils/index"
 
 export class Color {
 	color: { h: number; s: number; l: number }
+
+	//#region Default Colors
+
+	// gray scale
+	static white = () => Color.fromRGB([255, 255, 255])
+	static silver = () => Color.fromRGB([192, 192, 192])
+	static gray = () => Color.fromRGB([128, 128, 128])
+	static black = () => Color.fromRGB([0, 0, 0])
+
+	// rgb
+	static red = () => Color.fromRGB([255, 0, 0])
+	static maroon = () => Color.fromRGB([128, 0, 0])
+	static green = () => Color.fromRGB([0, 255, 0])
+	static greenDeep = () => Color.fromRGB([0, 128, 0])
+	static blue = () => Color.fromRGB([0, 0, 255])
+	static navy = () => Color.fromRGB([0, 0, 128])
+
+	// mix
+	static yellow = () => Color.fromRGB([255, 255, 0])
+	static yellowPale = () => Color.fromRGB([255, 255, 128])
+	static olive = () => Color.fromRGB([128, 128, 0])
+	static aqua = () => Color.fromRGB([0, 255, 255])
+	static cyan = () => Color.fromRGB([128, 255, 255])
+	static teal = () => Color.fromRGB([0, 128, 128])
+	static pink = () => Color.fromRGB([255, 0, 255])
+	static purple = () => Color.fromRGB([128, 0, 128])
+	static magenta = () => Color.fromRGB([255, 128, 255])
+
+	// half mix
+	static orange = () => Color.fromRGB([255, 128, 0])
+	static rose = () => Color.fromRGB([255, 0, 128])
+	static flamingo = () => Color.fromRGB([255, 128, 128])
+	static kiwi = () => Color.fromRGB([128, 255, 0])
+	static greenLime = () => Color.fromRGB([0, 255, 128])
+	static greenPale = () => Color.fromRGB([128, 255, 128])
+	static blueBolt = () => Color.fromRGB([0, 128, 255])
+	static violet = () => Color.fromRGB([128, 0, 255])
+	static blueSky = () => Color.fromRGB([128, 128, 255])
+
+	//#endregion Default Colors
+
+	//#region Default Palette
+	static americanPalette() {
+		return [
+			Color.fromRGB([85, 239, 196]),
+			Color.fromRGB([0, 184, 148]),
+			Color.fromRGB([255, 234, 167]),
+			Color.fromRGB([253, 203, 110]),
+			Color.fromRGB([129, 236, 236]),
+			Color.fromRGB([0, 206, 201]),
+			Color.fromRGB([250, 177, 160]),
+			Color.fromRGB([225, 112, 85]),
+			Color.fromRGB([116, 185, 255]),
+			Color.fromRGB([9, 132, 227]),
+			Color.fromRGB([255, 118, 117]),
+			Color.fromRGB([214, 48, 49]),
+			Color.fromRGB([162, 155, 254]),
+			Color.fromRGB([108, 92, 231]),
+			Color.fromRGB([253, 121, 168]),
+			Color.fromRGB([232, 67, 147]),
+			Color.fromRGB([223, 230, 233]),
+			Color.fromRGB([178, 190, 195]),
+			Color.fromRGB([99, 110, 114]),
+			Color.fromRGB([45, 52, 54])
+		]
+	}
+
+	static flatPalette() {
+		return [
+			Color.fromRGB([26, 188, 156]),
+			Color.fromRGB([22, 160, 133]),
+			Color.fromRGB([241, 196, 15]),
+			Color.fromRGB([243, 156, 18]),
+			Color.fromRGB([46, 204, 113]),
+			Color.fromRGB([39, 174, 96]),
+			Color.fromRGB([230, 126, 34]),
+			Color.fromRGB([211, 84, 0]),
+			Color.fromRGB([52, 152, 219]),
+			Color.fromRGB([41, 128, 185]),
+			Color.fromRGB([231, 76, 60]),
+			Color.fromRGB([192, 57, 43]),
+			Color.fromRGB([155, 89, 182]),
+			Color.fromRGB([142, 68, 173]),
+			Color.fromRGB([236, 240, 241]),
+			Color.fromRGB([189, 195, 199]),
+			Color.fromRGB([52, 73, 94]),
+			Color.fromRGB([44, 62, 80]),
+			Color.fromRGB([149, 165, 166]),
+			Color.fromRGB([127, 140, 141])
+		]
+	}
+
+	static germanPalette() {
+		return [
+			Color.fromRGB([252, 92, 101]),
+			Color.fromRGB([253, 150, 68]),
+			Color.fromRGB([254, 211, 48]),
+			Color.fromRGB([38, 222, 129]),
+			Color.fromRGB([43, 203, 186]),
+			Color.fromRGB([235, 59, 90]),
+			Color.fromRGB([250, 130, 49]),
+			Color.fromRGB([247, 183, 49]),
+			Color.fromRGB([32, 191, 107]),
+			Color.fromRGB([15, 185, 177]),
+			Color.fromRGB([69, 170, 242]),
+			Color.fromRGB([75, 123, 236]),
+			Color.fromRGB([165, 94, 234]),
+			Color.fromRGB([209, 216, 224]),
+			Color.fromRGB([119, 140, 163]),
+			Color.fromRGB([45, 152, 218]),
+			Color.fromRGB([56, 103, 214]),
+			Color.fromRGB([136, 84, 208]),
+			Color.fromRGB([165, 177, 194]),
+			Color.fromRGB([75, 101, 132])
+		]
+	}
+	//#endregion Default Palette
 
 	constructor(h: number, s: number, l: number) {
 		this.color = { h: Math.round(h), s: Math.round(s), l: Math.round(l) }
@@ -145,7 +261,7 @@ export class Color {
 		const max = Math.max(r, g, b)
 		const min = Math.min(r, g, b)
 		let h = (max + min) / 2
-		let s = h
+		let s = 0
 		let l = h
 
 		if (max == min) {

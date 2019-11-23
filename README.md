@@ -41,12 +41,12 @@ ___
 ## Development
 
 ### Getting Started
-Automatically rebuild code on changed and start a local server with samples on `localhost:8085`
+Automatically rebuild code and start a local server with samples on `localhost:8085`
 ```sh
 npm run dev
 ```
 
-If you want to work on sample, I recommend using in another termin:
+If you want to work on samples, I recommend using in another terminal:
 ```sh
 npm run dev:livereload
 ```

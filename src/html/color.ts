@@ -43,7 +43,7 @@ export class Color {
 
 	//#endregion Default Colors
 
-	//#region Default Pallette
+	//#region Default Palette
 	static americanPalette() {
 		return [
 			Color.fromRGB([85, 239, 196]),
@@ -118,7 +118,7 @@ export class Color {
 			Color.fromRGB([75, 101, 132])
 		]
 	}
-	//#endregion Default Pallette
+	//#endregion Default Palette
 
 	constructor(h: number, s: number, l: number) {
 		this.color = { h: Math.round(h), s: Math.round(s), l: Math.round(l) }

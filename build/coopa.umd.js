@@ -2203,13 +2203,13 @@
 	}
 
 	class Color {
-	    //#endregion Default Pallette
+	    //#endregion Default Palette
 	    constructor(h, s, l) {
 	        this.color = { h: Math.round(h), s: Math.round(s), l: Math.round(l) };
 	        this.validate();
 	    }
 	    //#endregion Default Colors
-	    //#region Default Pallette
+	    //#region Default Palette
 	    static americanPalette() {
 	        return [
 	            Color.fromRGB([85, 239, 196]),

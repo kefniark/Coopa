@@ -36,7 +36,7 @@ test("Default Colors", () => {
 	expect(Color.violet()).toBeDefined()
 	expect(Color.blueSky()).toBeDefined()
 
-	// pallette
+	// palette
 	expect(Color.germanPalette()).toBeDefined()
 	expect(Color.flatPalette()).toBeDefined()
 	expect(Color.americanPalette()).toBeDefined()

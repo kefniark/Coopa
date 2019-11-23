@@ -32,9 +32,9 @@ export declare class Color {
     static blueBolt: () => Color;
     static violet: () => Color;
     static blueSky: () => Color;
-    static americanPallette(): Color[];
-    static flatPallette(): Color[];
-    static germanPallette(): Color[];
+    static americanPalette(): Color[];
+    static flatPalette(): Color[];
+    static germanPalette(): Color[];
     constructor(h: number, s: number, l: number);
     private validate;
     private hue2rgb;

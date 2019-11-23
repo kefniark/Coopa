@@ -37,9 +37,9 @@ test("Default Colors", () => {
 	expect(Color.blueSky()).toBeDefined()
 
 	// pallette
-	expect(Color.germanPallette()).toBeDefined()
-	expect(Color.flatPallette()).toBeDefined()
-	expect(Color.americanPallette()).toBeDefined()
+	expect(Color.germanPalette()).toBeDefined()
+	expect(Color.flatPalette()).toBeDefined()
+	expect(Color.americanPalette()).toBeDefined()
 })
 
 test("Import / Export", () => {
@@ -75,7 +75,7 @@ test("Import / Export", () => {
 	expect(colorA.hex()).toBeDefined()
 	expect(colorA.hsl()).toBeDefined()
 
-	for (var color of Color.germanPallette()) {
+	for (var color of Color.germanPalette()) {
 		expect(color.rgb()).toBeDefined()
 		expect(color.hex()).toBeDefined()
 		expect(color.hsl()).toBeDefined()

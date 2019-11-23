@@ -44,7 +44,7 @@ export class Color {
 	//#endregion Default Colors
 
 	//#region Default Pallette
-	static americanPallette() {
+	static americanPalette() {
 		return [
 			Color.fromRGB([85, 239, 196]),
 			Color.fromRGB([0, 184, 148]),
@@ -69,7 +69,7 @@ export class Color {
 		]
 	}
 
-	static flatPallette() {
+	static flatPalette() {
 		return [
 			Color.fromRGB([26, 188, 156]),
 			Color.fromRGB([22, 160, 133]),
@@ -94,7 +94,7 @@ export class Color {
 		]
 	}
 
-	static germanPallette() {
+	static germanPalette() {
 		return [
 			Color.fromRGB([252, 92, 101]),
 			Color.fromRGB([253, 150, 68]),

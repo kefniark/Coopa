@@ -117,7 +117,7 @@
 		resize()
 		window.addEventListener("resize", () => resize())
 
-		document.write(
+		document.write( // lgtm [js/eval-like-call]
 			'<script src="http://' +
 				(location.host || "localhost").split(":")[0] +
 				':35729/livereload.js?snipver=1"></' +

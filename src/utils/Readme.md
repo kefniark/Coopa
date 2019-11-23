@@ -1,12 +1,5 @@
+## Utils
 
-### Typed Events
-```ts
-import { Event } from "coopa"
-
-const event = new Event<string>()
-event.on(() => console.log('my event is called'))
-event.emit('message')
-```
 ### Id
 ```ts
 import { uid } from "coopa"
@@ -46,19 +39,6 @@ logger.prefix = "[MyLibrary]"
 logger.info("lol")
 logger.warn("warn", { a: 1 })
 logger.error("error", { a: 2 })
-```
-
-### OnChange
-```ts
-import { onChange } from "coopa"
-
-const data = { a: 2, c: 4 }
-const proxy = onChange(data, (prop, value) => console.log(`Property changed ${prop} = ${value}`))
-
-proxy.b = { a: 1, b: 2} // Add: Property changed `b` = { a: 1, b: 2 }
-proxy.a = 5 // Set: Property changed `a` = 5
-proxy.b.a = 5 // Set Chield: Property changed `b.a` = 5
-delete proxy.b // Delete: Property changed `b`
 ```
 
 ### Date

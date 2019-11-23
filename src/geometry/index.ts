@@ -2,9 +2,9 @@
 import * as matrix from "./matrix"
 import * as point from "./point"
 import * as rect from "./rect"
-import { ArrayExt } from "../utils/extension/array"
+import { ArrayExt } from "../extension/array"
 import { DOMVector3 } from "./vector"
-import { roundTo } from "../math/math"
+import { roundTo } from "../utils/math"
 
 const m = globalThis.DOMMatrix ? DOMMatrix : (matrix.DOMMatrix as any)
 const p = globalThis.DOMPoint ? DOMPoint : (point.DOMPoint as any)

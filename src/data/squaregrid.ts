@@ -1,6 +1,6 @@
-import { inRange } from "../math/math"
-import { ObjectExt } from "../utils"
-import { PriorityQueue } from "../algorithm"
+import { inRange } from "../utils/index"
+import { PriorityQueue } from "../algorithm/index"
+import { ObjectExt } from "../extension"
 
 export interface SquareGridNode<T> {
 	x: number
@@ -68,15 +68,15 @@ export class SquareGrid<T> {
 			left: () => this.getNode(x - 1, y),
 			neighbors: () => {
 				const neighbors = []
-				if (inRange(y - 1, 0, this.height)) neighbors.push(newNode.up())
+				if (inRange(y - 1, 0, this.height - 1)) neighbors.push(newNode.up())
 				if (inRange(y + 1, 0, this.height - 1)) neighbors.push(newNode.down())
-				if (inRange(x - 1, 0, this.width)) neighbors.push(newNode.left())
+				if (inRange(x - 1, 0, this.width - 1)) neighbors.push(newNode.left())
 				if (inRange(x + 1, 0, this.width - 1)) neighbors.push(newNode.right())
 				if (this.diagonal) {
-					const topLeft = inRange(x - 1, 0, this.width) && inRange(y - 1, 0, this.height)
-					const topRight = inRange(x + 1, 0, this.width) && inRange(y - 1, 0, this.height)
-					const bottomLeft = inRange(x - 1, 0, this.width) && inRange(y + 1, 0, this.height)
-					const bottomRight = inRange(x + 1, 0, this.width) && inRange(y + 1, 0, this.height)
+					const topLeft = inRange(x - 1, 0, this.width - 1) && inRange(y - 1, 0, this.height - 1)
+					const topRight = inRange(x + 1, 0, this.width - 1) && inRange(y - 1, 0, this.height - 1)
+					const bottomLeft = inRange(x - 1, 0, this.width - 1) && inRange(y + 1, 0, this.height - 1)
+					const bottomRight = inRange(x + 1, 0, this.width - 1) && inRange(y + 1, 0, this.height - 1)
 
 					if (topLeft) neighbors.push(newNode.up().left())
 					if (topRight) neighbors.push(newNode.up().right())
@@ -125,8 +125,7 @@ export class SquareGrid<T> {
 		parent.set(from, undefined)
 
 		while (queue.hasNext()) {
-			const node = queue.next()
-			if (!node) continue
+			const node = queue.next() as SquareGridNode<T>
 			if (node === to) {
 				const res: SquareGridNode<T>[] = []
 				let current: SquareGridNode<T> | undefined = node

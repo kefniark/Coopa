@@ -1,4 +1,5 @@
 /// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
+/* eslint @typescript-eslint/no-inferrable-types: 0 */
 
 export interface Listener<T> {
 	(event: T): any
@@ -8,9 +9,25 @@ export interface Disposable {
 	dispose(): void
 }
 
-export class Event<T> {
+export interface IEvent<T> {
+	enable: boolean
+	on(listener: Listener<T>): Disposable
+	once(listener: Listener<T>): void
+	off(listener: Listener<T>): void
+	emit(event: T): void
+	clear(): void
+}
+
+export class Event<T> implements IEvent<T> {
+	enable: boolean = true
 	private listeners: Listener<T>[] = []
 	private listenersOncer: Listener<T>[] = []
+
+	clear() {
+		this.enable = false
+		this.listeners.length = 0
+		this.listenersOncer.length = 0
+	}
 
 	on(listener: Listener<T>): Disposable {
 		this.listeners.push(listener)
@@ -27,6 +44,8 @@ export class Event<T> {
 	}
 
 	emit(event: T) {
+		if (!this.enable) return
+
 		/** Update any general listeners */
 		this.listeners.forEach(listener => listener(event))
 
@@ -36,51 +55,5 @@ export class Event<T> {
 			this.listenersOncer = []
 			toCall.forEach(listener => listener(event))
 		}
-	}
-}
-
-/**
- * Delay event to be processed later
- * Example: render event computed only once a frame at the end
- *
- * @export
- * @class DelayedEvent
- */
-export class DelayedEvent<T> {
-	private ouput: Event<T>
-	private queue: T[] = []
-	private distinct: boolean
-
-	constructor(event?: Event<T>, distinct = true) {
-		if (event) event.on(evt => this.emit(evt))
-		this.ouput = new Event<T>()
-		this.distinct = distinct
-	}
-
-	on(listener: Listener<T>): Disposable {
-		return this.ouput.on(listener)
-	}
-
-	once(listener: Listener<T>): void {
-		this.ouput.once(listener)
-	}
-
-	off(listener: Listener<T>): void {
-		return this.ouput.off(listener)
-	}
-
-	update() {
-		for (const evt of this.queue) {
-			this.ouput.emit(evt)
-		}
-		this.queue.length = 0
-	}
-
-	emit(event: T, force = false) {
-		if (force) return this.ouput.emit(event)
-		if (this.distinct) {
-			if (this.queue.includes(event)) return
-		}
-		this.queue.push(event)
 	}
 }

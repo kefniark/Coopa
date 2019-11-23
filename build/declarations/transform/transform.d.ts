@@ -1,5 +1,5 @@
 import { DOMVector3 } from "../geometry/index";
-import { Event } from "../utils/index";
+import { Event } from "../events/index";
 /**
  * Basic Transform class, provide (position, rotation, scale) and take care of transformation
  *

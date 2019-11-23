@@ -1,13 +1,14 @@
-import { Event } from "./events"
+import { Event } from "../events/event"
 
 export const enum LogLevel {
+	DEBUG = -1,
 	INFO = 0,
 	WARN = 1,
 	ERROR = 2,
 	OFF = 3
 }
 
-class Logger {
+export class Logger {
 	private eventHandler = new Event<any>()
 	get events() {
 		return this.eventHandler
@@ -35,6 +36,12 @@ class Logger {
 	}
 	set console(val: boolean) {
 		this._console = val
+	}
+
+	public debug(...params: any[]) {
+		if (this.level > LogLevel.DEBUG) return
+		if (this._console) console.debug(this.prefix, ...params)
+		this.eventHandler.emit([LogLevel.DEBUG, this.prefix, ...params])
 	}
 
 	public info(...params: any[]) {

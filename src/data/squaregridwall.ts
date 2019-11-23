@@ -1,6 +1,6 @@
-import { inRange } from "../math/math"
-import { ObjectExt, ArrayExt } from "../utils"
+import { inRange } from "../utils/index"
 import { SquareGrid, SquareGridNode } from "./squaregrid"
+import { ObjectExt, ArrayExt } from "../extension"
 
 export enum SquareGridNodeType {
 	TILE = 0,
@@ -112,24 +112,24 @@ export class SquareGridWall<T> extends SquareGrid<T> {
 
 			walls: () => {
 				const neighbors: SquareGridWallNode<T>[] = []
-				if (inRange(y - 1, 0, this.height)) neighbors.push(newNode.upWall())
+				if (inRange(y - 1, 0, this.height - 1)) neighbors.push(newNode.upWall())
 				if (inRange(y + 1, 0, this.height - 1)) neighbors.push(newNode.downWall())
-				if (inRange(x - 1, 0, this.width)) neighbors.push(newNode.leftWall())
+				if (inRange(x - 1, 0, this.width - 1)) neighbors.push(newNode.leftWall())
 				if (inRange(x + 1, 0, this.width - 1)) neighbors.push(newNode.rightWall())
 				return neighbors
 			},
 
 			neighbors: () => {
 				const neighbors: SquareGridWallNode<T>[] = []
-				if (inRange(y - 2, 0, this.height)) neighbors.push(newNode.up())
-				if (inRange(y + 2, 0, this.height - 2)) neighbors.push(newNode.down())
-				if (inRange(x - 2, 0, this.width)) neighbors.push(newNode.left())
-				if (inRange(x + 2, 0, this.width - 2)) neighbors.push(newNode.right())
+				if (inRange(y - 2, 0, this.height - 1)) neighbors.push(newNode.up())
+				if (inRange(y + 2, 0, this.height - 1)) neighbors.push(newNode.down())
+				if (inRange(x - 2, 0, this.width - 1)) neighbors.push(newNode.left())
+				if (inRange(x + 2, 0, this.width - 1)) neighbors.push(newNode.right())
 				if (this.diagonal) {
-					const topLeft = inRange(x - 2, 0, this.width) && inRange(y - 2, 0, this.height)
-					const topRight = inRange(x + 2, 0, this.width) && inRange(y - 2, 0, this.height)
-					const bottomLeft = inRange(x - 2, 0, this.width) && inRange(y + 2, 0, this.height)
-					const bottomRight = inRange(x + 2, 0, this.width) && inRange(y + 2, 0, this.height)
+					const topLeft = inRange(x - 2, 0, this.width - 1) && inRange(y - 2, 0, this.height - 1)
+					const topRight = inRange(x + 2, 0, this.width - 1) && inRange(y - 2, 0, this.height - 1)
+					const bottomLeft = inRange(x - 2, 0, this.width - 1) && inRange(y + 2, 0, this.height - 1)
+					const bottomRight = inRange(x + 2, 0, this.width - 1) && inRange(y + 2, 0, this.height - 1)
 
 					if (topLeft) neighbors.push(newNode.up().left())
 					if (topRight) neighbors.push(newNode.up().right())

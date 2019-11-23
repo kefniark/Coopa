@@ -30,4 +30,5 @@ test("contains", () => {
 test("slugify", () => {
 	expect(StringExt.slugify("John rambo", false)).toBe("John-rambo")
 	expect(StringExt.slugify("John rambo", true)).toBe("john-rambo")
+	expect(StringExt.slugify("John rambo")).toBe("john-rambo")
 })

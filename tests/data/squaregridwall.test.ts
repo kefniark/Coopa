@@ -41,6 +41,10 @@ test("Create Grid", () => {
 	expect(grid2.heightTile).toBe(4)
 	expect(grid2.width).toBe(7)
 	expect(grid2.height).toBe(9)
+
+	expect(grid2.getNode(2,2).toString()).toBe("")
+	expect(grid2.getNode(2,2).content()).toBeUndefined()
+	expect(grid2.getNode(64,2).content()).toBeUndefined()
 })
 
 test("Pathfinding", () => {
@@ -60,6 +64,12 @@ test("Pathfinding", () => {
 		// border
 		return " "
 	})
+
+	expect(grid.getTile(2, 2).neighbors().length).toBe(4)
+	expect(grid.getTile(0, 0).neighbors().length).toBe(2)
+	expect(grid.getTile(8, 0).neighbors().length).toBe(2)
+	expect(grid.getTile(8, 8).neighbors().length).toBe(2)
+	expect(grid.getTile(0, 8).neighbors().length).toBe(2)
 
 	grid.getTile(3, 7).set("0")
 	grid.getTile(5, 5).set("0")
@@ -98,6 +108,15 @@ test("Pathfinding with diagonal", () => {
 		// border
 		return " "
 	})
+
+	expect(grid.getTile(2, 2).neighbors().length).toBe(8)
+	expect(grid.getTile(0, 0).neighbors().length).toBe(3)
+	expect(grid.getTile(8, 0).neighbors().length).toBe(3)
+	expect(grid.getTile(8, 8).neighbors().length).toBe(3)
+	expect(grid.getTile(0, 8).neighbors().length).toBe(3)
+	expect(grid.getTile(2, 2).walls().length).toBe(4)
+	expect(grid.getTile(0, 0).leftWall().upWall().walls().length).toBe(2)
+	expect(grid.getTile(8, 8).rightWall().downWall().walls().length).toBe(2)
 
 	grid.getTile(3, 7).set("0")
 	grid.getTile(5, 5).set("0")

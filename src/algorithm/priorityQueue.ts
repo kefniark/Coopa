@@ -1,5 +1,5 @@
 import { BinarySearchTree } from "./binarySearchTree"
-import { ArrayExt } from "../utils"
+import { ArrayExt } from "../extension/index"
 
 export enum PriorityQueueOrder {
 	Lower = "lower",

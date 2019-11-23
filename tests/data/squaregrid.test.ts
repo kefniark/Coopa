@@ -43,6 +43,9 @@ test("Create 2d grid", () => {
 	const grid2 = new SquareGrid<number>(3, 4)
 	expect(grid2.width).toBe(3)
 	expect(grid2.height).toBe(4)
+
+	expect(grid2.getNode(2,2).toString()).toBe("")
+	expect(grid2.getNode(2,2).content()).toBeUndefined()
 })
 
 test("Pathfinding", () => {
@@ -59,6 +62,12 @@ test("Pathfinding", () => {
 		// border
 		return i === 0 || i === width - 1 || j === 0 || j === height - 1 ? "X" : " "
 	})
+
+	expect(grid.getNode(2, 2).neighbors().length).toBe(4)
+	expect(grid.getNode(0, 0).neighbors().length).toBe(2)
+	expect(grid.getNode(39, 0).neighbors().length).toBe(2)
+	expect(grid.getNode(39, 34).neighbors().length).toBe(2)
+	expect(grid.getNode(0, 34).neighbors().length).toBe(2)
 
 	grid.getNode(1, 3).set("0")
 	grid.getNode(35, 8).set("0")
@@ -88,6 +97,12 @@ test("Pathfinding with diagonal", () => {
 		// border
 		return i === 0 || i === width - 1 || j === 0 || j === height - 1 ? "X" : " "
 	})
+
+	expect(grid.getNode(2, 2).neighbors().length).toBe(8)
+	expect(grid.getNode(0, 0).neighbors().length).toBe(3)
+	expect(grid.getNode(39, 0).neighbors().length).toBe(3)
+	expect(grid.getNode(39, 34).neighbors().length).toBe(3)
+	expect(grid.getNode(0, 34).neighbors().length).toBe(3)
 
 	grid.getNode(1, 3).set("0")
 	grid.getNode(35, 8).set("0")

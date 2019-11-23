@@ -1,4 +1,3 @@
-// [COOPA] Build: 0.2.3 - November 23, 2019
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -234,6 +233,7 @@
 	        return 1 + Math.max(this.getMaxHeightRecursively(node.left), this.getMaxHeightRecursively(node.right));
 	    }
 	}
+	//# sourceMappingURL=binarySearchTree.js.map
 
 	/**
 	 * Provide polyfill around Date.now()
@@ -253,6 +253,7 @@
 	    }
 	    return now() - start;
 	};
+	//# sourceMappingURL=date.js.map
 
 	class ArrayExt {
 	    /**
@@ -328,6 +329,7 @@
 	        return ArrayExt.clone(arr).sort(() => Math.random() - 0.5);
 	    }
 	}
+	//# sourceMappingURL=array.js.map
 
 	class StringExt {
 	    static isNullOrEmpty(val) {
@@ -366,6 +368,7 @@
 	        return val.normalize().replace(/[^a-z0-9]/gi, "-");
 	    }
 	}
+	//# sourceMappingURL=string.js.map
 
 	class ObjectExt {
 	    static isString(val) {
@@ -387,6 +390,7 @@
 	        return !val && val !== 0;
 	    }
 	}
+	//# sourceMappingURL=object.js.map
 
 	(function (PriorityQueueOrder) {
 	    PriorityQueueOrder["Lower"] = "lower";
@@ -481,6 +485,7 @@
 	        return `[PriorityQueue: ${this.length} (${this.tree.minKey} < ${this.tree.maxKey})]`;
 	    }
 	}
+	//# sourceMappingURL=priorityQueue.js.map
 
 	const url = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	/**
@@ -496,6 +501,7 @@
 	    }
 	    return id;
 	}
+	//# sourceMappingURL=id.js.map
 
 	/// Inspired by https://basarat.gitbooks.io/typescript/docs/tips/typed-event.html
 	/* eslint @typescript-eslint/no-inferrable-types: 0 */
@@ -535,6 +541,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=event.js.map
 
 	(function (LogLevel) {
 	    LogLevel[LogLevel["DEBUG"] = -1] = "DEBUG";
@@ -601,6 +608,7 @@
 	    }
 	}
 	const logger = new Logger();
+	//# sourceMappingURL=logger.js.map
 
 	// To reuse export `rng` const without hacking around
 	/* eslint @typescript-eslint/no-use-before-define: 0 */
@@ -657,6 +665,7 @@
 	    }
 	}
 	const rng = new Random();
+	//# sourceMappingURL=random.js.map
 
 	/* istanbul ignore file */
 	/**
@@ -719,6 +728,7 @@
 	function equals(a, b) {
 	    return Math.abs(a - b) <= EPSILON * Math.max(1.0, Math.abs(a), Math.abs(b));
 	}
+	//# sourceMappingURL=math.js.map
 
 	/**
 	 * Implementation of 2D Grid
@@ -742,6 +752,15 @@
 	    }
 	    getIndex(x, y) {
 	        return y * this.width + x;
+	    }
+	    iterate() {
+	        const arr = [];
+	        for (let x = 0; x < this.width; x++) {
+	            for (let y = 0; y < this.width; y++) {
+	                arr.push(this.getNode(x, y));
+	            }
+	        }
+	        return arr;
 	    }
 	    getNode(x, y) {
 	        const index = this.getIndex(x, y);
@@ -841,6 +860,7 @@
 	        return [];
 	    }
 	}
+	//# sourceMappingURL=squaregrid.js.map
 
 	(function (SquareGridNodeType) {
 	    SquareGridNodeType[SquareGridNodeType["TILE"] = 0] = "TILE";
@@ -973,6 +993,7 @@
 	        });
 	    }
 	}
+	//# sourceMappingURL=squaregridwall.js.map
 
 	/**
 	 * Delay event to be processed later (based on an update)
@@ -1026,6 +1047,7 @@
 	        this.queue.push(event);
 	    }
 	}
+	//# sourceMappingURL=delayedEvent.js.map
 
 	/* eslint @typescript-eslint/no-use-before-define: 0 */
 	const updateLoopChannel = "_updateLoop";
@@ -1162,6 +1184,7 @@
 	        return this.map.get(name);
 	    }
 	}
+	//# sourceMappingURL=eventBus.js.map
 
 	/**
 	 * Method used to create a proxy around some data an get event
@@ -1212,6 +1235,7 @@
 	    map.set(objToWatch, "");
 	    return new Proxy(objToWatch, handler);
 	}
+	//# sourceMappingURL=onchange.js.map
 
 	// Used only as a polyfill for DOMMatrix
 	/* istanbul ignore file */
@@ -1797,6 +1821,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=matrix.js.map
 
 	// Used only as a polyfill for DOMPoint
 	// cf: https://drafts.fxtf.org/geometry/#DOMPoint
@@ -1820,6 +1845,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=point.js.map
 
 	// Used only as a polyfill for DOMRect
 	/* istanbul ignore file */
@@ -1846,6 +1872,7 @@
 	        return this.y + this.height;
 	    }
 	}
+	//# sourceMappingURL=rect.js.map
 
 	/* istanbul ignore file */
 	class DOMVector2 {
@@ -1992,6 +2019,7 @@
 	        return `[Vector ${this.x}, ${this.y}, ${this.z}]`;
 	    }
 	}
+	//# sourceMappingURL=vector.js.map
 
 	/* istanbul ignore file */
 	const m = globalThis.DOMMatrix ? DOMMatrix : DOMMatrix$1;
@@ -2136,6 +2164,7 @@
 	        scale: { x: roundTo(scale[0], 4), y: roundTo(scale[1], 4), z: roundTo(scale[2], 4) }
 	    };
 	};
+	//# sourceMappingURL=index.js.map
 
 	class DOM {
 	    /* istanbul ignore next */
@@ -2177,6 +2206,7 @@
 	        }
 	    }
 	}
+	//# sourceMappingURL=dom.js.map
 
 	/* istanbul ignore file */
 	function createImageContext(width = 200, height = 200, action) {
@@ -2189,7 +2219,7 @@
 	    action(ctx);
 	    return canvas.toDataURL();
 	}
-	function createCircle(options) {
+	function createCircle(options = {}) {
 	    const size = options.size || 64;
 	    return createImageContext(size, size, ctx => {
 	        ctx.beginPath();
@@ -2201,6 +2231,43 @@
 	        ctx.stroke();
 	    });
 	}
+	function createSquare(options = {}) {
+	    const size = options.size || 64;
+	    const line = options.lineWidth || 5;
+	    const radius = 4;
+	    const x = line / 2;
+	    const y = line / 2;
+	    const w = size - line;
+	    const h = size - line;
+	    const r = x + w;
+	    const b = y + h;
+	    return createImageContext(size, size, ctx => {
+	        ctx.rect(line, line, w - line, h - line);
+	        ctx.fillStyle = options.color || "#FFF";
+	        ctx.fill();
+	        ctx.beginPath();
+	        ctx.strokeStyle = options.strokeColor || "#000";
+	        ctx.lineWidth = line;
+	        ctx.moveTo(x + radius, y);
+	        ctx.lineTo(r - radius, y);
+	        ctx.quadraticCurveTo(r, y, r, y + radius);
+	        ctx.lineTo(r, y + h - radius);
+	        ctx.quadraticCurveTo(r, b, r - radius, b);
+	        ctx.lineTo(x + radius, b);
+	        ctx.quadraticCurveTo(x, b, x, b - radius);
+	        ctx.lineTo(x, y + radius);
+	        ctx.quadraticCurveTo(x, y, x + radius, y);
+	        ctx.stroke();
+	        // ctx.beginPath()
+	        // ctx.lineWidth = options.lineWidth || 5
+	        // ctx.arc(size / 2, size / 2, size / 2 - ctx.lineWidth, 0, 2 * Math.PI)
+	        // ctx.fillStyle = options.color || "#FFF"
+	        // ctx.fill()
+	        // ctx.strokeStyle = options.strokeColor || "#000"
+	        // ctx.stroke()
+	    });
+	}
+	//# sourceMappingURL=shape.js.map
 
 	class Color {
 	    //#endregion Default Palette
@@ -2457,6 +2524,7 @@
 	Color.blueBolt = () => Color.fromRGB([0, 128, 255]);
 	Color.violet = () => Color.fromRGB([128, 0, 255]);
 	Color.blueSky = () => Color.fromRGB([128, 128, 255]);
+	//# sourceMappingURL=color.js.map
 
 	/* istanbul ignore file */
 	/**
@@ -2516,6 +2584,7 @@
 	        };
 	    }
 	}
+	//# sourceMappingURL=transform.js.map
 
 	/* istanbul ignore file */
 	/**
@@ -2656,8 +2725,32 @@
 	        this.onChanged.emit();
 	    }
 	}
+	//# sourceMappingURL=rectTransform.js.map
+
+	(function (HTMLTransformEvent) {
+	    HTMLTransformEvent["HTMLChanged"] = "DomUpdate";
+	})(exports.HTMLTransformEvent || (exports.HTMLTransformEvent = {}));
+	function createHTMLTransform(el = "div", size = 960) {
+	    if (!EventBus.channelNames.includes(exports.HTMLTransformEvent.HTMLChanged)) {
+	        EventBus.create(exports.HTMLTransformEvent.HTMLChanged, exports.EventBusChannelType.Delayed);
+	    }
+	    const channel = EventBus.channel(exports.HTMLTransformEvent.HTMLChanged);
+	    const transform = new RectTransformMatrix(size, size);
+	    const div = DOM.createElement(el);
+	    DOM.setStyle(div, transform.toCSS2D());
+	    transform.onChanged.on(() => channel.emit({
+	        dom: div,
+	        transform
+	    }));
+	    channel.on(arg => DOM.setStyle(arg.dom, arg.transform.toCSS2D()));
+	    return {
+	        dom: div,
+	        transform
+	    };
+	}
 
 	const name = "Coopa";
+	//# sourceMappingURL=index.js.map
 
 	exports.ARRAY_TYPE = ARRAY_TYPE;
 	exports.ArrayExt = ArrayExt;
@@ -2686,10 +2779,12 @@
 	exports.clamp = clamp;
 	exports.clamp01 = clamp01;
 	exports.createCircle = createCircle;
+	exports.createHTMLTransform = createHTMLTransform;
 	exports.createImageContext = createImageContext;
 	exports.createMatrix = createMatrix;
 	exports.createPoint = createPoint;
 	exports.createRect = createRect;
+	exports.createSquare = createSquare;
 	exports.decomposeMatrix = decomposeMatrix;
 	exports.equals = equals;
 	exports.inRange = inRange;

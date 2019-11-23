@@ -1,21 +1,12 @@
-<html>
+<html class="demoCoopa">
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<script src="../../build/coopa.umd.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/fatina@3.0.2/build/fatina.min.js"></script>
+		<link rel="stylesheet" href="../common.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
 
 		<style>
-			html, body {
-				padding: 0;
-				margin: 0;
-				overflow: hidden;
-			}
-
-			#app {
-				transform-style: preserve-3d;
-				backface-visibility: hidden;
-			}
-
 			.element {
 				will-change: transform, opacity;
 				position: absolute;
@@ -67,56 +58,33 @@
 				display: flex;
 				flex-wrap: wrap;
 			}
-
-			.list-item a {
-				color: #4a4a4a;
-			}
 		</style>
 	</head>
 	<body>
-		<div class="container is-fluid">
+		<div class="columns">
+			<div id="menu" class="column is-one-fifth">
+				<div class="item" style="padding: 15px">
+					<h3 class="title is-3">Binary Search Tree</h3>
+					<ul class="list">
+						<li class="list-item"><a href="https://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">Wikipedia</a></li>
+						<li class="list-item"><a href="../../src/algorithm/" target="_blank">API Documentation</a></li>
+					</ul>
 
-			<div class="item" style="padding: 15px">
-				<h3 class="title is-3">Binary Search Tree</h3>
-				<ul class="list">
-					<li class="list-item"><a href="https://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">Wikipedia</a></li>
-					<li class="list-item"><a href="../../src/algorithm/" target="_blank">API Documentation</a></li>
-				</ul>
-
-				<h5 class="title is-5">Actions</h5>
-				<a href="#" class="button is-small" onclick="window.location.reload(true);">Reset</a>
-				<button id="addBtn" class="button is-small">Add</button>
-				<button id="addAllBtn" class="button is-small">Add All</button>
-				<!-- <button id="deleteBtn" class="button is-small">Delete</button> -->
-			</div>
-			<div class="item">
-				<div id="appContainer" style="width: 60vw; height: 60vw; max-width: 800px;">
-					<div id="app" style="position: absolute; overflow: hidden; width: 960px; height: 960px; background-color: #FFF; transform-origin: top left;"></div>
+					<h5 class="title is-5">Actions</h5>
+					<a href="#" class="button is-small" onclick="window.location.reload(true);">Reset</a>
+					<button id="addBtn" class="button is-small">Add</button>
+					<button id="addAllBtn" class="button is-small">Add All</button>
+					<!-- <button id="deleteBtn" class="button is-small">Delete</button> -->
 				</div>
+			</div>
+			<div class="column demo">
+				<div id="app"></div>
 			</div>
 		</div>
 
+		<script src="../common.js"></script>
 		<script src="./bst.js"></script>
 		<script>
-		function resize() {
-			const w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-			const h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-
-			const parent = document.getElementById("appContainer")
-			if (w > h) {
-				parent.style.width = "150vh"
-				parent.style.height = "150vh"
-			} else {
-				parent.style.width = "100vw"
-				parent.style.height = "100vw"
-			}
-			const app = document.getElementById("app")
-			const scale = Math.min(parent.clientWidth / 960, 1)
-			app.style.transform = `scale(${scale})`
-		}
-		resize()
-		window.addEventListener("resize", () => resize())
-
 		document.write( // lgtm [js/eval-like-call]
 			'<script src="http://' +
 				(location.host || "localhost").split(":")[0] +

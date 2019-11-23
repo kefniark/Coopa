@@ -1,0 +1,55 @@
+html,
+body, iframe {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+@media only screen and (max-width: 1280px) {
+	html, body {
+		overflow: auto;
+	}
+
+	/* #menu {
+		height: auto;
+	} */
+}
+
+html.demoCoopa {
+	overflow: hidden;
+}
+
+#app {
+	/* position: absolute; */
+	transform-style: preserve-3d;
+	width: 960px;
+	height: 960px;
+	transform-origin: top left;
+}
+
+#app div {
+	user-select: none;
+	pointer-events: none;
+}
+
+.column {
+	margin: 0;
+	padding: 0.75rem 0 0;
+}
+
+.demo {
+	height: calc(100vh);
+	overflow: hidden;
+}
+
+/* #menu {
+	height: calc(100vh - 10px);
+} */
+
+#menu {
+	min-width: 250px;
+}
+
+.list-item a {
+	color: #4a4a4a;
+}

@@ -52,6 +52,16 @@ export class SquareGrid<T> {
 		return y * this.width + x
 	}
 
+	iterate() {
+		const arr: SquareGridNode<T>[] = []
+		for (let x = 0; x < this.width; x++) {
+			for (let y = 0; y < this.width; y++) {
+				arr.push(this.getNode(x, y))
+			}
+		}
+		return arr
+	}
+
 	getNode(x: number, y: number): SquareGridNode<T> {
 		const index = this.getIndex(x, y)
 

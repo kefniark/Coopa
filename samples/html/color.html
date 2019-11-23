@@ -1,21 +1,12 @@
-<html>
+<html class="demoCoopa">
 	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<script src="../../build/coopa.umd.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/fatina@3.0.2/build/fatina.min.js"></script>
+		<link rel="stylesheet" href="../common.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
 
 		<style>
-			html, body {
-				padding: 0;
-				margin: 0;
-				overflow: hidden;
-			}
-
-			#app {
-				transform-style: preserve-3d;
-				backface-visibility: hidden;
-			}
-
 			.container {
 				display: flex;
 				flex-wrap: wrap;
@@ -30,9 +21,9 @@
 				vertical-align: middle;
 				text-align: center;
 				position: absolute;
-				width: 640px;
-				height: 640px;
-				line-height: 640px;
+				width: 960px;
+				height: 960px;
+				line-height: 960px;
 				font-size: 32px;
 				font-weight: bold;
 				pointer-events: none;
@@ -42,32 +33,33 @@
 			.square {
 				will-change: transform, opacity;
 				position: absolute;
-				width: 640px;
-				height: 640px;
+				width: 960px;
+				height: 960px;
 			}
 		</style>
 	</head>
 	<body>
-		<div class="container is-fluid">
-			<div class="item" style="padding: 15px">
-				<h3 class="title is-3">Colors</h3>
-				<p>
-					Small helper to generate and convert colors
-				</p>
-				<br>
-				<ul class="list">
-					<li class="list-item"><a href="../../src/html/" target="_blank">API Documentation</a></li>
-				</ul>
-				<h5 class="title is-5">Actions</h5>
-				<a href="#" class="button is-small" onclick="window.location.reload(true);">Reset</a>
-			</div>
-			<div class="item">
-				<div id="appContainer" style="width: 640px; height: 640px">
-					<div id="app" style="position: absolute; overflow: hidden; width: 640px; height: 640px; background-color: #FFF; transform-origin: top left; transform: scale(0.75);"></div>
+		<div class="columns">
+			<div id="menu" class="column is-one-fifth">
+				<div class="item" style="padding: 15px">
+					<h3 class="title is-3">Colors</h3>
+					<p>
+						Small helper to generate and convert colors
+					</p>
+					<br>
+					<ul class="list">
+						<li class="list-item"><a href="../../src/html/" target="_blank">API Documentation</a></li>
+					</ul>
+					<h5 class="title is-5">Actions</h5>
+					<a href="#" class="button is-small" onclick="window.location.reload(true);">Reset</a>
 				</div>
+			</div>
+			<div class="column demo">
+				<div id="app"></div>
 			</div>
 		</div>
 
+		<script src="../common.js"></script>
 		<script src="./color.js"></script>
 		<script>
 		document.write( // lgtm [js/eval-like-call]

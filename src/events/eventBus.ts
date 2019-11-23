@@ -129,7 +129,7 @@ export class EventBus {
 		const chan = this.map.get(name)
 		if (chan) {
 			logger.warn("channel already exist", name)
-			return chan
+			return chan as IChannelEvent<T>
 		}
 		let newChan: IChannelEvent<T>
 		switch (type) {

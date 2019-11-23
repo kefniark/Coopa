@@ -5,7 +5,7 @@ Fatina.setDefaultTicker(def)
 
 const map = new WeakMap()
 
-const rootTransform = new Coopa.RectTransformMatrix(1280, 960)
+const rootTransform = new Coopa.RectTransformMatrix(960, 960)
 const rootDiv = Coopa.DOM.createElement("div")
 Coopa.DOM.setAttr(rootDiv, { id: "root", class: "element" })
 Coopa.DOM.setStyle(rootDiv, rootTransform.toCSS())
@@ -16,7 +16,7 @@ rootEvent.on(() => {
 })
 map.set(rootTransform, rootDiv)
 
-const rootLayout = new Coopa.RectTransformMatrix(1280, 960)
+const rootLayout = new Coopa.RectTransformMatrix(960, 960)
 rootLayout.parent = rootTransform
 const layoutDiv = Coopa.DOM.createElement("div")
 rootDiv.appendChild(layoutDiv)
@@ -29,7 +29,7 @@ layoutEvent.on(() => {
 })
 map.set(rootLayout, layoutDiv)
 
-const child1Transform = new Coopa.RectTransformMatrix(1280, 960)
+const child1Transform = new Coopa.RectTransformMatrix(960, 960)
 child1Transform.parent = rootLayout
 const child1Div = Coopa.DOM.createElement("div")
 layoutDiv.appendChild(child1Div)
@@ -41,7 +41,7 @@ child1Event.on(() => {
 })
 map.set(child1Transform, child1Div)
 
-const child2Transform = new Coopa.RectTransformMatrix(1280, 960)
+const child2Transform = new Coopa.RectTransformMatrix(960, 960)
 child2Transform.parent = rootLayout
 const child2Div = Coopa.DOM.createElement("div")
 layoutDiv.appendChild(child2Div)
@@ -57,7 +57,7 @@ child2Transform.onParentChanged.on(parent => {
 })
 map.set(child2Transform, child2Div)
 
-const childCenterTransform = new Coopa.RectTransformMatrix(1280, 960)
+const childCenterTransform = new Coopa.RectTransformMatrix(960, 960)
 childCenterTransform.parent = rootLayout
 const childCenterDiv = Coopa.DOM.createElement("div")
 layoutDiv.appendChild(childCenterDiv)
@@ -73,7 +73,7 @@ childCenterTransform.onParentChanged.on(parent => {
 })
 map.set(childCenterTransform, childCenterDiv)
 
-const rootLayout2 = new Coopa.RectTransformMatrix(1280, 960)
+const rootLayout2 = new Coopa.RectTransformMatrix(960, 960)
 rootLayout2.parent = rootTransform
 const layoutDiv2 = Coopa.DOM.createElement("div")
 rootDiv.appendChild(layoutDiv2)
@@ -86,7 +86,7 @@ layoutEvent2.on(() => {
 })
 map.set(rootLayout2, layoutDiv2)
 
-const rootLayout4 = new Coopa.RectTransformMatrix(1280, 960)
+const rootLayout4 = new Coopa.RectTransformMatrix(960, 960)
 rootLayout4.parent = rootLayout2
 const layoutDiv4 = Coopa.DOM.createElement("div")
 layoutDiv2.appendChild(layoutDiv4)
@@ -99,7 +99,7 @@ layoutEvent4.on(() => {
 })
 map.set(rootLayout4, layoutDiv4)
 
-const rootLayout3 = new Coopa.RectTransformMatrix(1280, 960)
+const rootLayout3 = new Coopa.RectTransformMatrix(960, 960)
 rootLayout3.parent = rootLayout2
 const layoutDiv3 = Coopa.DOM.createElement("div")
 layoutDiv2.appendChild(layoutDiv3)
@@ -113,7 +113,7 @@ layoutEvent3.on(() => {
 map.set(rootLayout3, layoutDiv3)
 
 function createPoint(x, y, size, parent, parentDiv, color) {
-	const rootPoint = new Coopa.RectTransformMatrix(1280, 960)
+	const rootPoint = new Coopa.RectTransformMatrix(960, 960)
 	rootPoint.parent = parent
 
 	rootPoint.anchor.set(x, y)

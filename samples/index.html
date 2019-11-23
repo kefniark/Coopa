@@ -4,41 +4,63 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Coopa Sample !</title>
+		<link rel="stylesheet" href="./common.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
 
 		<style>
 			html, body {
 				padding: 0;
 				margin: 0;
-				overflow: auto;
+				overflow: hidden;
+			}
+
+			.container.is-fluid  {
+				margin-left: 5px !important;
+				margin-right: 5px !important;
+			}
+
+			@media only screen and (max-width: 1280px) {
+				html, body {
+					overflow: auto;
+				}
 			}
 
 			#samples {
-				border: 0px;
-				width: calc(100vw - 5px);
-				height: calc(100vh - 5px);
+				min-height: calc(100vh - 10px);
+				width: 100%;
 			}
 
-			.menu {
+			.tile {
 				position: absolute;
-				z-index: 10;
-				top: 20px;
-				right: 20px;
-				width: 200px;
+				width: 960px;
+				height: 960px;
+			}
+
+			.tile img {
+				width: 960px;
+				height: 960px;
 			}
 		</style>
 	</head>
 
 	<body>
-		<aside class="menu">
-			<p class="menu-label">Menu</p>
-			<ul class="menu-list">
-				<li><a href="./algorithm/bst.html" target="frame">Binary Search Tree</a></li>
-				<li><a href="./html/color.html" target="frame">Colors</a></li>
-				<li><a href="./transform/matrix.html" target="frame">Transform</a></li>
-			</ul>
-		</aside>
-
-		<iframe id="samples" name="frame" src="./html/color.html"></iframe>
+		<div class="container is-fluid">
+			<div class="columns">
+				<div class="column">
+					<iframe id="samples" name="frame" src="./grid/grid.html"></iframe>
+				</div>
+				<div class="column is-one-fifth">
+					<aside class="menu">
+						<p class="menu-label">Menu</p>
+						<ul class="menu-list">
+							<li><a href="./algorithm/bst.html" target="frame">Binary Search Tree</a></li>
+							<li><a href="./html/color.html" target="frame">Colors</a></li>
+							<li><a href="./grid/grid.html" target="frame">Grid</a></li>
+							<li><a href="./transform/matrix.html" target="frame">Transform</a></li>
+						</ul>
+					</aside>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

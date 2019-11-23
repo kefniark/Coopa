@@ -75,7 +75,7 @@ test("Import / Export", () => {
 	expect(colorA.hex()).toBeDefined()
 	expect(colorA.hsl()).toBeDefined()
 
-	for (var color of Color.germanPalette()) {
+	for (const color of Color.germanPalette()) {
 		expect(color.rgb()).toBeDefined()
 		expect(color.hex()).toBeDefined()
 		expect(color.hsl()).toBeDefined()

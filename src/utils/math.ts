@@ -23,6 +23,25 @@ export function toDegree(a: number) {
 	return a / degree
 }
 
+export function rotSign(angle: number) {
+	angle = (angle + 360) % 360
+	let h = 0
+	if (angle > 90 && angle < 270) {
+		h = -1
+	} else if (angle < 90 || angle > 270) {
+		h = 1
+	}
+
+	let v = 0
+	if (angle > 0 && angle < 180) {
+		v = 1
+	} else if (angle > 180 && angle < 360) {
+		v = -1
+	}
+
+	return { h, v }
+}
+
 export function clamp(val: number, min: number, max: number) {
 	return Math.max(Math.min(val, max), min)
 }

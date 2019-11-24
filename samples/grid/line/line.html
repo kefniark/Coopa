@@ -1,14 +1,22 @@
 <html class="demoCoopa">
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<script src="../../build/coopa.umd.js"></script>
+		<script src="../../../build/coopa.umd.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/fatina@3.0.2/build/fatina.min.js"></script>
-		<link rel="stylesheet" href="../common.css" />
+		<link rel="stylesheet" href="../../common.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
 		<style>
 			#app {
 				position: absolute;
 				transform-style: flat !important;
+				width: 960px;
+				height: 960px;
+			}
+
+			.line {
+				background-color: #000;
+				z-index: 10;
+				pointer-events: none;
 				width: 960px;
 				height: 960px;
 			}
@@ -48,8 +56,8 @@
 			</div>
 		</div>
 
-		<script src="./grid.js"></script>
-		<script src="../common.js"></script>
+		<script src="./line.js"></script>
+		<script src="../../common.js"></script>
 		<script>
 		document.write( // lgtm [js/eval-like-call]
 			'<script src="http://' +

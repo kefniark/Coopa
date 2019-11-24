@@ -11,6 +11,10 @@ import { SquareGrid } from "coopa"
 
 const grid = new SquareGrid<number>(5, 5) // create 5x5 grid
 
+// properties
+grid.width
+grid.height
+
 const cell = grid.getNode(2, 2) // get a cell and navigate around the grid
 cell.content() // get the content of a cell
 cell.set(5) // set the content of a cell
@@ -41,6 +45,12 @@ Generic 2D Grid with :
 import { SquareGridWall } from "coopa"
 
 const grid = new SquareGridWall<string>(9, 9)
+
+// properties
+grid.width // real width, includes wall and corners (2n+1)
+grid.height // real height, includes wall and corners (2n+1)
+grid.widthTile // width only with tiles
+grid.heightTile // height only with tiles
 
 const cell = grid.getTile(4, 4)
 

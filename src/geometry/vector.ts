@@ -18,6 +18,26 @@ export class DOMVector2 {
 		this.y = y
 	}
 
+	sign() {
+		this.x = Math.sign(this.x)
+		this.y = Math.sign(this.y)
+		return this
+	}
+
+	signTo() {
+		return this.clone().sign()
+	}
+
+	abs() {
+		this.x = Math.abs(this.x)
+		this.y = Math.abs(this.y)
+		return this
+	}
+
+	absTo() {
+		return this.clone().abs()
+	}
+
 	clone() {
 		return new DOMVector2(this.x, this.y)
 	}
@@ -57,6 +77,30 @@ export class DOMVector2 {
 		this.x += x
 		this.y += y
 		return this
+	}
+
+	sub(x = 0, y = 0) {
+		this.x -= x
+		this.y -= y
+		return this
+	}
+
+	addVec(vec: DOMVector2) {
+		this.add(vec.x, vec.y)
+		return this
+	}
+
+	addVecTo(vec: DOMVector2) {
+		return this.clone().addVec(vec)
+	}
+
+	subVec(vec: DOMVector2) {
+		this.sub(vec.x, vec.y)
+		return this
+	}
+
+	subVecTo(vec: DOMVector2) {
+		return this.clone().subVec(vec)
 	}
 
 	round(decimals = 4) {

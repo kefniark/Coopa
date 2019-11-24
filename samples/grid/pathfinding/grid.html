@@ -1,0 +1,62 @@
+<html class="demoCoopa">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<script src="../../../build/coopa.umd.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/fatina@3.0.2/build/fatina.min.js"></script>
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.css" />
+		<style>
+			#app {
+				position: absolute;
+				transform-style: flat !important;
+				width: 960px;
+				height: 960px;
+			}
+
+			.tile {
+				will-change: transform, opacity;
+				position: absolute;
+				transform-origin: center center;
+				width: 960px;
+				height: 960px;
+			}
+
+			img.tile {
+				image-rendering: pixelated;
+				transform: translateZ(0);
+				backface-visibility: hidden;
+				user-select: none;
+				pointer-events: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="columns">
+			<div id="menu" class="column is-one-fifth">
+				<div class="item" style="padding: 15px">
+					<h3 class="title is-3">Grid</h3>
+					<ul class="list">
+						<li class="list-item"><a href="../../src/data/" target="_blank">API Documentation</a></li>
+					</ul>
+
+					<h5 class="title is-5">Actions</h5>
+					<a href="#" class="button is-small" onclick="window.location.reload(true);">Reset</a>
+				</div>
+			</div>
+			<div class="column demo">
+				<div id="app"></div>
+			</div>
+		</div>
+
+		<script src="./grid.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+		document.write( // lgtm [js/eval-like-call]
+			'<script src="http://' +
+				(location.host || "localhost").split(":")[0] +
+				':35729/livereload.js?snipver=1"></' +
+				"script>"
+		)
+		</script>
+	</body>
+</html>

@@ -37,21 +37,21 @@ function timeout(ms) {
 			Coopa.DOM.setAttr(tile.dom, { class: "tile" })
 
 			if (tileData.content() === 0) {
-				Coopa.DOM.setAttr(tile.dom, { src: `../assets/dungeon/floor_1.png` })
+				Coopa.DOM.setAttr(tile.dom, { src: `../../assets/dungeon/floor_1.png` })
 				tile.transform.angle = 90 * Coopa.rng.randRangeInt(0, 1)
 			} else if (tileData.content() === 1) {
 				if (tileData.x === 0) {
-					Coopa.DOM.setAttr(tile.dom, { src: "../assets/dungeon/wall_inner_corner_mid_left.png" })
+					Coopa.DOM.setAttr(tile.dom, { src: "../../assets/dungeon/wall_inner_corner_mid_left.png" })
 				} else if (tileData.x === 11) {
-					Coopa.DOM.setAttr(tile.dom, { src: "../assets/dungeon/wall_inner_corner_mid_rigth.png" })
+					Coopa.DOM.setAttr(tile.dom, { src: "../../assets/dungeon/wall_inner_corner_mid_rigth.png" })
 				} else {
-					Coopa.DOM.setAttr(tile.dom, { src: "../assets/dungeon/wall_mid.png" })
+					Coopa.DOM.setAttr(tile.dom, { src: "../../assets/dungeon/wall_mid.png" })
 				}
 			} else if (tileData.content() === 2) {
 				if (Math.random() > 0.8) {
-					Coopa.DOM.setAttr(tile.dom, { src: "../assets/dungeon/floor_spikes_anim_f3.png" })
+					Coopa.DOM.setAttr(tile.dom, { src: "../../assets/dungeon/floor_spikes_anim_f3.png" })
 				} else {
-					Coopa.DOM.setAttr(tile.dom, { src: "../assets/dungeon/hole.png" })
+					Coopa.DOM.setAttr(tile.dom, { src: "../../assets/dungeon/hole.png" })
 				}
 			}
 			app.appendChild(tile.dom)
@@ -63,14 +63,14 @@ function timeout(ms) {
 	tileStart.transform.size.set(tileSize / 1.5, tileSize / 1.5)
 	tileStart.transform.position.set(1 * tileSize - 0.5, 1 * tileSize - 0.5)
 	Coopa.DOM.setAttr(tileStart.dom, { class: "tile" })
-	Coopa.DOM.setAttr(tileStart.dom, { src: "../assets/dungeon/knight_f_idle_anim_f0.png" })
+	Coopa.DOM.setAttr(tileStart.dom, { src: "../../assets/dungeon/knight_f_idle_anim_f0.png" })
 	app.appendChild(tileStart.dom)
 
 	const tileGoal = Coopa.createHTMLTransform("img")
 	tileGoal.transform.size.set(tileSize / 2, tileSize / 2)
 	tileGoal.transform.position.set(10 * tileSize - 0.5, 10 * tileSize - 0.5)
 	Coopa.DOM.setAttr(tileGoal.dom, { class: "tile" })
-	Coopa.DOM.setAttr(tileGoal.dom, { src: "../assets/dungeon/chest_empty_open_anim_f0.png" })
+	Coopa.DOM.setAttr(tileGoal.dom, { src: "../../assets/dungeon/chest_empty_open_anim_f0.png" })
 	app.appendChild(tileGoal.dom)
 
 	// pathfinding
@@ -83,7 +83,7 @@ function timeout(ms) {
 		tile.transform.scale.set(tileSize / 2, tileSize / 2)
 		tile.transform.position.set(path.x * tileSize - 0.5, path.y * tileSize - 0.5)
 		Coopa.DOM.setAttr(tile.dom, { class: "tile" })
-		Coopa.DOM.setAttr(tile.dom, { src: "../assets/dungeon/coin_anim_f0.png" })
+		Coopa.DOM.setAttr(tile.dom, { src: "../../assets/dungeon/coin_anim_f0.png" })
 		app.appendChild(tile.dom)
 
 		Fatina.shake(tile.transform, {

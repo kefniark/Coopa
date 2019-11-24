@@ -1,6 +1,7 @@
-import { inRange } from "../utils/index"
+import { inRange, roundTo, rotSign } from "../utils/index"
 import { SquareGrid, SquareGridNode } from "./squaregrid"
 import { ObjectExt, ArrayExt } from "../extension"
+import { DOMVector2 } from "../geometry"
 
 export enum SquareGridNodeType {
 	TILE = 0,
@@ -82,6 +83,90 @@ export class SquareGridWall<T> extends SquareGrid<T> {
 		}
 	}
 
+	line(source: DOMVector2, dest: DOMVector2): SquareGridWallNode<T>[] {
+		const tiles: SquareGridWallNode<T>[] = []
+
+		const diff = dest.subVecTo(source)
+		const diffSign = diff.signTo()
+		const diffAbs = diff.absTo()
+		let tile = this.getTile(Math.round(source.x), Math.round(source.y))
+		const goal = this.getTile(Math.round(dest.x), Math.round(dest.y))
+
+		tiles.push(tile)
+		for (let ix = 0, iy = 0; ix < diffAbs.x || iy < diffAbs.y; ) {
+			if ((ix + 0.5) / diffAbs.x < (iy + 0.5) / diffAbs.y) {
+				ix++
+				tile = diffSign.x > 0 ? tile.right() : tile.left()
+			} else {
+				iy++
+				tile = diffSign.y > 0 ? tile.down() : tile.up()
+			}
+			tiles.push(tile)
+			if (goal === tile) break
+		}
+		return tiles
+	}
+
+	raycast(source: DOMVector2, angle = 0, isValidMove: (arg: IPathfindingWallArg<T>) => boolean) {
+		const origin = source.clone()
+		const points: SquareGridNodeRaycast<T>[] = []
+		const max = 16
+		const { h, v } = rotSign(angle)
+
+		if (h !== 0) {
+			const diffX = h * 0.5 - (source.x - Math.round(source.x))
+			for (let i = 0; i < max; i++) {
+				const x = diffX + i * h
+				const y = x * Math.tan((angle * Math.PI) / 180)
+
+				const point = new DOMVector2(roundTo(source.x + x), roundTo(source.y + y))
+				const from = this.getTile(Math.round(point.x - h * 0.5), Math.round(point.y))
+				const to = this.getTile(Math.round(point.x + h * 0.5), Math.round(point.y))
+				const wall = this.getInBetween(from, to)
+				const valid = isValidMove({ from, to, wall })
+				if (!valid) {
+					points.push({ origin, point, collide: to, distance: Math.hypot(x, y) } as SquareGridNodeRaycast<T>)
+					break
+				}
+			}
+		}
+
+		if (v !== 0) {
+			const diffY = v * 0.5 - (source.y - Math.round(source.y))
+			for (let j = 0; j < max; j++) {
+				const y = diffY + j * v
+				const x = y / Math.tan((angle * Math.PI) / 180)
+
+				const point = new DOMVector2(roundTo(source.x + x), roundTo(source.y + y))
+				const from = this.getTile(Math.round(point.x), Math.round(point.y - v * 0.5))
+				const to = this.getTile(Math.round(point.x), Math.round(point.y + v * 0.5))
+				const wall = this.getInBetween(from, to)
+				const valid = isValidMove({ from, to, wall })
+				if (!valid) {
+					points.push({ origin, point, collide: to, distance: Math.hypot(x, y) } as SquareGridNodeRaycast<T>)
+					break
+				}
+			}
+		}
+
+		points.sort((a, b) => a.distance - b.distance)
+		return points.length > 0 ? points.shift() : undefined
+	}
+
+	getInBetween(node1: SquareGridWallNode<T>, node2: SquareGridWallNode<T>) {
+		return this.getNode(
+			ArrayExt.avg([node1.x * 2 + 1, node2.x * 2 + 1]),
+			ArrayExt.avg([node1.y * 2 + 1, node2.y * 2 + 1])
+		)
+	}
+
+	getType(x: number, y: number) {
+		if (x % 2 === 0 && y % 2 === 0) return SquareGridNodeType.CORNER
+		if (x % 2 === 0 && y % 2 === 1) return SquareGridNodeType.VWALL
+		if (x % 2 === 1 && y % 2 === 0) return SquareGridNodeType.HWALL
+		return SquareGridNodeType.TILE
+	}
+
 	getTile(x: number, y: number, type = SquareGridNodeType.TILE): SquareGridWallNode<T> {
 		if (type === SquareGridNodeType.CORNER) return this.getNode(x * 2, y * 2)
 		else if (type === SquareGridNodeType.VWALL) return this.getNode(x * 2, y * 2 + 1)
@@ -96,9 +181,10 @@ export class SquareGridWall<T> extends SquareGrid<T> {
 		if (node) return node
 
 		const newNode = {
-			x,
-			y,
+			x: (x - 1) / 2,
+			y: (y - 1) / 2,
 			index,
+			type: this.getType(x, y),
 
 			up: () => this.getNode(x, y - 2),
 			down: () => this.getNode(x, y + 2),
@@ -161,7 +247,7 @@ export class SquareGridWall<T> extends SquareGrid<T> {
 			const middle = this.getNode(ArrayExt.avg([arg.from.x, arg.to.x]), ArrayExt.avg([arg.from.y, arg.to.y]))
 			return isValid({
 				from: arg.from as SquareGridWallNode<T>,
-				to: arg.from as SquareGridWallNode<T>,
+				to: arg.to as SquareGridWallNode<T>,
 				wall: middle
 			} as IPathfindingWallArg<T>)
 		})
@@ -172,4 +258,14 @@ export interface IPathfindingWallArg<T> {
 	from: SquareGridWallNode<T>
 	to: SquareGridWallNode<T>
 	wall: SquareGridWallNode<T>
+}
+
+export interface SquareGridNodeRaycast<T> {
+	origin: DOMVector2
+	point: DOMVector2
+	from: SquareGridWallNode<T>
+	to: SquareGridWallNode<T>
+	wall: SquareGridWallNode<T>
+	distance: number
+	collide: SquareGridWallNode<T> | undefined
 }
